@@ -1,6 +1,6 @@
 # ContinuousRDF
 
-This project aimes to create a parallel and continuous way to process RDF data using Apache Storm platforme. 
+This project aimes to create a parallel and continuous way to process RDF data using Apache Storm platform. 
 
 Please check it out using:
 ```
@@ -16,7 +16,7 @@ Install [Maven](http://maven.apache.org/) (preferably version 3.x) by following 
 Importing ContinuousRDF as a project in IDEA
 --------------------------------------------
 
-1. Open File > Import Project... and navigate to the storm-starter directory of your storm clone (e.g. ~/workspace/ContinuousRDF).
+1. Open File > Import Project... and navigate to the ContinuousRDF check out directory of your storm clone (e.g. ~/workspace/ContinuousRDF).
 
 2. Select Import project from external model, select "Maven", and click Next.
 
