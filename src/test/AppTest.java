@@ -1,4 +1,4 @@
-package test.java.ContinuousRDF;
+package test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
