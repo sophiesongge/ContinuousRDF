@@ -44,8 +44,8 @@
     </scm>
     
     <build>
-        <sourceDirectory>src/jvm</sourceDirectory>
-        <testSourceDirectory>test/jvm</testSourceDirectory>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <resources>
             <resource>
                 <directory>${basedir}/multilang</directory>
