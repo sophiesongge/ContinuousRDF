@@ -44,7 +44,7 @@
     </scm>
     
     <build>
-        <sourceDirectory>src</sourceDirectory>
+    <!--     <sourceDirectory>src</sourceDirectory> -->
         <testSourceDirectory>test</testSourceDirectory>
         <resources>
             <resource>
