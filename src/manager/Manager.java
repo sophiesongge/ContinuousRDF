@@ -11,7 +11,7 @@ public class Manager {
 	
 	String query = "";
 	RDFTriple latest = new RDFTriple(" "," "," ");
-	RDFSpout = new RDFSpout();
+	//RDFSpout = new RDFSpout();
 	
 	public static void main(String[] args) {
 		Manager manager = new Manager();

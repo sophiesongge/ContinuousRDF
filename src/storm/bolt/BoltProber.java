@@ -1,6 +1,7 @@
 package storm.bolt;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import storm.rdf.RDFTriple;
@@ -13,33 +14,29 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltCreatBF implements IRichBolt {
+public class BoltProber implements IRichBolt {
 	private OutputCollector collector;
+	private BloomFilter bf;
 
-	Map<String, BloomFilter<Object>> bloomFilters;
+	//Map<String, BloomFilter<Object>> bloomFilters;
 	
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
 		
 		this.collector = collector;
+		this.bf = new BloomFilter(0.001, 20);
 		//this.bloomfilters = new HashMap<String, BloomFilter>();
-		this.bloomFilters = new HashMap<String, BloomFilter<Object>>();
+		//this.bloomFilters = new HashMap<String, BloomFilter<Object>>();
 	}
 
 	public void execute(Tuple input) {
 		
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
-		String Object = input.getStringByField("Object");
-		
-		if (!bloomFilters.containsKey(Predicate)) {
-			BloomFilter< Object> bf= new BloomFilter<Object>(0.01, 15);
+		//String Object = input.getStringByField("Object");
+		if(Predicate != "paper"){
 			bf.add(Subject);
-			bloomFilters.put(Predicate, bf);
-		} else {
-			BloomFilter< Object> bf= bloomFilters.get(Predicate);
-			bf.add(Subject);
-			bloomFilters.put(Predicate, bf);
+			collector.emit((List<Object>) bf);
 		}
 		
 	}
@@ -49,9 +46,11 @@ public class BoltCreatBF implements IRichBolt {
 	}
 
 	public void cleanup() {
-		for (Map.Entry<String, BloomFilter<Object>> entry : bloomFilters.entrySet()) {
-			System.out.println("Bloom Filter with Predicate = "+ entry.getKey() + " has values = " + entry.getValue().count());
+		
+		for(int i=0; i<bf.size(); i++){
+			System.out.print(bf.getBit(i)+" ");
 		}
+		
 	}
 
 	public Map<String, Object> getComponentConfiguration() {
