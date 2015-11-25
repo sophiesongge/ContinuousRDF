@@ -39,10 +39,10 @@ public class BenchmarkCSBF{
 		}
 
 		
-		for(int i=0; i<csbf.BloomFilter.size(); i++){
-			System.out.print(csbf.BloomFilter.getBit(i)+" ");
-		}
-		System.out.print("\n");
+//		for(int i=0; i<csbf.BloomFilter.size(); i++){
+//			System.out.print(csbf.BloomFilter.getBit(i)+" ");
+//		}
+//		System.out.print("\n");
 		
 		
 		for(int i=0; i<24; i++){
