@@ -17,8 +17,12 @@
  */
 package storm.spout;
 
-import storm.rdf.RDFTriple;
-import storm.topology.RDFTopology;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Random;
+
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -26,17 +30,15 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
+import storm.rdf.RDFTriple;
+import storm.topology.RDFTopology;
 
 public class RDFSpout extends BaseRichSpout {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	SpoutOutputCollector _collector;
 
 	Random _rand;

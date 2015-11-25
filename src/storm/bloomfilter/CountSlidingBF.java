@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import storm.bloomfilter.BloomFilter;
-
 public class CountSlidingBF<E>{
 	
 	static final Charset charset = Charset.forName("UTF-8");
@@ -21,7 +19,7 @@ public class CountSlidingBF<E>{
 	public int slidingWindowSize; //the maximum number of elements a sliding window will contain
 	public int elementNumber; //the number of elements we have already treated in a Sliding Window
 	public int k; //the number of hash functions
-	public BloomFilter BloomFilter; //the Bloom Filter used in this Sliding Window
+	public BloomFilter<E> BloomFilter; //the Bloom Filter used in this Sliding Window
 	public Map<Integer, Integer> Generation; //the Map to store the information of generation, with key:hash value (bitset index); value:generation ---- BloomFilter + Generation = Sliding BF
 	
 	/**
@@ -36,8 +34,8 @@ public class CountSlidingBF<E>{
 		this.slidingWindowSize = slidingWindowSize;
 		this.numberOfGeneration = numberOfGeneration;
 		this.k = k;
-		this.BloomFilter = new BloomFilter(c, slidingWindowSize, k);
-		this.Generation = new HashMap();
+		this.BloomFilter = new BloomFilter<E>(c, slidingWindowSize, k);
+		this.Generation = new HashMap<Integer, Integer>();
 	}
 	
 	/**
@@ -50,8 +48,8 @@ public class CountSlidingBF<E>{
 		this.slidingWindowSize = slidingWindowSize;
 		this.numberOfGeneration = numberOfGeneration;
 		this.generationSize = (int) Math.ceil(slidingWindowSize/numberOfGeneration);
-		this.BloomFilter = new BloomFilter(bitSetSize, slidingWindowSize);
-		this.Generation = new HashMap();
+		this.BloomFilter = new BloomFilter<E>(bitSetSize, slidingWindowSize);
+		this.Generation = new HashMap<Integer, Integer>();
 	}
 	
 	/**
@@ -64,8 +62,8 @@ public class CountSlidingBF<E>{
 		this.slidingWindowSize = slidingWindowSize;
 		this.numberOfGeneration = numberOfGeneration;
 		this.generationSize = (int) Math.ceil(slidingWindowSize/numberOfGeneration);
-		this.BloomFilter = new BloomFilter(falsePositive, slidingWindowSize);
-		this.Generation = new HashMap();
+		this.BloomFilter = new BloomFilter<E>(falsePositive, slidingWindowSize);
+		this.Generation = new HashMap<Integer, Integer>();
 	}
 	
 	/**

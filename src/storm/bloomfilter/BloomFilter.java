@@ -12,6 +12,10 @@ import java.util.Collection;
 
 public class BloomFilter<E> implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public BitSet bitset;
 	public int bitSetSize;
 	public double bitsPerElement;

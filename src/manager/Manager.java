@@ -1,17 +1,15 @@
 package manager;
+
 import java.util.Random;
 
-import storm.bloomfilter.*;
-import storm.bolt.*;
-import storm.rdf.*;
-import storm.spout.*;
-import storm.topology.*;
+import storm.rdf.RDFTriple;
+import storm.spout.RDFSpout;
 
 public class Manager {
 	
 	String query = "";
-	RDFTriple latest = new RDFTriple(" "," "," ");
-	RDFSpout = new RDFSpout();
+	RDFTriple latest = new RDFTriple(" ", " "," ");
+	RDFSpout spout = new RDFSpout();
 	
 	public static void main(String[] args) {
 		Manager manager = new Manager();
