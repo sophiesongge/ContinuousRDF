@@ -31,9 +31,9 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import storm.rdf.RDFTriple;
-import storm.topology.RDFTopology;
+import storm.topology.TestTopology;
 
-public class RDFSpout extends BaseRichSpout {
+public class TestSpout extends BaseRichSpout {
 
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
@@ -52,7 +52,7 @@ public class RDFSpout extends BaseRichSpout {
 		this._collector = collector;
 		this._rand = new Random();
 		//to read the input file
-		this._reader = RDFTopology.reader;
+		this._reader = TestTopology.reader;
 	}
 	
 	/*

@@ -8,6 +8,7 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 import storm.bloomfilter.BloomFilter;
 
 public class BoltCreatBF implements IRichBolt {
@@ -38,7 +39,7 @@ public class BoltCreatBF implements IRichBolt {
 			bf.add(Subject);
 			bloomFilters.put(Predicate, bf);
 		}
-		
+		collector.emit(new Values(bloomFilters));
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

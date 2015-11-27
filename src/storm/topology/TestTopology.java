@@ -1,36 +1,17 @@
 package storm.topology;
 
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
-import backtype.storm.generated.AlreadyAliveException;
-import backtype.storm.generated.InvalidTopologyException;
-import backtype.storm.spout.SpoutOutputCollector;
-import backtype.storm.task.OutputCollector;
-import backtype.storm.task.ShellBolt;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
-import backtype.storm.topology.IRichBolt;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.topology.TopologyBuilder;
-import backtype.storm.topology.base.BaseBasicBolt;
-import backtype.storm.topology.base.BaseRichSpout;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
-import backtype.storm.utils.Utils;
-import storm.bolt.BoltBuilder;
-import storm.bolt.BoltProber;
-import storm.spout.RDFSpout;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+
+import backtype.storm.Config;
+import backtype.storm.LocalCluster;
+import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.tuple.Fields;
+import storm.bolt.BoltBuilder;
+import storm.spout.TestSpout;
 
 
 
@@ -76,8 +57,9 @@ public static BufferedReader reader;
 		 * Bolts to create bloom filters using fieldsGrouping on Predicate. 
 		 * For now we are creating 3 bloomfilters for each predicate.
 		*/
-		builder.setSpout("spout_getdata", new RDFSpout(),1);
-		builder.setBolt("bolt_builder", new BoltBuilder(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setSpout("spout_getdata", new TestSpout(),1);
+		builder.setBolt("bolt_builder", new BoltBuilder(),4).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		//builder.setBolt("bolt_builder2", new BoltBuilder("Builder2"),1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//builder.setBolt("bolt_prober", new BoltProber(), 3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		
 		
@@ -88,8 +70,8 @@ public static BufferedReader reader;
 		 */
 		
 		LocalCluster cluster = new LocalCluster();
-		cluster.submitTopology("RDFStorm", config, builder.createTopology());
-		Thread.sleep(10000);
+		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
+		Thread.sleep(100000);
 		
 		cluster.shutdown();
 		
