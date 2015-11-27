@@ -16,7 +16,7 @@ import storm.spout.TestSpout;
 
 
 
-public class TestTopology{
+public class IVJTopology{
 	
 public static BufferedReader reader;
 	

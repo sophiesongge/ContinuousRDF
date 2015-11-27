@@ -31,7 +31,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import storm.rdf.RDFTriple;
-import storm.topology.TestTopology;
+import storm.topology.IVJTopology;;
 
 public class TestSpout extends BaseRichSpout {
 
@@ -52,7 +52,7 @@ public class TestSpout extends BaseRichSpout {
 		this._collector = collector;
 		this._rand = new Random();
 		//to read the input file
-		this._reader = TestTopology.reader;
+		this._reader = IVJTopology.reader;
 	}
 	
 	/*
