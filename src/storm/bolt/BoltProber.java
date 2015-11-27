@@ -1,10 +1,8 @@
 package storm.bolt;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
-import storm.rdf.RDFTriple;
 import storm.bloomfilter.BloomFilter;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -16,28 +14,43 @@ import backtype.storm.tuple.Values;
 
 public class BoltProber implements IRichBolt {
 	private OutputCollector collector;
-	private BloomFilter bf;
-
-	//Map<String, BloomFilter<Object>> bloomFilters;
+	private BloomFilter bfp1;
+	private BloomFilter bfp2;
 	
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
 		
 		this.collector = collector;
-		this.bf = new BloomFilter(0.001, 20);
-		//this.bloomfilters = new HashMap<String, BloomFilter>();
-		//this.bloomFilters = new HashMap<String, BloomFilter<Object>>();
+		this.bfp1 = new BloomFilter();
+		this.bfp2 = new BloomFilter();
+
 	}
 
-	public void execute(Tuple input) {
-		
-		String Subject = input.getStringByField("Subject");
-		String Predicate = input.getStringByField("Predicate");
-		//String Object = input.getStringByField("Object");
-		if(Predicate != "paper"){
-			bf.add(Subject);
-			collector.emit((List<Object>) bf);
+	public void execute(Tuple tuple) {
+		String input = tuple.getStringByField("ID");
+		String[] id = input.split("_");
+		ArrayList idList = new ArrayList();
+		if(id[0].equals("BuilderTaskID")){
+			if(!idList.contains(id[1])){
+				idList.add(id[1]);
+			}
+			if(idList.get(0).equals(id[1])){
+				bfp1.equals(tuple.getValueByField("Content"));
+			}else{
+				bfp2.equals(tuple.getValueByField("Content"));
+			}
+			collector.emit(null);
+		}else{
+			String str = tuple.getStringByField("Content");
+			boolean contains1 = bfp1.contains(str);
+			boolean contains2 = bfp2.contains(str);
+			if(contains1 && contains2){
+				collector.emit(new Values(tuple.getStringByField("Content")));
+			}else{
+				collector.emit(null);
+			}
 		}
+		
 		
 	}
 
@@ -46,10 +59,6 @@ public class BoltProber implements IRichBolt {
 	}
 
 	public void cleanup() {
-		
-		for(int i=0; i<bf.size(); i++){
-			System.out.print(bf.getBit(i)+" ");
-		}
 		
 	}
 

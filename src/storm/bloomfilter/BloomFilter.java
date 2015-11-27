@@ -101,6 +101,10 @@ public class BloomFilter<E> implements Serializable{
 	}
 	
 	
+	public BloomFilter() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
      *
      *A method to generate digests for a bytes array, and split the result into 4-byte ints, then store them in an Array.

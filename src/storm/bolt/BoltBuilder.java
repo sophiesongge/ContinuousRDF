@@ -40,16 +40,16 @@ public class BoltBuilder implements IRichBolt {
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
-		bf.add(Subject);
 		if(Predicate.equals("Paper")){
-			collector.emit(new Values("TaskID: "+id, Subject));
+			collector.emit(new Values("ProberTaskID_"+id, Subject));
 		}else{
-			collector.emit(new Values("TaskID: "+id, "The predicate processed by this task: "+Predicate));
+			collector.emit(new Values("BuilderTaskID_"+id, bf));
+			bf.add(Subject);
 		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		
+		declarer.declare(new Fields("ID","Content"));
 	}
 
 	public void cleanup() {

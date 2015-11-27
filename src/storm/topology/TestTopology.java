@@ -11,6 +11,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import storm.bolt.BoltBuilder;
+import storm.bolt.BoltProber;
 import storm.spout.TestSpout;
 
 
@@ -59,6 +60,7 @@ public static BufferedReader reader;
 		*/
 		builder.setSpout("spout_getdata", new TestSpout(),1);
 		builder.setBolt("bolt_builder", new BoltBuilder(),4).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setBolt("bolt_prober", new BoltProber(),1).shuffleGrouping("bolt_builder");
 		//builder.setBolt("bolt_builder2", new BoltBuilder("Builder2"),1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//builder.setBolt("bolt_prober", new BoltProber(), 3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		
