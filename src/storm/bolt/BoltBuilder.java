@@ -41,7 +41,11 @@ public class BoltBuilder implements IRichBolt {
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
 		bf.add(Subject);
-		collector.emit(new Values("TaskID: "+id, "The predicate processed by this task: "+Predicate));
+		if(Predicate.equals("Paper")){
+			collector.emit(new Values("TaskID: "+id, Subject));
+		}else{
+			collector.emit(new Values("TaskID: "+id, "The predicate processed by this task: "+Predicate));
+		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
