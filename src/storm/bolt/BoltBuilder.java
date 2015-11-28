@@ -1,7 +1,5 @@
 package storm.bolt;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import storm.bloomfilter.BloomFilter;
@@ -15,7 +13,8 @@ import backtype.storm.tuple.Values;
 
 public class BoltBuilder implements IRichBolt {
 	private OutputCollector collector;
-	private BloomFilter<String> bf;
+	private BloomFilter<String> bf1;
+	private BloomFilter<String> bf2;
 	private int id;
 	
 	/**
@@ -26,10 +25,9 @@ public class BoltBuilder implements IRichBolt {
 		//initialize the emitter
 		this.collector = collector;
 		//initialize an empty Bloom Filter with fp=0.001 and maximum_element=20 
-		this.bf = new BloomFilter(0.01, 20);
+		this.bf1 = new BloomFilter(0.001, 20);
+		this.bf2 = new BloomFilter(0.001, 20);
 		this.id = context.getThisTaskId();
-		//this.bloomfilters = new HashMap<String, BloomFilter>();
-		//this.bloomFilters = new HashMap<String, BloomFilter<Object>>();
 	}
 	
 	/**
@@ -40,11 +38,22 @@ public class BoltBuilder implements IRichBolt {
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
-		if(Predicate.equals("Paper")){
-			collector.emit(new Values("ProberTaskID_"+id, Subject));
+		if(Predicate.equals("Diplome")){
+			if(Object.equals("Ph.D")){
+				collector.emit(new Values("ProberTaskID_"+id, Subject));
+			}
+		}else if(Predicate.equals("Work")){
+			if(Object.equals("INRIA")){
+				//bf1.add(Subject);
+				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+			}
+			//collector.emit(new Values("BuilderTaskID_1_"+id, bf1));
 		}else{
-			collector.emit(new Values("BuilderTaskID_"+id, bf));
-			bf.add(Subject);
+			if(Object.equals("kNN")){
+				//bf2.add(Subject);
+				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+			}
+			//collector.emit(new Values("BuilderTaskID_2_"+id, bf2));
 		}
 	}
 
@@ -53,10 +62,6 @@ public class BoltBuilder implements IRichBolt {
 	}
 
 	public void cleanup() {
-		
-		for(int i=0; i<bf.size(); i++){
-			System.out.print(bf.getBit(i)+" ");
-		}
 		
 	}
 

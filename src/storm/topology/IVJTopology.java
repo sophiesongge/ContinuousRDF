@@ -14,22 +14,18 @@ import storm.bolt.BoltBuilder;
 import storm.bolt.BoltProber;
 import storm.spout.TestSpout;
 
-
-
 public class IVJTopology{
 	
 public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
-		
-		
+				
 		String filePath="./data/rdfdata.txt";
 		File file = new File(filePath);
 		reader = null;
 		try{
 			reader = new BufferedReader(new FileReader(file));
 			stormCall();
-				
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,8 +38,6 @@ public static BufferedReader reader;
 				}
 			}
 		}
-		
-		
 	}
 	
 	public static void stormCall() throws Exception
