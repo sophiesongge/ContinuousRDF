@@ -70,7 +70,14 @@ public static BufferedReader reader;
 		cluster.submitTopology("RDFStorm", config, builder.createTopology());
 		Thread.sleep(10000);
 		
-		cluster.shutdown();
+		
+		//Sander: cluster shutdown throws IOException, but adding try/catch states that it is an Unreachable catch block for IOException.
+		//try{
+			cluster.shutdown();			
+		/*} catch(IOException e){
+			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
+		}*/
+
 		
 		/* Result like this
 		Bloom Filter with Predicate = Work has values = 11
