@@ -64,7 +64,7 @@ public static BufferedReader reader;
 		
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
-		Thread.sleep(100000);
+		Thread.sleep(10000);
 		
 		cluster.shutdown();
 		
