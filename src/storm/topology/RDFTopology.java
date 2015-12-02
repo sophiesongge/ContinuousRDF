@@ -71,13 +71,12 @@ public static BufferedReader reader;
 		Thread.sleep(10000);
 		
 		//Sander: cluster shutdown throws IOException, but adding try/catch states that it is an Unreachable catch block for IOException.
-		//try{
+		try{
 			cluster.shutdown();	
-			//java.io.IOException: Unable to delete file: C:\Users\Sander\AppData\Local\Temp\fb8a88e9-6550-4bbc-b270-dd73892c7a14\version-2\log.1
-			//java.io.IOException: Unable to delete file: C:\Users\Sander\AppData\Local\Temp\659c8fe1-de36-4ec3-bf6f-927c664a1fc6\version-2\log.1
-		/*} catch(IOException e){
+			throw new IOException("test");//Used as debug, otherwise we got the error saying this block couldn't generate an IOException
+		} catch(IOException e){
 			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
-		}*/
+		}
 
 		
 		/* Result like this
