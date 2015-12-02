@@ -25,8 +25,8 @@ public class BoltBuilder implements IRichBolt {
 		//initialize the emitter
 		this.collector = collector;
 		//initialize an empty Bloom Filter with fp=0.001 and maximum_element=20 
-		this.bf1 = new BloomFilter(0.001, 20);
-		this.bf2 = new BloomFilter(0.001, 20);
+		this.bf1 = new BloomFilter(0.01, 10);
+		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
 	}
 	
@@ -44,16 +44,18 @@ public class BoltBuilder implements IRichBolt {
 			}
 		}else if(Predicate.equals("Work")){
 			if(Object.equals("INRIA")){
-				//bf1.add(Subject);
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				bf1.add(Subject);
+				//collector.emit(new Values("BuilderTaskID_1_"+id,bf1));
+				//collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
-			//collector.emit(new Values("BuilderTaskID_1_"+id, bf1));
+			collector.emit(new Values("BuilderTaskID_1_"+id, bf1));
 		}else{
 			if(Object.equals("kNN")){
-				//bf2.add(Subject);
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				bf2.add(Subject);
+				//collector.emit(new Values("BuilderTaskID_2_"+id,bf2));
+				//collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
-			//collector.emit(new Values("BuilderTaskID_2_"+id, bf2));
+			collector.emit(new Values("BuilderTaskID_2_"+id, bf2));
 		}
 	}
 

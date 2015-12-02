@@ -21,8 +21,8 @@ public class BoltProber implements IRichBolt {
 			OutputCollector collector) {
 		
 		this.collector = collector;
-		this.bfp1 = new BloomFilter(0.001, 20);
-		this.bfp2 = new BloomFilter(0.001, 20);
+		this.bfp1 = new BloomFilter(0.01, 10);
+		this.bfp2 = new BloomFilter(0.01, 10);
 
 	}
 
@@ -31,13 +31,18 @@ public class BoltProber implements IRichBolt {
 		String[] id = input.split("_");
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
+				bfp1 = (BloomFilter<String>) tuple.getValueByField("Content");
 				//bfp1.equals(tuple.getValueByField("Content"));
 				//collector.emit(new Values(tuple.getStringByField("Content")));
-				bfp1.add(tuple.getStringByField("Content"));
+				//bfp1.add(tuple.getStringByField("Content"));
+				/*for(int i=0; i<bfp1.size(); i++){
+					System.out.print(bfp1.getBit(i));
+				}*/
 			}else{
+				bfp2 = (BloomFilter<String>) tuple.getValueByField("Content");
 				//bfp2.equals(tuple.getValueByField("Content"));
 				//collector.emit(new Values(tuple.getStringByField("Content")));
-				bfp2.add(tuple.getStringByField("Content"));
+				//bfp2.add(tuple.getStringByField("Content"));
 			}
 		}else{
 			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
