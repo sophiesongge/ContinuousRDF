@@ -45,7 +45,11 @@ public static BufferedReader reader;
 		
 	}
 	
-	public static void stormCall() throws Exception
+	/**
+	 * The function that calls all the other functions and keeps the overview
+	 * @throws InterruptedException if the thread.sleep(10000) gets interrupted
+	 */
+	public static void stormCall() throws InterruptedException
 	{
 		Config config = new Config();
 		config.setDebug(true);
