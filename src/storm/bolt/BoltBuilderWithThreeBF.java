@@ -83,10 +83,10 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
 		HashMap<String, String> hmap = new HashMap<String, String>();
-		
+		hmap.put("Paper", objectPaper);
 		hmap.put("Work", objectWork);
 		hmap.put("Diplome", objectDiplome);
-		hmap.put("Paper", objectPaper);
+		
 		// Identify the join type and set values of predicate and objects accordingly
 		int countAny=0;
 		int index=0;
@@ -94,7 +94,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		Iterator iterator = set.iterator();
 		while(iterator.hasNext()) {
 			Map.Entry mentry = (Map.Entry)iterator.next();
-			if(mentry.getValue().toString().equals("ANY")) {
+			if(mentry.getValue().toString().equalsIgnoreCase("ANY")) {
 				predicates[2-countAny]=mentry.getKey().toString();
 				objects[2-countAny]=mentry.getValue().toString();
 				countAny++;
