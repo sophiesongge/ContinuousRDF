@@ -76,8 +76,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		//("multi-variable join, to find the authors for paper kNN, and the place they work, and their diplome: ");
 		//find s where p1=v1,p2=any,p3=any;
 		
+		//todo: let the objects be automaticly defined on the user input
 		String paper="Paper",work="Work",diplome="Diplome";
-		String objectPaper="kNN",objectWork="INRIA",objectDiplome="Master";
+		String objectPaper="kNN",objectWork="INRIA",objectDiplome="ANY";
 
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
