@@ -20,6 +20,12 @@ public class BoltTest implements IRichBolt {
 	public void execute(Tuple input) {		
 		System.out.println("BoltTest execute");
 		System.out.println("subject: " + input.toString());
+		java.util.List<Object> values = input.getValues();
+		/*
+		 * values.get(0): subject
+		 * values.get(1): predicate
+		 * values.get(2): object 
+		 */
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
