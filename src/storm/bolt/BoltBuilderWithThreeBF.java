@@ -3,6 +3,7 @@ package storm.bolt;
 import java.util.Map;
 
 import storm.bloomfilter.BloomFilter;
+import storm.topology.TopologyWithThreeBF;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
@@ -29,6 +30,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
+		this.p1 = TopologyWithThreeBF.query.getP1();
+		this.p2 = TopologyWithThreeBF.query.getP2();
+		this.p3 = TopologyWithThreeBF.query.getP3();
 	}
 	
 	/**
