@@ -31,7 +31,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		
 		this.bfp3 = new BloomFilter(0.01, 10);
 		queryResult = new ArrayList<String>();
-
+		
 	}
 
 	public void execute(Tuple tuple) {
@@ -73,7 +73,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				queryResult.add(tuple.getStringByField("Content"));
 			}
 			else
-			{
+			{ 
 				bfp3.add(tuple.getStringByField("Content"));
 			}
 		}

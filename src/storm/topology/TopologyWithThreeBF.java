@@ -55,13 +55,13 @@ public static BufferedReader reader;
 		 * "bolt_builder" will create Bloom Filters by fields grouping by "Predicate"
 		 * "bolt_prober" will probe Bloom Filters
 		*/
-		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),1);
+		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),3);
 		builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),4).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
 		
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
-		Thread.sleep(20000);
+		Thread.sleep(30000);
 		
 		cluster.shutdown();
 		
