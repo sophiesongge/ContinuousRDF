@@ -23,6 +23,8 @@ public class TopologyWithThreeBF{
 	public static Query query;
 	
 public static BufferedReader reader;
+
+private static Scanner user_input;
 	
 	public static void main(String[] args) throws Exception{
 				
@@ -48,14 +50,14 @@ public static BufferedReader reader;
 	
 	public static void stormCall() throws Exception
 	{
-		Scanner user_input = new Scanner( System.in );
-		System.out.println("Value for P1?");
-		String p1 = user_input.next();
-		System.out.println("Value for P2? (put in ANY for any possible value)");
-		String p2 = user_input.next();
-		System.out.println("Value for P3? (put in ANY for any possible value)");
-		String p3 = user_input.next();
-		query = new Query(p1,p2,p3);
+		user_input = new Scanner( System.in );
+		System.out.println("Value for V1?");
+		String v1 = user_input.next();
+		System.out.println("Value for V2? (put in ANY for any possible value)");
+		String v2 = user_input.next();
+		System.out.println("Value for V3? (put in ANY for any possible value)");
+		String v3 = user_input.next();
+		query = new Query(v1,v2,v3);
 		
 		Config config = new Config();
 		config.setDebug(true);
