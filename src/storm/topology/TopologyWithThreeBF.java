@@ -77,7 +77,13 @@ private static Scanner user_input;
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
 		Thread.sleep(30000);
 		
-		cluster.shutdown();
+		//Sander: cluster shutdown throws IOException, but adding try/catch states that it is an Unreachable catch block for IOException.
+		try{
+			cluster.shutdown();	
+			throw new IOException("test");//Used as debug, otherwise we got the error saying this block couldn't generate an IOException
+		} catch(IOException e){
+			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
+		}
 		
 	}
 	
