@@ -11,6 +11,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import storm.bolt.BoltCreatBF;
+import storm.bolt.BoltTest;
 import storm.spout.RDFSpout;
 
 
@@ -62,7 +63,13 @@ public static BufferedReader reader;
 		 * For now we are creating 3 bloomfilters for each predicate.
 		*/
 		builder.setSpout("spout_getdata", new RDFSpout(),1);
+		//write own bolt, insert here, 3 is the parallelism factor of the bolts
+		//now creates a bloomfilter for every triple
 		builder.setBolt("bolt_bloomfilter", new BoltCreatBF(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		//BoltCreateTest() handles new data after the Bloomfilters have been created
+		builder.setBolt("bolt_test", new BoltTest()).fieldsGrouping("bolt_bloomfilter", new Fields("Predicate"));
+		//use API of Jena to treat data
+		//fieldgrouping: if we have P1, P2 and P3, then P1 always goes to bolt 1, P2 always goes to bolt 2 and P3 always goes to bolt 3, alternativly: shufflegroup to shuffle.
 		
 		/*
 		 * This bolt is optional, but I have shifted code of this file to spout
@@ -81,7 +88,7 @@ public static BufferedReader reader;
 		} catch(IOException e){
 			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
 		}
-
+	
 		
 		/* Result like this
 		Bloom Filter with Predicate = Work has values = 11
