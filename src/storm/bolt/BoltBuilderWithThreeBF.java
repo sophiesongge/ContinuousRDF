@@ -104,7 +104,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 				index++;
 			}
 		}
-		countAny=0;
+		
 		if(countAny==0) {
 			oneVariableJoin(Subject, Predicate, Object);
 		}
