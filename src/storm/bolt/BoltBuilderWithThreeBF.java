@@ -122,12 +122,12 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals(predicates[0])){
-			if(Object.equals(objects[0])){
+			if(Object.equals(v3)){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
-			if(Object.equals(objects[1])){
+			if(Object.equals(v2)){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 		}
@@ -184,27 +184,17 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		
 		if(Predicate.equals("Diplome")){
-<<<<<<< HEAD
-			if(Object.equals("Ph.D")){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
-=======
 			if(Object.equals(v3)){//for example: Ph.D
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
->>>>>>> 845b3e7828e6b001d9c8f0a800202d769461666c
 			}
 		}else if(Predicate.equals("Work")){
-			if(Object.equals(v2)){//for exmaple: INRIA
+			if(Object.equals(v2)){//for example: INRIA
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-<<<<<<< HEAD
-			if(Object.equals("kNN")){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
-=======
 			if(Object.equals(v1)){//for example: kNN
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
->>>>>>> 845b3e7828e6b001d9c8f0a800202d769461666c
 			}
 			
 		}
