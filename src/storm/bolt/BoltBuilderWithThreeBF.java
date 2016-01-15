@@ -61,16 +61,16 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals("Diplome")){
-			if(Object.equals("Ph.D")){//V3
+			if(Object.equals(v3)){//for example: Ph.D
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){//V2
+			if(Object.equals(v2)){//for exmaple: INRIA
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){//V1
+			if(Object.equals(v1)){//for example: kNN
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 			
@@ -80,19 +80,19 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	//("2-variable join, to find the authors for paper kNN who works in INRIA and their diplome:");
 	public void twoVariableJoin(String Subject,String Predicate, String Object) {
-		
+		//v3 = ANY
 		if(Predicate.equals("Diplome")){
 			//if(Object.equals("Ph.D")){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			//}
 			
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){
+			if(Object.equals(v2)){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){
+			if(Object.equals(v1)){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 		}
@@ -101,6 +101,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	//("multi-variable join, to find the authors for paper kNN, and the place they work, and their diplome: ");
 	public void multiVariableJoin(String Subject,String Predicate, String Object) {
+		//v3 = v2 = ANY
 		if(Predicate.equals("Diplome")){
 			//if(Object.equals("Ph.D")){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
@@ -112,7 +113,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 			//}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){
+			if(Object.equals(v1)){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 		}
