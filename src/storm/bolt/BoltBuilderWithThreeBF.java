@@ -16,6 +16,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
+	private String p1, p2, p3;
 	
 	/**
 	 * initialization
@@ -56,16 +57,16 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals("Diplome")){
-			if(Object.equals("Ph.D")){
+			if(Object.equals("Ph.D")){//P3
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){
+			if(Object.equals("INRIA")){//P2
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){
+			if(Object.equals("kNN")){//P1
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 			
