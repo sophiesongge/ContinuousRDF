@@ -20,7 +20,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
-	private String v1, v2, v3;
+	
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];

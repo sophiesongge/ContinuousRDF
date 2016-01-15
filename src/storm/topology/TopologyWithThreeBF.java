@@ -69,8 +69,8 @@ private static Scanner user_input;
 		 * "bolt_builder" will create Bloom Filters by fields grouping by "Predicate"
 		 * "bolt_prober" will probe Bloom Filters
 		*/
-		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),3);
-		builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),4).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),1);
+		builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
 		
 		LocalCluster cluster = new LocalCluster();

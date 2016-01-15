@@ -40,19 +40,6 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
 				
-				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
-				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
-				if(contains2 && contains3){
-					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple.getStringByField("Content"));
-				}
-				else
-				{
-					bfp1.add(tuple.getStringByField("Content"));
-				}
-				
-			}else{
-				
 				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
 				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
 				if(contains1 && contains3){
@@ -63,18 +50,31 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				{
 					bfp2.add(tuple.getStringByField("Content"));
 				}
+				
+			}else{
+				
+				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
+				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+				if(contains1 && contains2){
+					collector.emit(new Values(tuple.getStringByField("Content")));
+					queryResult.add(tuple.getStringByField("Content"));
+				}
+				else
+				{
+					bfp3.add(tuple.getStringByField("Content"));
+				}
 			}
 		}else{
 			
-			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
-			if(contains1 && contains2){
+			boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
+			if(contains2 && contains3){
 				collector.emit(new Values(tuple.getStringByField("Content")));
 				queryResult.add(tuple.getStringByField("Content"));
 			}
 			else
 			{ 
-				bfp3.add(tuple.getStringByField("Content"));
+				bfp1.add(tuple.getStringByField("Content"));
 			}
 		}
 	
