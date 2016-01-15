@@ -17,7 +17,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
-	private String p1, p2, p3;
+	private String v1, v2, v3;
 	
 	/**
 	 * initialization
@@ -30,9 +30,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
-		this.p1 = TopologyWithThreeBF.query.getP1();
-		this.p2 = TopologyWithThreeBF.query.getP2();
-		this.p3 = TopologyWithThreeBF.query.getP3();
+		this.v1 = TopologyWithThreeBF.query.getV1();
+		this.v2 = TopologyWithThreeBF.query.getV2();
+		this.v3 = TopologyWithThreeBF.query.getV3();
 	}
 	
 	/**
@@ -61,16 +61,16 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals("Diplome")){
-			if(Object.equals("Ph.D")){//P3
+			if(Object.equals("Ph.D")){//V3
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){//P2
+			if(Object.equals("INRIA")){//V2
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){//P1
+			if(Object.equals("kNN")){//V1
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 			
