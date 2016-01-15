@@ -19,8 +19,10 @@ public class BoltTest implements IRichBolt {
 
 	public void execute(Tuple input) {		
 		System.out.println("BoltTest execute");
-		System.out.println("subject: " + input.toString());
-		java.util.List<Object> values = input.getValues();
+		String Subject = input.getStringByField("Subject");
+		String Predicate = input.getStringByField("Predicate");
+		String Object = input.getStringByField("Object");
+		System.out.println("tuple: (" + Subject + "," + Predicate + "," + Object + ")");
 		/*
 		 * values.get(0): subject
 		 * values.get(1): predicate
