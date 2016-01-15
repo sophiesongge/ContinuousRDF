@@ -39,6 +39,7 @@ public class BoltCreatBF implements IRichBolt {
 			bf.add(Subject);
 			bloomFilters.put(Predicate, bf);
 		}
+		//output, send to next stage.
 		collector.emit(new Values(bloomFilters));
 	}
 

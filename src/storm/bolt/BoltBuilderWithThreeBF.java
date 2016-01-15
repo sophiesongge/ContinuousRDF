@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import storm.bloomfilter.BloomFilter;
+import storm.topology.TopologyWithThreeBF;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
@@ -19,6 +20,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
+	private String v1, v2, v3;
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];
@@ -36,6 +38,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
+		this.v1 = TopologyWithThreeBF.query.getV1();
+		this.v2 = TopologyWithThreeBF.query.getV2();
+		this.v3 = TopologyWithThreeBF.query.getV3();
 	}
 	
 	/**
@@ -179,17 +184,27 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		
 		if(Predicate.equals("Diplome")){
+<<<<<<< HEAD
 			if(Object.equals("Ph.D")){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+=======
+			if(Object.equals(v3)){//for example: Ph.D
+				collector.emit(new Values("ProberTaskID_"+id, Subject));
+>>>>>>> 845b3e7828e6b001d9c8f0a800202d769461666c
 			}
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){
+			if(Object.equals(v2)){//for exmaple: INRIA
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
+<<<<<<< HEAD
 			if(Object.equals("kNN")){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
+=======
+			if(Object.equals(v1)){//for example: kNN
+				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+>>>>>>> 845b3e7828e6b001d9c8f0a800202d769461666c
 			}
 			
 		}
@@ -198,19 +213,19 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	//("2-variable join, to find the authors for paper kNN who works in INRIA and their diplome:");
 	public void twoVariableJoin(String Subject,String Predicate, String Object) {
-		
+		//v3 = ANY
 		if(Predicate.equals("Diplome")){
 			//if(Object.equals("Ph.D")){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			//}
 			
 		}else if(Predicate.equals("Work")){
-			if(Object.equals("INRIA")){
+			if(Object.equals(v2)){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){
+			if(Object.equals(v1)){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 		}
@@ -219,6 +234,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	//("multi-variable join, to find the authors for paper kNN, and the place they work, and their diplome: ");
 	public void multiVariableJoin(String Subject,String Predicate, String Object) {
+		//v3 = v2 = ANY
 		if(Predicate.equals("Diplome")){
 			//if(Object.equals("Ph.D")){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
@@ -230,7 +246,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 			//}
 			
 		}else if(Predicate.equals("Paper")){
-			if(Object.equals("kNN")){
+			if(Object.equals(v1)){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
 			}
 		}

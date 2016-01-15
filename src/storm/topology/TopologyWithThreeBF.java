@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -14,12 +15,16 @@ import storm.bolt.BoltBuilder;
 import storm.bolt.BoltBuilderWithThreeBF;
 import storm.bolt.BoltProber;
 import storm.bolt.BoltProberWithThreeBF;
+import storm.rdf.Query;
 import storm.spout.RDFSpoutWithThreeBF;
 import storm.spout.TestSpout;
 
 public class TopologyWithThreeBF{
+	public static Query query;
 	
 public static BufferedReader reader;
+
+private static Scanner user_input;
 	
 	public static void main(String[] args) throws Exception{
 				
@@ -45,6 +50,15 @@ public static BufferedReader reader;
 	
 	public static void stormCall() throws Exception
 	{
+		user_input = new Scanner( System.in );
+		System.out.println("Value for V1?");
+		String v1 = user_input.next();
+		System.out.println("Value for V2? (put in ANY for any possible value)");
+		String v2 = user_input.next();
+		System.out.println("Value for V3? (put in ANY for any possible value)");
+		String v3 = user_input.next();
+		query = new Query(v1,v2,v3);
+		
 		Config config = new Config();
 		config.setDebug(true);
 		
