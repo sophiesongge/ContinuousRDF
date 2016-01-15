@@ -77,7 +77,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		//find s where p1=v1,p2=any,p3=any;
 		
 		String paper="Paper",work="Work",diplome="Diplome";
-		String objectPaper="kNN",objectWork="INRIA",objectDiplome="ANY";
+		String objectPaper="kNN",objectWork="ANY",objectDiplome="ANY";
 
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
