@@ -24,7 +24,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];
-	String p1,p2,p3,v1,v2,v3;
+	String p1,p2,p3;
 
 	
 	/**
