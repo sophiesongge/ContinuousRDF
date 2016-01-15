@@ -122,12 +122,12 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals(predicates[0])){
-			if(Object.equals(v3)){
+			if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
-			if(Object.equals(v2)){
+			if(Object.equals(objects[1])){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 		}
