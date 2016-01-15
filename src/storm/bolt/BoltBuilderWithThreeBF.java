@@ -24,7 +24,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];
-	String p1,p2,p3;
+	String p1,p2,p3,v1,v2,v3;
 
 	
 	/**
@@ -76,14 +76,15 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		//("multi-variable join, to find the authors for paper kNN, and the place they work, and their diplome: ");
 		//find s where p1=v1,p2=any,p3=any;
 		
-		String paper="Paper",work="Work",diplome="Diploma";
-		String objectPaper="kNN",objectWork="INRIA",objectDiplome="Ph.D";
+		String paper="Paper",work="Work",diplome="Diplome";
+		String objectPaper="kNN",objectWork="INRIA",objectDiplome="Master";
 
+		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
 		HashMap<String, String> hmap = new HashMap<String, String>();
 		
 		hmap.put("Work", objectWork);
-		hmap.put("Diploma", objectDiplome);
+		hmap.put("Diplome", objectDiplome);
 		hmap.put("Paper", objectPaper);
 		// Identify the join type and set values of predicate and objects accordingly
 		int countAny=0;
@@ -122,12 +123,12 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals(predicates[0])){
-			if(Object.equals(v3)){
+			if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
-			if(Object.equals(v2)){
+			if(Object.equals(objects[1])){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
 			}
 		}
@@ -161,9 +162,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void multiVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals(predicates[0])){
-			if(Object.equals(objects[0])){
+			//if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
-			}
+			//}
 		}
 		else if(Predicate.equals(predicates[1])){
 			//if(Object.equals(objects[1])){
@@ -245,6 +246,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("ID","Content"));
+		
 	}
 
 	public void cleanup() {

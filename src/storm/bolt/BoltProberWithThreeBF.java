@@ -87,6 +87,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	public void cleanup() {
 		
 		System.out.println("Query Result is :" +Arrays.toString(queryResult.toArray()));
+		System.out.println( bfp1.count() + " " + bfp2.count() + " " + bfp3.count() + " ");
 		queryResult.clear();
 	}
 
