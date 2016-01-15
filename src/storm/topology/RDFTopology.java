@@ -67,7 +67,7 @@ public static BufferedReader reader;
 		//now creates a bloomfilter for every triple
 		builder.setBolt("bolt_bloomfilter", new BoltCreatBF(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//BoltCreateTest() handles new data after the Bloomfilters have been created
-		builder.setBolt("bolt_test", new BoltTest()).fieldsGrouping("bolt_bloomfilter", new Fields("Predicate"));
+		builder.setBolt("bolt_test", new BoltTest(),1).shuffleGrouping("spout_getdata");
 		//use API of Jena to treat data
 		//fieldgrouping: if we have P1, P2 and P3, then P1 always goes to bolt 1, P2 always goes to bolt 2 and P3 always goes to bolt 3, alternativly: shufflegroup to shuffle.
 		

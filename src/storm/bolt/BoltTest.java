@@ -26,10 +26,10 @@ public class BoltTest implements IRichBolt {
 		
 	}
 
-	public void cleanup() {
-	}
-
 	public Map<String, Object> getComponentConfiguration() {
 		return null;
+	}
+
+	public void cleanup() {		
 	}
 }
