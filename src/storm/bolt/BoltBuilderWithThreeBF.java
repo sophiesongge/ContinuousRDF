@@ -24,7 +24,8 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];
-	String p1,p2,p3,v1,v2,v3;
+	String[] v = new String[3];//v1, v2 and v3
+	String p1,p2,p3;
 
 	
 	/**
@@ -38,9 +39,9 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
-		this.v1 = TopologyWithThreeBF.query.getV1();
-		this.v2 = TopologyWithThreeBF.query.getV2();
-		this.v3 = TopologyWithThreeBF.query.getV3();
+		this.v[0] = TopologyWithThreeBF.query.getV1();
+		this.v[1] = TopologyWithThreeBF.query.getV2();
+		this.v[2] = TopologyWithThreeBF.query.getV3();
 	}
 	
 	/**
@@ -78,7 +79,47 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		//todo: let the objects be automaticly defined on the user input
 		String paper="Paper",work="Work",diplome="Diplome";
-		String objectPaper="kNN",objectWork="ANY",objectDiplome="ANY";
+		String objectPaper="ANY",objectWork="ANY",objectDiplome="ANY";//start with all values ANY
+		
+		//define possible objects to possible relations
+		String[] paperObjects = {"kNN"};
+		String[] workObjects = {"INRIA","ECP"};
+		String[] diplomeObjects = {"Ph.D","Master"};
+		
+		//check for all v values to which relation they belong
+		//for now it's case insensitive 
+		Boolean found = false;
+		for(int i = 0; i < v.length; i++){
+			found = false;
+			//check if it's a paper object
+			for(int j = 0; j < paperObjects.length; j++){
+				if(v[i].equalsIgnoreCase(paperObjects[j])){
+					found = true;
+					objectPaper = v[i];
+				}
+			}
+			
+			if(!found){//not a paper object
+				//check if it's a work object
+				for(int j = 0; j < workObjects.length; j++){
+					if(v[i].equalsIgnoreCase(workObjects[j])){
+						found = true;
+						objectWork = v[i];
+					}
+				}				
+			}
+			
+			if(!found){//not a paper object, nor a work object
+				//check if it's a work object
+				for(int j = 0; j < diplomeObjects.length; j++){
+					if(v[i].equalsIgnoreCase(diplomeObjects[j])){
+						found = true;
+						objectDiplome = v[i];
+					}
+				}				
+			}
+			//note: if it doesn't fit with a value, the object just stays at any
+		}
 
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			

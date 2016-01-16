@@ -51,11 +51,11 @@ private static Scanner user_input;
 	public static void stormCall() throws Exception
 	{
 		user_input = new Scanner( System.in );
-		System.out.println("Value for paper?");
+		System.out.println("First value? (put in ANY for any possible value)");
 		String v1 = user_input.next();
-		System.out.println("Value for work? (put in ANY for any possible value)");
+		System.out.println("Second value? (put in ANY for any possible value)");
 		String v2 = user_input.next();
-		System.out.println("Value for diploma? (put in ANY for any possible value)");
+		System.out.println("Third value? (put in ANY for any possible value)");
 		String v3 = user_input.next();
 		query = new Query(v1,v2,v3);
 		
