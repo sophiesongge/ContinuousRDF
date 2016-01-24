@@ -162,7 +162,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 			multiVariableJoin(Subject, Predicate, Object);
 		}
 		else
-			System.out.println("Error, con't identify join type");
+			System.out.println("Error, can't identify join type");
 			
 
 	}
