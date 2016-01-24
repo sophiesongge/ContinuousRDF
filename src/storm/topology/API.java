@@ -22,12 +22,14 @@ public class API {
 		String[] returnval = new String[]{};
 		Query query = new Query(var1,var2,var3);		
 		Config config = new Config();
+		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF();
+		
 		
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),3);
-		builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setBolt("bolt_builder", boltBuilder,1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
-		//todo
-		return returnval;
+		
+		return boltBuilder.results.getResults();
 	}
 }

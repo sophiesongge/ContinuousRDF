@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import storm.bloomfilter.BloomFilter;
+import storm.rdf.Results;
 import storm.topology.TopologyWithThreeBF;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -20,6 +21,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
+	public Results results;
 	
 	
 	String[] predicates = new String[3];
@@ -172,16 +174,19 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		if(Predicate.equals(predicates[0])){
 			if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
+				results.add(Subject);
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
 			if(Object.equals(objects[1])){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				results.add(Subject);
 			}
 		}
 		else if(Predicate.equals(predicates[2])){
 			if(Object.equals(objects[2])){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				results.add(Subject);
 			}
 		}
 			
@@ -191,16 +196,19 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		if(Predicate.equals(predicates[0])){
 			if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
+				results.add(Subject);
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
 			if(Object.equals(objects[1])){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				results.add(Subject);
 			}
 		}
 		else if(Predicate.equals(predicates[2])){
 			//if(Object.equals(objects[2])){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				results.add(Subject);
 			//}
 		}
 		
@@ -211,16 +219,19 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		if(Predicate.equals(predicates[0])){
 			//if(Object.equals(objects[0])){
 				collector.emit(new Values("ProberTaskID_"+id, Subject));
+				results.add(Subject);
 			//}
 		}
 		else if(Predicate.equals(predicates[1])){
 			//if(Object.equals(objects[1])){
 				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				results.add(Subject);
 			//}
 		}
 		else if(Predicate.equals(predicates[2])){
 			//if(Object.equals(objects[2])){
 				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				results.add(Subject);
 			//}
 		}
 		
