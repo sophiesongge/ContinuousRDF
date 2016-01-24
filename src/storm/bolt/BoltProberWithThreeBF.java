@@ -40,6 +40,8 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
 				
+				//bfp2.add(tuple.getStringByField("Content"));
+				
 				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
 				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
 				if(contains1 && contains3){
@@ -53,6 +55,8 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				
 			}else{
 				
+				bfp3.add(tuple.getStringByField("Content"));
+				/*
 				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
 				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
 				if(contains1 && contains2){
@@ -62,10 +66,12 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				else
 				{
 					bfp3.add(tuple.getStringByField("Content"));
-				}
+				}*/
 			}
 		}else{
 			
+			bfp1.add(tuple.getStringByField("Content"));
+			/*
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
 			boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
 			if(contains2 && contains3){
@@ -75,7 +81,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 			else
 			{ 
 				bfp1.add(tuple.getStringByField("Content"));
-			}
+			}*/
 		}
 	
 	}

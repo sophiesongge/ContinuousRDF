@@ -78,7 +78,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		//todo: let the objects be automaticly defined on the user input
 		String paper="Paper",work="Work",diplome="Diplome";
-		String objectPaper="kNN",objectWork="ANY",objectDiplome="ANY";
+		String objectPaper="kNN",objectWork="INRIA",objectDiplome="ANY";
 
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
@@ -105,7 +105,12 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 				index++;
 			}
 		}
-		
+		/*
+		for(int i=0;i<3;i++) {
+			System.out.println(predicates[i]);
+			System.out.println(objects[i]);
+		}
+		*/
 		if(countAny==0) {
 			oneVariableJoin(Subject, Predicate, Object);
 		}
