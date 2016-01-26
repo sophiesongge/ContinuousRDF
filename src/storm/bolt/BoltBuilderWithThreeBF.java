@@ -79,10 +79,8 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		//todo: let the objects be automaticly defined on the user input
 		String paper="Paper",work="Work",diplome="Diplome";
-<<<<<<< HEAD
-		String objectPaper="kNN",objectWork="INRIA",objectDiplome="ANY";
-=======
-		String objectPaper="ANY",objectWork="ANY",objectDiplome="ANY";//start with all values ANY
+
+		String objectPaper="kNN",objectWork="INRIA",objectDiplome="ANY";//start with all values ANY
 		
 		//define possible objects to possible relations
 		String[] paperObjects = {"kNN"};
@@ -128,7 +126,6 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		System.out.println("Work: " + objectWork);
 		System.out.println("Diplome: " + objectDiplome);
 		
->>>>>>> 1e013742ca8d26cf0c2b0674b499fe5a1f119666
 
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
@@ -180,17 +177,17 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		if(Predicate.equals(predicates[0])){
 			if(Object.equals(objects[0])){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
+				collector.emit(new Values("onevariable", "BuilderTaskID_1_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
 			if(Object.equals(objects[1])){
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				collector.emit(new Values("onevariable", "BuilderTaskID_2_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[2])){
 			if(Object.equals(objects[2])){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				collector.emit(new Values("onevariable", "ProberTaskID_"+id, Subject));
 			}
 		}
 			
@@ -199,17 +196,17 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		
 		if(Predicate.equals(predicates[0])){
 			if(Object.equals(objects[0])){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
+				collector.emit(new Values("twovariable", "BuilderTaskID_1_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[1])){
 			if(Object.equals(objects[1])){
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				collector.emit(new Values("twovariable", "BuilderTaskID_2_"+id, Subject));
 			}
 		}
 		else if(Predicate.equals(predicates[2])){
 			//if(Object.equals(objects[2])){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				collector.emit(new Values("twovariable", "ProberTaskID_"+id, Subject));
 			//}
 		}
 		
@@ -218,90 +215,26 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	public void multiVariableJoin(String Subject,String Predicate, String Object) {
 		
 		if(Predicate.equals(predicates[0])){
-			//if(Object.equals(objects[0])){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
-			//}
+			if(Object.equals(objects[0])){
+				collector.emit(new Values("multivariable", "BuilderTaskID_1_"+id, Subject));
+			}
 		}
 		else if(Predicate.equals(predicates[1])){
 			//if(Object.equals(objects[1])){
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
+				collector.emit(new Values("multivariable", "BuilderTaskID_2_"+id, Subject));
 			//}
 		}
 		else if(Predicate.equals(predicates[2])){
 			//if(Object.equals(objects[2])){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
+				collector.emit(new Values("multivariable", "ProberTaskID_"+id, Subject));
 			//}
 		}
 		
 	}
 	
-	/*
-	//("1-variable join, to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome:");
-	public void oneVariableJoin(String Subject,String Predicate, String Object) {
-		
-		
-		if(Predicate.equals("Diplome")){
-			if(Object.equals(v3)){//for example: Ph.D
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
-			}
-		}else if(Predicate.equals("Work")){
-			if(Object.equals(v2)){//for example: INRIA
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
-			}
-			
-		}else if(Predicate.equals("Paper")){
-			if(Object.equals(v1)){//for example: kNN
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
-			}
-			
-		}
-		
-	}
-	
-	//("2-variable join, to find the authors for paper kNN who works in INRIA and their diplome:");
-	public void twoVariableJoin(String Subject,String Predicate, String Object) {
-		//v3 = ANY
-		if(Predicate.equals("Diplome")){
-			//if(Object.equals("Ph.D")){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
-			//}
-			
-		}else if(Predicate.equals("Work")){
-			if(Object.equals(v2)){
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
-			}
-			
-		}else if(Predicate.equals("Paper")){
-			if(Object.equals(v1)){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
-			}
-		}
-		
-	}
-	
-	//("multi-variable join, to find the authors for paper kNN, and the place they work, and their diplome: ");
-	public void multiVariableJoin(String Subject,String Predicate, String Object) {
-		//v3 = v2 = ANY
-		if(Predicate.equals("Diplome")){
-			//if(Object.equals("Ph.D")){
-				collector.emit(new Values("ProberTaskID_"+id, Subject));
-			//}
-			
-		}else if(Predicate.equals("Work")){
-			//if(Object.equals("INRIA")){
-				collector.emit(new Values("BuilderTaskID_1_"+id, Subject));
-			//}
-			
-		}else if(Predicate.equals("Paper")){
-			if(Object.equals(v1)){
-				collector.emit(new Values("BuilderTaskID_2_"+id, Subject));
-			}
-		}
-	}
-	*/
 	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("ID","Content"));
+		declarer.declare(new Fields("JoinType","ID","Content"));
 		
 	}
 

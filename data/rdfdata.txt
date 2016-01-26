@@ -1,3 +1,8 @@
+Sophie Paper kNN
+Justine Paper kNN
+Fabrice Paper kNN
+Lea Paper kNN
+Frederic Paper kNN
 Justine Work INRIA
 Bob Work INRIA
 John Work INRIA
@@ -22,8 +27,3 @@ Justine Diplome Ph.D
 Fabrice Diplome Ph.D
 Lea Diplome Master
 Frederic Diplome Ph.D
-Sophie Paper kNN
-Justine Paper kNN
-Fabrice Paper kNN
-Lea Paper kNN
-Frederic Paper kNN

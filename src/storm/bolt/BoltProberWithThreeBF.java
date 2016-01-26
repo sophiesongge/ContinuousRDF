@@ -28,64 +28,110 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		this.collector = collector;
 		this.bfp1 = new BloomFilter(0.01, 10);
 		this.bfp2 = new BloomFilter(0.01, 10);
-		
+
 		this.bfp3 = new BloomFilter(0.01, 10);
 		queryResult = new ArrayList<String>();
 		
 	}
 
 	public void execute(Tuple tuple) {
+		
+		String jointype = tuple.getStringByField("JoinType");
+		
+		if (jointype.equalsIgnoreCase("onevariable")) {
+			oneVariableJoin(tuple);
+		} else if (jointype.equalsIgnoreCase("twovariable")){
+			twoVariableJoin(tuple);
+		} else if (jointype.equalsIgnoreCase("multivariable")){
+			multiVariableJoin(tuple);
+		}
+		else {
+			System.out.println("Error, con't identify join type");
+		}
+	}
+
+	
+	public void oneVariableJoin(Tuple tuple) {
+		
 		String input = tuple.getStringByField("ID");
 		String[] id = input.split("_");
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
-				
-				//bfp2.add(tuple.getStringByField("Content"));
-				
-				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
-				if(contains1 && contains3){
-					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple.getStringByField("Content"));
-				}
-				else
-				{
-					bfp2.add(tuple.getStringByField("Content"));
-				}
+				bfp1.add(tuple.getStringByField("Content"));
 				
 			}else{
-				
-				bfp3.add(tuple.getStringByField("Content"));
-				/*
-				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
-				if(contains1 && contains2){
-					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple.getStringByField("Content"));
-				}
-				else
-				{
-					bfp3.add(tuple.getStringByField("Content"));
-				}*/
+				bfp2.add(tuple.getStringByField("Content"));
 			}
 		}else{
-			
-			bfp1.add(tuple.getStringByField("Content"));
-			/*
+			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
-			boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
-			if(contains2 && contains3){
+			if(contains1 && contains2){
 				collector.emit(new Values(tuple.getStringByField("Content")));
 				queryResult.add(tuple.getStringByField("Content"));
 			}
-			else
-			{ 
-				bfp1.add(tuple.getStringByField("Content"));
-			}*/
 		}
-	
 	}
-
+	
+	public void twoVariableJoin(Tuple tuple) {
+		
+		String input = tuple.getStringByField("ID");
+		String[] id = input.split("_");
+		if(id[0].equals("BuilderTaskID")){
+			if(id[1].equals("1")){
+				bfp1.add(tuple.getStringByField("Content"));
+			}else{
+				bfp2.add(tuple.getStringByField("Content"));
+			}
+		}else{
+			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
+			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+			if(contains1 && contains2){
+				collector.emit(new Values(tuple.getStringByField("Content")));
+				queryResult.add(tuple.getStringByField("Content"));
+			}
+		}
+	}
+	
+	public void multiVariableJoin(Tuple tuple) {
+		String input = tuple.getStringByField("ID");
+		String[] id = input.split("_");
+		if(id[0].equals("BuilderTaskID")) {
+			if(id[1].equals("1")) {
+				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
+				if(contains2 && contains3){
+					collector.emit(new Values(tuple.getStringByField("Content")));
+					queryResult.add(tuple.getStringByField("Content"));
+				} else { 
+					bfp1.add(tuple.getStringByField("Content"));
+				}
+				
+			} else {
+				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
+				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
+				if(contains1 && contains3) {
+					collector.emit(new Values(tuple.getStringByField("Content")));
+					queryResult.add(tuple.getStringByField("Content"));
+				} else {
+					bfp2.add(tuple.getStringByField("Content"));
+				}
+			}
+		} else {
+			
+			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
+			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+			if(contains1 && contains2) {
+				collector.emit(new Values(tuple.getStringByField("Content")));
+				queryResult.add(tuple.getStringByField("Content"));
+			} 
+			else {
+				bfp3.add(tuple.getStringByField("Content"));
+			}
+			
+		}
+		
+	}
+	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
 	}
