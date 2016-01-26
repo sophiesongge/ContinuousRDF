@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import storm.bloomfilter.BloomFilter;
+import storm.rdf.Results;
+import storm.topology.API;
 import storm.topology.TopologyWithThreeBF;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -20,6 +22,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
+	public Results results;
 	
 	
 	String[] predicates = new String[3];
@@ -39,9 +42,18 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
-		this.v[0] = TopologyWithThreeBF.query.getV1();
-		this.v[1] = TopologyWithThreeBF.query.getV2();
-		this.v[2] = TopologyWithThreeBF.query.getV3();
+		
+		boolean apimode = false;//switch to true for API testing
+		
+		if(apimode){			
+			this.v[0] = API.query.getV1();
+			this.v[1] = API.query.getV2();
+			this.v[2] = API.query.getV3();			
+		} else {			
+			this.v[0] = TopologyWithThreeBF.query.getV1();
+			this.v[1] = TopologyWithThreeBF.query.getV2();
+			this.v[2] = TopologyWithThreeBF.query.getV3();			
+		}
 	}
 	
 	/**
@@ -168,7 +180,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 			multiVariableJoin(Subject, Predicate, Object);
 		}
 		else
-			System.out.println("Error, con't identify join type");
+			System.out.println("Error, can't identify join type");
 			
 
 	}
@@ -222,8 +234,8 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		else if(Predicate.equals(predicates[1])){
 			//if(Object.equals(objects[1])){
 				collector.emit(new Values("multivariable", "BuilderTaskID_2_"+id, Subject));
-			//}
 		}
+		
 		else if(Predicate.equals(predicates[2])){
 			//if(Object.equals(objects[2])){
 				collector.emit(new Values("multivariable", "ProberTaskID_"+id, Subject));
@@ -231,7 +243,6 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		}
 		
 	}
-	
 	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("JoinType","ID","Content"));
