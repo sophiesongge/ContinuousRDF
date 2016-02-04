@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import storm.bloomfilter.BloomFilter;
+import storm.rdf.Query;
 import storm.rdf.Results;
 import storm.topology.API;
 import storm.topology.TopologyWithThreeBF;
@@ -22,6 +23,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
+	private Query query;
 	public Results results;
 	
 	
@@ -29,6 +31,11 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	String[] objects = new String[3];
 	String[] v = new String[3];//v1, v2 and v3
 	String p1,p2,p3;
+	
+	public BoltBuilderWithThreeBF(Query q){
+		//give selection query on initialization
+		query = q;
+	}
 
 	
 	/**
@@ -42,18 +49,10 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
-		
-		boolean apimode = false;//switch to true for API testing
-		
-		if(apimode){			
-			this.v[0] = API.query.getV1();
-			this.v[1] = API.query.getV2();
-			this.v[2] = API.query.getV3();			
-		} else {			
-			this.v[0] = TopologyWithThreeBF.query.getV1();
-			this.v[1] = TopologyWithThreeBF.query.getV2();
-			this.v[2] = TopologyWithThreeBF.query.getV3();			
-		}
+						
+		this.v[0] = query.getV1();
+		this.v[1] = query.getV2();
+		this.v[2] = query.getV3();	
 	}
 	
 	/**

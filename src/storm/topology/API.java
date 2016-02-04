@@ -24,7 +24,7 @@ public class API {
 		String[] returnval = new String[]{};
 		query = new Query(var1,var2,var3);		
 		Config config = new Config();
-		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF();
+		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF(query);
 		
 		
 		TopologyBuilder builder = new TopologyBuilder();
