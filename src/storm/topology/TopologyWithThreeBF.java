@@ -70,8 +70,12 @@ private static Scanner user_input;
 		 * "bolt_builder" will create Bloom Filters by fields grouping by "Predicate"
 		 * "bolt_prober" will probe Bloom Filters
 		*/
+		
+		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF();
+		boltBuilder.setQuery(query);
+		
 		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),1);
-		builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(query),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setBolt("bolt_builder", boltBuilder,3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),3).customGrouping("spout_getdata",new PredicateGrouping());
 		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
 		

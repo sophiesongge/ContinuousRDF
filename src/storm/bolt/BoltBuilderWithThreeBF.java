@@ -23,7 +23,6 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
-	private Query query;
 	public Results results;
 	
 	
@@ -32,9 +31,13 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	String[] v = new String[3];//v1, v2 and v3
 	String p1,p2,p3;
 	
-	public BoltBuilderWithThreeBF(Query q){
-		//give selection query on initialization
-		query = q;
+	public void setQuery(Query q){
+		//the query used for filtering the data
+		
+		this.v[0] = q.getV1();
+		this.v[1] = q.getV2();
+		this.v[2] = q.getV3();	
+		
 	}
 
 	
@@ -49,10 +52,6 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.bf1 = new BloomFilter(0.01, 10);
 		this.bf2 = new BloomFilter(0.01, 10);
 		this.id = context.getThisTaskId();
-						
-		this.v[0] = query.getV1();
-		this.v[1] = query.getV2();
-		this.v[2] = query.getV3();	
 	}
 	
 	/**

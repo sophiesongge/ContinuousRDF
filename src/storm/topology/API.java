@@ -24,8 +24,8 @@ public class API {
 		String[] returnval = new String[]{};
 		query = new Query(var1,var2,var3);		
 		Config config = new Config();
-		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF(query);
-		
+		BoltBuilderWithThreeBF boltBuilder = new BoltBuilderWithThreeBF();
+		boltBuilder.setQuery(query);
 		
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(),3);
