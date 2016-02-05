@@ -14,6 +14,7 @@ public class APITest  extends TestCase{
 	public void testSingle1(){
 		System.out.println("test 1.1");
 		String[] results = tester.singleVarJoin("Ph.d");
+		
 		System.out.println("test 1.2");
 		String[] resultsEq = {"Sophie", "Bob", "Johne", "Laura", "Sergie", "Yuki", "Yume", "Linda", "Sabrina", "Justine", "Fabrice", "Frederic"};
 		System.out.println("test 1.3");

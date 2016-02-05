@@ -20,7 +20,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bfp2;
 	
 	private BloomFilter<String> bfp3;
-	private List<String> queryResult;
+	public List<Tuple> queryResult;
 	
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
@@ -30,7 +30,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		this.bfp2 = new BloomFilter(0.01, 10);
 
 		this.bfp3 = new BloomFilter(0.01, 10);
-		queryResult = new ArrayList<String>();
+		queryResult = new ArrayList<Tuple>();
 		
 	}
 
@@ -67,7 +67,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2){
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple.getStringByField("Content"));
+				queryResult.add(tuple);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2){
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple.getStringByField("Content"));
+				queryResult.add(tuple);
 			}
 		}
 	}
@@ -101,7 +101,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
 				if(contains2 && contains3){
 					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple.getStringByField("Content"));
+					queryResult.add(tuple);
 				} else { 
 					bfp1.add(tuple.getStringByField("Content"));
 				}
@@ -111,7 +111,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
 				if(contains1 && contains3) {
 					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple.getStringByField("Content"));
+					queryResult.add(tuple);
 				} else {
 					bfp2.add(tuple.getStringByField("Content"));
 				}
@@ -122,7 +122,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2) {
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple.getStringByField("Content"));
+				queryResult.add(tuple);
 			} 
 			else {
 				bfp3.add(tuple.getStringByField("Content"));
@@ -139,7 +139,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	public void cleanup() {
 		// Add code to write queryResult
 		/*
-		 * Implement here
+		 * Implement here, add returns here!!
 		 */
 		System.out.println("Query Result is :" +Arrays.toString(queryResult.toArray()));
 		System.out.println( bfp1.count() + " " + bfp2.count() + " " + bfp3.count() + " ");
