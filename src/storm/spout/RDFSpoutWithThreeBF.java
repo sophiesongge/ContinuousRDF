@@ -62,7 +62,7 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 	 */
 	public void nextTuple() {
 		Utils.sleep(100);
-		generateTuple();
+		generateTuple();	
 	}
 
 	public void generateTuple(){
@@ -87,6 +87,9 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{

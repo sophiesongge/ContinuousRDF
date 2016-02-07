@@ -1,13 +1,14 @@
 package storm.bolt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import storm.bloomfilter.BloomFilter;
 import storm.rdf.Query;
-import storm.rdf.Results;
 import storm.topology.API;
 import storm.topology.TopologyWithThreeBF;
 import backtype.storm.task.OutputCollector;
@@ -23,13 +24,13 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
 	private int id;
-	public Results results;
 	
 	
 	String[] predicates = new String[3];
 	String[] objects = new String[3];
 	String[] v = new String[3];//v1, v2 and v3
 	String p1,p2,p3;
+	public List<Tuple> queryResult;
 	
 	public void setQuery(Query q){
 		//the query used for filtering the data
@@ -37,7 +38,7 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 		this.v[0] = q.getV1();
 		this.v[1] = q.getV2();
 		this.v[2] = q.getV3();	
-		
+		queryResult = new ArrayList<Tuple>();
 	}
 
 	

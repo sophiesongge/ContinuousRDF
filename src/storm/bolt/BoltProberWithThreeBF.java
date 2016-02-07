@@ -137,13 +137,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	}
 
 	public void cleanup() {
-		// Add code to write queryResult
-		/*
-		 * Implement here, add returns here!!
-		 */
-		System.out.println("Query Result is :" +Arrays.toString(queryResult.toArray()));
-		System.out.println( bfp1.count() + " " + bfp2.count() + " " + bfp3.count() + " ");
-		queryResult.clear();
+		System.out.println("Query Result (size " + queryResult.size() + ") is :" +Arrays.toString(queryResult.toArray()));
 	}
 
 	public Map<String, Object> getComponentConfiguration() {
