@@ -15,21 +15,27 @@ public class APITest  extends TestCase{
 	
 	public void testSingle1(){
 		System.out.println("test 1.1");
-		List<Tuple> results = tester.singleVarJoin("INRIA");
+		List<Tuple> results;
 		
-		System.out.println("test 1.2");
-		String[] resultsEq = {"Sophie", "Bob", "Johne", "Laura", "Sergie", "Yuki", "Yume", "Linda", "Sabrina", "Justine", "Fabrice", "Frederic"};
-		System.out.println("test 1.3");
-		//String[] resultsEq = {"Sophie", "Fabrice", "Lea", "Frederic", "Justine"};
-		for(Tuple result : results){
-			System.out.println(result.toString());
+		try {
+			results = tester.singleVarJoin("INRIA");
+		
+			System.out.println("test 1.2");
+			String[] resultsEq = {"Sophie", "Bob", "Johne", "Laura", "Sergie", "Yuki", "Yume", "Linda", "Sabrina", "Justine", "Fabrice", "Frederic"};
+			System.out.println("test 1.3");	
+			if(results == null){
+				System.out.println("No results!");								
+			}
+			assertEquals(true,true);
+			
+			//Todo: actually test this!
+			/*System.out.println("test 1");
+			assertEquals(resultsEq, results);*/
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println("test 1.4");
-		
-		assertEquals(true,true);
-		//Todo: actaally test this!
-		/*System.out.println("test 1");
-		assertEquals(resultsEq, results);*/
 	}
 	
 	/*public void testSingle2(){
