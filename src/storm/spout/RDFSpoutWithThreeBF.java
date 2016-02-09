@@ -32,6 +32,7 @@ import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import storm.rdf.RDFTriple;
 import storm.topology.TopologyWithThreeBF;
+import storm.topology.API;
 import storm.topology.RDFTopology;
 
 public class RDFSpoutWithThreeBF extends BaseRichSpout {
@@ -40,6 +41,13 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 	SpoutOutputCollector _collector;
 	Random _rand;
 	BufferedReader _reader; 
+	boolean apimode = false;
+	
+	public RDFSpoutWithThreeBF(boolean mode){
+		if(mode){
+			apimode = true;
+		}
+	}
 	
 	/*
 	 * @param stormConf: the configuration in the topology
@@ -53,7 +61,11 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 		this._collector = collector;
 		this._rand = new Random();
 		//to read the input file
-		this._reader = TopologyWithThreeBF.reader;
+		if(apimode){
+			this._reader = API.reader;//change this reader for API			
+		}else{
+			this._reader = TopologyWithThreeBF.reader;//change this reader for API			
+		}
 	}
 	
 	/*
