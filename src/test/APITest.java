@@ -1,38 +1,27 @@
 package test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import backtype.storm.tuple.Tuple;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import storm.rdf.Query;
 import storm.topology.API;
+import storm.topology.TopologyWithThreeBF;
 
 public class APITest  extends TestCase{
 	
-	API tester = new API();
+	static API tester = new API();
+	TopologyWithThreeBF topo = new TopologyWithThreeBF();
 	
-	public void testSingle1(){
-		System.out.println("test 1.1");
+	public static void testSingle1(){
 		List<Tuple> results;
 		
 		try {
-			results = tester.singleVarJoin("INRIA");
-		
-			System.out.println("test 1.2");
-			String[] resultsEq = {"Sophie", "Bob", "Johne", "Laura", "Sergie", "Yuki", "Yume", "Linda", "Sabrina", "Justine", "Fabrice", "Frederic"};
-			System.out.println("test 1.3");	
-			if(results == null){
-				System.out.println("No results!");								
-			}
+			API.runQuery(new Query("INRIA","*","*"));
+			// TODO compare results with what they should be
 			assertEquals(true,true);
-			
-			//Todo: actually test this!
-			/*System.out.println("test 1");
-			assertEquals(resultsEq, results);*/
 
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

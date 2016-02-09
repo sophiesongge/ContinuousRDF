@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.Tuple;
 import storm.bolt.BoltBuilderWithThreeBF;
 import storm.bolt.BoltProberWithThreeBF;
 import storm.rdf.Query;
@@ -30,7 +32,7 @@ public class API{
 		reader = null;
 		try{
 			reader = new BufferedReader(new FileReader(file));
-			stormCall();
+			stormCall(new Query("INRIA","*","*"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,17 +47,30 @@ public class API{
 		}
 	}
 	
-	public static void stormCall() throws Exception
-	{
-		user_input = new Scanner( System.in );
-		System.out.println("First value? (put in ANY for any possible value)");
-		String v1 = user_input.next();
-		System.out.println("Second value? (put in ANY for any possible value)");
-		String v2 = user_input.next();
-		System.out.println("Third value? (put in ANY for any possible value)");
-		String v3 = user_input.next();
-		query = new Query(v1,v2,v3);
+	public static void runQuery(Query q) throws Exception{
 		
+		String filePath="./data/rdfdata.txt";
+		File file = new File(filePath);
+		reader = null;
+		try{
+			reader = new BufferedReader(new FileReader(file));
+			stormCall(q);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(reader != null){
+				try{
+					reader.close();
+				}catch(IOException e1){
+					//Do nothing
+				}
+			}
+		}
+	}	
+	
+	private static List<Tuple> stormCall(Query query) throws Exception
+	{		
 		Config config = new Config();
 		config.setDebug(true);
 		
@@ -72,7 +87,6 @@ public class API{
 		
 		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(true),1);
 		builder.setBolt("bolt_builder", boltBuilder,3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
-		//builder.setBolt("bolt_builder", new BoltBuilderWithThreeBF(),3).customGrouping("spout_getdata",new PredicateGrouping());
 		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
 		
 		LocalCluster cluster = new LocalCluster();
@@ -86,7 +100,7 @@ public class API{
 		} catch(IOException e){
 			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
 		}
-		
+		return null;
 	}
 	
 
