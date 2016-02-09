@@ -14,7 +14,8 @@ public class PredicateGrouping implements CustomStreamGrouping,Serializable {
     
 	public void prepare(WorkerTopologyContext context, GlobalStreamId stream,
 			List<Integer> targetTasks) {
-		// TODO Auto-generated method stub
+		// Tricky part is that Task Ids start from 2. e.g., for 3 tasks [2 3 4] and for for 7 tasks [2 3 4 5 6 7 8]
+		System.out.println("Targeted Tasks are:" + targetTasks.toString());
 		
 	}
 
@@ -26,25 +27,17 @@ public class PredicateGrouping implements CustomStreamGrouping,Serializable {
             String predicate = values.get(1).toString();
             
             if(predicate.equalsIgnoreCase("work")) {
-            	boltIds.add(0);
+            	boltIds.add(2);
             }
             else if(predicate.equalsIgnoreCase("paper")) {
             	boltIds.add(3);
             }
             else if(predicate.equalsIgnoreCase("diplome")) {
-            	boltIds.add(2);
+            	boltIds.add(4);
             }
             else
             	boltIds.add(0);
             	//System.out.println("Error, con't identify predicate");
-            /*
-            if(predicate.isEmpty())
-            {
-                boltIds.add(0);
-                System.out.println("checkpoint id is"+boltIds.toString());
-            }
-            else
-                boltIds.add(predicate.charAt(0) % numTasks);*/
         }
         
         return boltIds;
