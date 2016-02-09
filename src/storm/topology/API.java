@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
-
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
@@ -23,31 +21,25 @@ public class API{
 		
 	public static BufferedReader reader;
 	
-	private static Scanner user_input;
-	
-	public static void main(String[] args) throws Exception{
-				
-		String filePath="./data/rdfdata.txt";
-		File file = new File(filePath);
-		reader = null;
-		try{
-			reader = new BufferedReader(new FileReader(file));
-			stormCall(new Query("INRIA","*","*"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			if(reader != null){
-				try{
-					reader.close();
-				}catch(IOException e1){
-					//Do nothing
-				}
-			}
-		}
+	public static List<Tuple> singleVarJoin(String var) throws InterruptedException{		
+		return multiVarJoin(var, "ANY", "ANY");
 	}
 	
-	public static void runQuery(Query q) throws Exception{
+	public static List<Tuple> doubleVarJoin(String var1,String var2) throws InterruptedException{		
+		return multiVarJoin(var1, var2, "ANY");		
+	}
+	public static List<Tuple> multiVarJoin(String var1,String var2,String var3) throws InterruptedException{		
+		Query input = new Query(var1,var2,var3);
+		try {
+			runQuery(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null; //TODO return actual results
+	}
+	
+	private static void runQuery(Query q) throws Exception{
 		
 		String filePath="./data/rdfdata.txt";
 		File file = new File(filePath);

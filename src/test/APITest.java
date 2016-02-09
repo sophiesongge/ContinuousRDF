@@ -4,7 +4,6 @@ import java.util.List;
 
 import backtype.storm.tuple.Tuple;
 import junit.framework.TestCase;
-import storm.rdf.Query;
 import storm.topology.API;
 import storm.topology.TopologyWithThreeBF;
 
@@ -17,7 +16,7 @@ public class APITest  extends TestCase{
 		List<Tuple> results;
 		
 		try {
-			API.runQuery(new Query("INRIA","*","*"));
+			API.singleVarJoin("INRIA");
 			// TODO compare results with what they should be
 			assertEquals(true,true);
 
