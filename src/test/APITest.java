@@ -1,5 +1,6 @@
 package test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import backtype.storm.tuple.Tuple;
@@ -16,7 +17,8 @@ public class APITest  extends TestCase{
 		List<Tuple> results;
 		
 		try {
-			API.singleVarJoin("INRIA");
+			results = API.multiVarJoin("INRIA");
+			System.out.println("TEST Query Result (size " + results.size() + ") is :" + results.toString());
 			// TODO compare results with what they should be
 			assertEquals(true,true);
 

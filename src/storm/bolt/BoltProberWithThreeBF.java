@@ -20,7 +20,7 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	private BloomFilter<String> bfp2;
 	
 	private BloomFilter<String> bfp3;
-	public List<Tuple> queryResult;
+	public static List<Tuple> queryResult;
 	
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
@@ -135,9 +135,8 @@ public class BoltProberWithThreeBF implements IRichBolt {
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
 	}
-
+	
 	public void cleanup() {
-		System.out.println("Query Result (size " + queryResult.size() + ") is :" +Arrays.toString(queryResult.toArray()));
 	}
 
 	public Map<String, Object> getComponentConfiguration() {
