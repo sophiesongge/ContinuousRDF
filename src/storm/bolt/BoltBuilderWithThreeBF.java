@@ -133,11 +133,6 @@ public class BoltBuilderWithThreeBF implements IRichBolt {
 			//note: if it doesn't fit with a value, the object just stays at any
 		}
 
-		System.out.println("Paper: " + objectPaper);
-		System.out.println("Work: " + objectWork);
-		System.out.println("Diplome: " + objectDiplome);
-		
-
 		//String objectPaper=v1,objectWork=v2,objectDiplome=v3;
 			
 		HashMap<String, String> hmap = new HashMap<String, String>();
