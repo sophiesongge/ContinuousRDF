@@ -27,7 +27,18 @@ public class PredicateGrouping implements CustomStreamGrouping,Serializable {
             String predicate = values.get(1).toString();
             
             if(predicate.equalsIgnoreCase("work")) {
-            	boltIds.add(2);
+            	//int i = (int) Math.random()*5;
+            	//if(i == 0){
+                	boltIds.add(2);            		
+            	/*}else if(i == 1){
+                	boltIds.add(3);            		
+            	}else if(i == 2){
+                	boltIds.add(4);            		
+            	}else if(i == 3){
+                	boltIds.add(5);     
+	        	}else{//i == 4
+	            	boltIds.add(6);            		
+	        	}*/
             }
             else if(predicate.equalsIgnoreCase("paper")) {
             	boltIds.add(3);
