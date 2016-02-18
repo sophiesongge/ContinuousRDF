@@ -38,8 +38,8 @@ private static Scanner user_input;
 			stormCall();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
+			e.printStackTrace();	
+					
 		} catch (IOException e){
 			//do nothing
 		}finally{
