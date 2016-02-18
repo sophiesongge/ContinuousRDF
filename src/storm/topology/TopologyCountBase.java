@@ -39,6 +39,9 @@ private static Scanner user_input;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+		} catch (IOException e){
+			//do nothing
 		}finally{
 			if(reader != null){
 				try{
@@ -50,7 +53,7 @@ private static Scanner user_input;
 		}
 	}
 	
-	public static void stormCall() throws Exception
+	public static void stormCall() throws IOException
 	{
 		
 		user_input = new Scanner( System.in );
@@ -81,10 +84,13 @@ private static Scanner user_input;
 		
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
-		Thread.sleep(30000);
-		
+		try {
+			Thread.sleep(30000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		cluster.shutdown();
-		
 	}
 	
 
