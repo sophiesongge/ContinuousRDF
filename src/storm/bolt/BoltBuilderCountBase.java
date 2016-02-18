@@ -7,10 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.sun.javafx.tk.Toolkit;
 
 import storm.bloomfilter.BloomFilter;
 import storm.rdf.Query;
@@ -22,7 +18,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltBuilder implements IRichBolt {
+public class BoltBuilderCountBase implements IRichBolt {
 	
 	private OutputCollector collector;
 	private static BloomFilter<String> bf1;
@@ -37,13 +33,11 @@ public class BoltBuilder implements IRichBolt {
 	String[] v = new String[3];//v1, v2 and v3
 	String p1,p2,p3;
 	
-	private int maxGenerationSize=100;
+	private int maxGenerationSize=29;
 	private static int currentGenerationSize=0;
-	private int maxProbListSize=50;
+	private int maxProbListSize=18;
 	private int currentProbListSize=0;
 	
-	String joinType="";
-    Timer timer;
 	
 	public void setQuery(Query q){
 		//the query used for filtering the data
@@ -77,41 +71,8 @@ public class BoltBuilder implements IRichBolt {
 		String Object = input.getStringByField("Object");
 		
 		query(Subject, Predicate, Object);
-		
-		timer = new Timer();
-        timer.schedule(new RemindTask(),
-                       10000,        //initial delay
-                       1*10000);  //subsequent rate
-		
 	}
 
-	class RemindTask extends TimerTask {
-        public void run() {
-            if (currentGenerationSize > 0) {
-                
-            	BloomFilter<String> bf1ToSend=new BloomFilter(bf1);
-    			BloomFilter<String> bf2ToSend=new BloomFilter(bf2);
-    			List<String> problistToSend=new ArrayList<String>(problist);
-    			
-    			collector.emit(new Values(joinType,bf1ToSend,bf2ToSend,problistToSend));
-    			
-    			System.out.println("Join Type is : "+ joinType);
-    			System.out.println("Timer is excuted: and generation size is:  " +currentGenerationSize);
-    			bf1.clear();
-    			bf2.clear();
-    			problist.clear();
-    			currentGenerationSize=0;
-    			currentProbListSize=0;
-    			
-            } else {
-                
-            	System.out.println("Timer is exited");
-                //System.exit(0);   //Stops the AWT thread 
-                                  //(and everything else)
-            }
-        }
-    }
-	
 	public void query(String Subject,String Predicate, String Object) {
 		
 		//("1-variable join, to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome:");
@@ -195,21 +156,16 @@ public class BoltBuilder implements IRichBolt {
 		}
 		
 		if(countAny==0) {
-			joinType="onevariable";
 			oneVariableJoin(Subject, Predicate, Object);
 		}
 		else if(countAny==1) {
-			joinType="twovariable";
 			twoVariableJoin(Subject, Predicate, Object);
 		}
 		else if(countAny==2) {
-			joinType="multivariable";
 			multiVariableJoin(Subject, Predicate, Object);
 		}
 		else
 			System.out.println("Error, can't identify join type");
-		
-		
 	}
 
 	public void oneVariableJoin(String Subject,String Predicate, String Object) {
@@ -229,6 +185,7 @@ public class BoltBuilder implements IRichBolt {
 				problist.add(Subject);
 			}
 		}
+		
 		currentGenerationSize++;
 		if(currentGenerationSize==maxGenerationSize || currentProbListSize==maxProbListSize)
 		{
@@ -236,23 +193,11 @@ public class BoltBuilder implements IRichBolt {
 			BloomFilter<String> bf2ToSend=new BloomFilter(bf2);
 			List<String> problistToSend=new ArrayList<String>(problist);
 			
-			System.out.println("Bloom Filter 1 contains Lea: "+bf1.contains("Lea"));
-			System.out.println("Bloom FilterS1 contains Lea: "+bf1ToSend.contains("Lea"));
-			System.out.println("Bloom Filter 2 contains Lea: "+bf2.contains("Lea"));
-			System.out.println("Bloom FilterS2 contains Lea: "+bf2ToSend.contains("Lea"));
-			
-			System.out.println("Bloom Filter 1 : "+bf1.bitset);
-			System.out.println("Bloom FilterS1 : "+bf1ToSend.bitset);
-			System.out.println("Bloom Filter 2 : "+bf2.bitset);
-			System.out.println("Bloom FilterS2 : "+bf2ToSend.bitset);
-			
-			
 			collector.emit(new Values("onevariable",bf1ToSend,bf2ToSend,problistToSend));
 			
 			bf1.clear();
 			bf2.clear();
 			problist.clear();
-			
 			currentGenerationSize=0;
 			currentProbListSize=0;
 		}
@@ -276,6 +221,7 @@ public class BoltBuilder implements IRichBolt {
 				problist.add(Subject);
 			//}
 		}
+		
 		currentGenerationSize++;
 		if(currentGenerationSize>=maxGenerationSize || currentProbListSize==maxProbListSize)
 		{
@@ -284,6 +230,7 @@ public class BoltBuilder implements IRichBolt {
 			List<String> problistToSend=new ArrayList<String>(problist);
 			
 			collector.emit(new Values("twovariable",bf1ToSend,bf2ToSend,problistToSend));
+			
 			bf1.clear();
 			bf2.clear();
 			problist.clear();
@@ -318,6 +265,7 @@ public class BoltBuilder implements IRichBolt {
 			List<String> problistToSend=new ArrayList<String>(problist);
 			
 			collector.emit(new Values("multivariable",bf1ToSend,bf2ToSend,problistToSend));
+			
 			bf1.clear();
 			bf2.clear();
 			problist.clear();

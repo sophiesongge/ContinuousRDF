@@ -12,13 +12,15 @@ import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import storm.bolt.BoltBuilder;
-import storm.bolt.BoltBuilderWithThreeBF;
+import storm.bolt.BoltBuilderCountBase;
 import storm.bolt.BoltProber;
+import storm.bolt.BoltProberCountBase;
 import storm.grouping.PredicateGrouping;
 import storm.rdf.Query;
+import storm.spout.RDFSpoutCountBase;
 import storm.spout.TestSpout;
 
-public class IVJTopology{
+public class TopologyCountBase{
 	
 public static BufferedReader reader;
 
@@ -70,13 +72,12 @@ private static Scanner user_input;
 		 * "bolt_builder" will create Bloom Filters by fields grouping by "Predicate"
 		 * "bolt_prober" will probe Bloom Filters
 		*/
-		BoltBuilder boltBuilder = new BoltBuilder();
+		BoltBuilderCountBase boltBuilder = new BoltBuilderCountBase();
 		boltBuilder.setQuery(query);
 		
-		builder.setSpout("spout_getdata", new TestSpout(),1);
-		//builder.setBolt("bolt_builder", new BoltBuilder(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		builder.setSpout("spout_getdata", new RDFSpoutCountBase(),1);
 		builder.setBolt("bolt_builder", boltBuilder,3).customGrouping("spout_getdata",new PredicateGrouping());
-		builder.setBolt("bolt_prober", new BoltProber(),1).shuffleGrouping("bolt_builder");
+		builder.setBolt("bolt_prober", new BoltProberCountBase(),1).shuffleGrouping("bolt_builder");
 		
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());

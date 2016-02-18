@@ -22,7 +22,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltBuilder implements IRichBolt {
+public class BoltBuilderTimeBase implements IRichBolt {
 	
 	private OutputCollector collector;
 	private static BloomFilter<String> bf1;

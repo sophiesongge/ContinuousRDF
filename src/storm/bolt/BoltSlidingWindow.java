@@ -1,41 +1,42 @@
 package storm.bolt;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import storm.bloomfilter.BloomFilter;
+import storm.bloomfilter.CountSlidingBF;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltProberWithThreeBF implements IRichBolt {
-	private OutputCollector collector;
-	private BloomFilter<String> bfp1;
-	private BloomFilter<String> bfp2;
+public class BoltSlidingWindow implements IRichBolt {
 	
-	private BloomFilter<String> bfp3;
-	public static List<Tuple> queryResult;
+	private OutputCollector collector;
+	
+	public static List<String> queryResult;
+	
+	private CountSlidingBF csbf1;
+	private CountSlidingBF csbf2;
+	private CountSlidingBF csbf3;
 	
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
 		
 		this.collector = collector;
-		this.bfp1 = new BloomFilter(0.01, 10);
-		this.bfp2 = new BloomFilter(0.01, 10);
-
-		this.bfp3 = new BloomFilter(0.01, 10);
-		queryResult = new ArrayList<Tuple>();
 		
+		queryResult = new ArrayList<String>();
+		
+		csbf1 = new CountSlidingBF(10, 2, 0.01);
+		csbf2 = new CountSlidingBF(10, 2, 0.01);
+		csbf3 = new CountSlidingBF(10, 2, 0.01);
 	}
 
-	public void execute(Tuple tuple) {
-		
+	public void execute(Tuple tuple) {		
+
 		String jointype = tuple.getStringByField("JoinType");
 		
 		if (jointype.equalsIgnoreCase("onevariable")) {
@@ -57,17 +58,17 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		String[] id = input.split("_");
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
-				bfp1.add(tuple.getStringByField("Content"));
+				csbf1.add(tuple.getStringByField("Content"));
 				
 			}else{
-				bfp2.add(tuple.getStringByField("Content"));
+				csbf2.add(tuple.getStringByField("Content"));
 			}
 		}else{
-			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+			boolean contains1 = csbf1.contains(tuple.getStringByField("Content"));
+			boolean contains2 = csbf2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2){
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple);
+				queryResult.add(tuple.getStringByField("Content"));
 			}
 		}
 	}
@@ -78,16 +79,16 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		String[] id = input.split("_");
 		if(id[0].equals("BuilderTaskID")){
 			if(id[1].equals("1")){
-				bfp1.add(tuple.getStringByField("Content"));
+				csbf1.add(tuple.getStringByField("Content"));
 			}else{
-				bfp2.add(tuple.getStringByField("Content"));
+				csbf2.add(tuple.getStringByField("Content"));
 			}
 		}else{
-			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+			boolean contains1 = csbf1.contains(tuple.getStringByField("Content"));
+			boolean contains2 = csbf2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2){
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple);
+				queryResult.add(tuple.getStringByField("Content"));
 			}
 		}
 	}
@@ -97,50 +98,49 @@ public class BoltProberWithThreeBF implements IRichBolt {
 		String[] id = input.split("_");
 		if(id[0].equals("BuilderTaskID")) {
 			if(id[1].equals("1")) {
-				boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
-				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
+				boolean contains2 = csbf2.contains(tuple.getStringByField("Content"));
+				boolean contains3 = csbf3.contains(tuple.getStringByField("Content"));
 				if(contains2 && contains3){
 					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple);
+					queryResult.add(tuple.getStringByField("Content"));
 				} else { 
-					bfp1.add(tuple.getStringByField("Content"));
+					csbf1.add(tuple.getStringByField("Content"));
 				}
 				
 			} else {
-				boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-				boolean contains3 = bfp3.contains(tuple.getStringByField("Content"));
+				boolean contains1 = csbf1.contains(tuple.getStringByField("Content"));
+				boolean contains3 = csbf3.contains(tuple.getStringByField("Content"));
 				if(contains1 && contains3) {
 					collector.emit(new Values(tuple.getStringByField("Content")));
-					queryResult.add(tuple);
+					queryResult.add(tuple.getStringByField("Content"));
 				} else {
-					bfp2.add(tuple.getStringByField("Content"));
+					csbf2.add(tuple.getStringByField("Content"));
 				}
 			}
 		} else {
 			
-			boolean contains1 = bfp1.contains(tuple.getStringByField("Content"));
-			boolean contains2 = bfp2.contains(tuple.getStringByField("Content"));
+			boolean contains1 = csbf1.contains(tuple.getStringByField("Content"));
+			boolean contains2 = csbf2.contains(tuple.getStringByField("Content"));
 			if(contains1 && contains2) {
 				collector.emit(new Values(tuple.getStringByField("Content")));
-				queryResult.add(tuple);
+				queryResult.add(tuple.getStringByField("Content"));
 			} 
 			else {
-				bfp3.add(tuple.getStringByField("Content"));
+				csbf3.add(tuple.getStringByField("Content"));
 			}
 			
 		}
 		
 	}
-	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
-	}
-	
-	public void cleanup() {
-		System.out.println("Size is: "+queryResult.size()+" Query Result is: "+ queryResult);
 	}
 
 	public Map<String, Object> getComponentConfiguration() {
 		return null;
+	}
+
+	public void cleanup() {		
+		System.out.println("Size is: "+queryResult.size()+" Sliding Window Query Result is: "+ queryResult);
 	}
 }

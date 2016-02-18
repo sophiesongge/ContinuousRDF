@@ -15,7 +15,7 @@ import storm.bolt.BoltBuilder;
 import storm.bolt.BoltBuilderWithThreeBF;
 import storm.bolt.BoltProber;
 import storm.bolt.BoltProberWithThreeBF;
-import storm.bolt.BoltProberWithThreeBF_oldVersion;
+import storm.bolt.BoltSlidingWindow;
 import storm.grouping.PredicateGrouping;
 import storm.rdf.Query;
 import storm.spout.RDFSpoutWithThreeBF;
@@ -78,7 +78,7 @@ private static Scanner user_input;
 		builder.setSpout("spout_getdata", new RDFSpoutWithThreeBF(false),1);
 		builder.setBolt("bolt_builder", boltBuilder,3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//builder.setBolt("bolt_builder", boltBuilder,3).customGrouping("spout_getdata",new PredicateGrouping());
-		builder.setBolt("bolt_prober", new BoltProberWithThreeBF(),1).shuffleGrouping("bolt_builder");
+		builder.setBolt("bolt_prober", new BoltBuilderWithThreeBF(),1).shuffleGrouping("bolt_builder");
 		
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("RDFContinuous", config, builder.createTopology());

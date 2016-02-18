@@ -105,6 +105,18 @@ public class BloomFilter<E> implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	public BloomFilter(BloomFilter<E> obj) {
+		// TODO Auto-generated constructor stub
+		
+		this.maxElementNumber = obj.maxElementNumber;
+		this.bitsPerElement = obj.bitsPerElement;
+		this.k = obj.k;
+		this.bitSetSize = obj.bitSetSize;
+		elementNumber = obj.elementNumber;
+		this.bitset = new BitSet(bitSetSize);
+		this.bitset = (BitSet) obj.getBitSet().clone();
+		
+	}
 	/**
      *
      *A method to generate digests for a bytes array, and split the result into 4-byte ints, then store them in an Array.

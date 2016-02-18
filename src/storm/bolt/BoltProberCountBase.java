@@ -13,7 +13,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltProber implements IRichBolt {
+public class BoltProberCountBase implements IRichBolt {
 	private OutputCollector collector;
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
@@ -58,11 +58,6 @@ public class BoltProber implements IRichBolt {
 		for(int i=0;i<problist.size();i++)
 		{
 			String probitem = problist.get(i);
-			System.out.println("Current Size of Bloome Filter 1 is: "+bf1.count());
-			System.out.println("Current Size of Bloome Filter 2 is: "+bf2.count());
-			boolean mycontains1 = bf1.contains("Sophie");
-			System.out.println("Bloome Filter 1 contains Sophie: "+mycontains1);
-			
 			boolean contains1 = bf1.contains(probitem);
 			boolean contains2 = bf2.contains(probitem);
 			if(contains1 && contains2){

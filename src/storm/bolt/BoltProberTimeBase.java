@@ -13,7 +13,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltProber implements IRichBolt {
+public class BoltProberTimeBase implements IRichBolt {
 	private OutputCollector collector;
 	private BloomFilter<String> bf1;
 	private BloomFilter<String> bf2;
