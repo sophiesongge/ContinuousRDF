@@ -21,14 +21,19 @@ public class API{
 		
 	public static BufferedReader reader;
 	
-	public static List<Tuple> multiVarJoin(String var) throws InterruptedException{		
-		return singleVarJoin(var, "ANY", "ANY");
+	public static List<Tuple> multiVarJoin(Tuple q) throws InterruptedException{		
+		return stringJoin(q.getFields().get(0), "ANY", "ANY");
 	}
 	
-	public static List<Tuple> doubleVarJoin(String var1,String var2) throws InterruptedException{		
-		return singleVarJoin(var1, var2, "ANY");		
+	public static List<Tuple> doubleVarJoin(Tuple q) throws InterruptedException{		
+		return stringJoin(q.getFields().get(0), q.getFields().get(1), "ANY");		
 	}
-	public static List<Tuple> singleVarJoin(String var1,String var2,String var3) throws InterruptedException{		
+	
+	public static List<Tuple> singleVarJoin(Tuple q) throws InterruptedException{
+		return stringJoin(q.getFields().get(0), q.getFields().get(1), q.getFields().get(2));
+	}
+	
+	public static List<Tuple> stringJoin(String var1,String var2,String var3) throws InterruptedException{		
 		Query input = new Query(var1,var2,var3);
 		try {
 			return runQuery(input);
