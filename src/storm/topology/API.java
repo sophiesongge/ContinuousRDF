@@ -44,6 +44,28 @@ public class API{
 		return null; 
 	}
 	
+	public static List<Tuple> readFile(){
+		/*
+		 * Steps todo:
+		 * 1: read file
+		 * 2: convert the file into interpretable tuples and data files (source file: RDFTopology.java:26)
+		 * 3: set up up the topology to read the interpretable data files
+		 * 4: run the topology for this 
+		 * 5: for each tuple: get the results and write them to a file
+		 */
+		
+		Query input = new Query("a","b","c");
+		
+		try {
+			return runQuery(input);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null; 
+		
+	}
+	
 	private static List<Tuple> runQuery(Query q) throws Exception{
 		
 		String filePath="./data/rdfdata.txt";
