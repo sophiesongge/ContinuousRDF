@@ -368,6 +368,11 @@ public class Generator {
   /** log writer */
   private PrintStream log_ = null;
 
+  /*
+   * Used input arguments:
+   * -onto Univ-bench
+   * 
+   */
   /**
    * main method
    */
