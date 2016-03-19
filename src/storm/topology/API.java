@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.util.FileManager;
+
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
@@ -44,7 +49,7 @@ public class API{
 		return null; 
 	}
 	
-	public static List<Tuple> readFile(){
+	public static void readFile(){
 		/*
 		 * Steps todo:
 		 * 1: read file
@@ -53,8 +58,40 @@ public class API{
 		 * 4: run the topology for this 
 		 * 5: for each tuple: get the results and write them to a file
 		 */
+		/*System.out.println("readFile called");
+		// create an empty model
+		 Model model = ModelFactory.createDefaultModel();
+		 String inputFileName="./data/University0_0.daml";
+		 // use the FileManager to find the input file
+		 InputStream in = FileManager.get().open( inputFileName );
+		if (in == null) {
+		    throw new IllegalArgumentException(
+		                                 "File: " + inputFileName + " not found");
+		}
+		// read the RDF/XML file
+		model.read(in, null);
 		
-		Query input = new Query("a","b","c");
+		
+		// list the statements in the Model
+		StmtIterator iter = model.listStatements();
+		// print out the predicate, subject and object of each statement
+		while (iter.hasNext()) {
+		    Statement stmt      = iter.nextStatement();  // get next statement
+		    Resource  subject   = stmt.getSubject();     // get the subject
+		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    RDFNode   object    = stmt.getObject();      // get the object
+		    System.out.print(subject.toString());
+		    System.out.print(" " + predicate.toString() + " ");
+		    if (object instanceof Resource) {
+		       System.out.print(object.toString());
+		    } else {
+		        // object is a literal
+		        System.out.print("\"" + object.toString() + "\"");
+		    }
+		    System.out.println(" .");
+		}*/
+		
+		/*Query input = new Query("a","b","c");
 		
 		try {
 			return runQuery(input);
@@ -63,7 +100,7 @@ public class API{
 			e.printStackTrace();
 		}
 		return null; 
-		
+		*/
 	}
 	
 	private static List<Tuple> runQuery(Query q) throws Exception{
@@ -123,6 +160,47 @@ public class API{
 			System.out.println("IOException when shutting down the cluster, continued afterwards, error message: " + e.getMessage());
 		}
 		return prober.queryResult;
+	}
+	
+	public static void main(String[] args){
+		 // create an empty model
+		 Model model = ModelFactory.createDefaultModel();
+
+		 String inputFileName="./data/University0_0.daml";
+		 
+		 
+		 // use the FileManager to find the input file
+		 InputStream in = FileManager.get().open( inputFileName );
+		if (in == null) {
+		    throw new IllegalArgumentException(
+		                                 "File: " + inputFileName + " not found");
+		}
+
+		// read the RDF/XML file
+		model.read(in, null);
+		
+		
+		// list the statements in the Model
+		StmtIterator iter = model.listStatements();
+
+		// print out the predicate, subject and object of each statement
+		while (iter.hasNext()) {
+		    Statement stmt      = iter.nextStatement();  // get next statement
+		    Resource  subject   = stmt.getSubject();     // get the subject
+		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    RDFNode   object    = stmt.getObject();      // get the object
+
+		    System.out.print(subject.toString());
+		    System.out.print(" " + predicate.toString() + " ");
+		    if (object instanceof Resource) {
+		       System.out.print(object.toString());
+		    } else {
+		        // object is a literal
+		        System.out.print("\"" + object.toString() + "\"");
+		    }
+
+		    System.out.println(" .");
+		}
 	}
 	
 
