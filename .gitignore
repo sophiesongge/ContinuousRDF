@@ -2,3 +2,4 @@
 sh.exe.stackdump
 src/storm/bolt/BoltProberWithThreeBF_oldVersion.java
 generated_data/
+/bin/
