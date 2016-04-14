@@ -52,36 +52,22 @@ public class BoltProberCountBase implements IRichBolt {
 	
 	}
 
-	public void oneVariableJoin(Tuple tuple) {
-		
-		
-		for(int i=0;i<problist.size();i++)
-		{
-			String probitem = problist.get(i);
-			boolean contains1 = bf1.contains(probitem);
-			boolean contains2 = bf2.contains(probitem);
-			if(contains1 && contains2){
-				collector.emit(new Values(probitem));
-				queryResult.add(probitem);
-			}
-		}
+	private void oneVariableJoin(Tuple tuple) {
+		//the same for all 3 for now, keep seperate functions in case we might have to change this.
+		variableJoin(tuple);
 	}
 	
-	public void twoVariableJoin(Tuple tuple) {
-		
-		for(int i=0;i<problist.size();i++)
-		{
-			String probitem = problist.get(i);
-			boolean contains1 = bf1.contains(probitem);
-			boolean contains2 = bf2.contains(probitem);
-			if(contains1 && contains2){
-				collector.emit(new Values(probitem));
-				queryResult.add(probitem);
-			}
-		}
+	private void twoVariableJoin(Tuple tuple) {
+		//the same for all 3 for now, keep seperate functions in case we might have to change this.
+		variableJoin(tuple);
 	}
 	
-	public void multiVariableJoin(Tuple tuple) {
+	private void multiVariableJoin(Tuple tuple) {
+		//the same for all 3 for now, keep seperate functions in case we might have to change this.
+		variableJoin(tuple);
+	}
+	
+	private void variableJoin(Tuple tuple) {
 		for(int i=0;i<problist.size();i++)
 		{
 			String probitem = problist.get(i);
@@ -91,9 +77,9 @@ public class BoltProberCountBase implements IRichBolt {
 				collector.emit(new Values(probitem));
 				queryResult.add(probitem);
 			}
-		}
-			
+		}			
 	}
+	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
 	}

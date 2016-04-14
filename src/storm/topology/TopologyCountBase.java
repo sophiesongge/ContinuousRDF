@@ -53,6 +53,13 @@ private static Scanner user_input;
 			//reader = new BufferedReader(new FileReader(file));
 			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			stormCall(args);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();	
+					
+		} catch (IOException e){
+			//do nothing
 		}finally{
 			if(reader != null){
 				try{
@@ -66,6 +73,7 @@ private static Scanner user_input;
 	
 	
 	public static void stormCall(String[] args) throws Exception
+
 	{
 		
 		user_input = new Scanner( System.in );
@@ -111,8 +119,6 @@ private static Scanner user_input;
 			
 			cluster.shutdown();
 		}
-		
-		
 		
 	}
 	
