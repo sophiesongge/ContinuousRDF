@@ -5,12 +5,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Scanner;
+
+import org.apache.jena.base.Sys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
+import backtype.storm.utils.Utils;
 import storm.bolt.BoltBuilder;
 import storm.bolt.BoltBuilderCountBase;
 import storm.bolt.BoltProber;
@@ -20,25 +29,30 @@ import storm.rdf.Query;
 import storm.spout.RDFSpoutCountBase;
 import storm.spout.TestSpout;
 
-public class TopologyCountBase{
+public class TopologyCountBase {
 	
 public static BufferedReader reader;
 
 public static Query query;
 
 private static Scanner user_input;
+
 	
 	public static void main(String[] args) throws Exception{
-				
+		
+			
 		String filePath="./data/rdfdata.txt";
+		InputStream is = ClassLoader.getSystemResourceAsStream("rdfdata.txt");
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		
+		
 		File file = new File(filePath);
 		reader = null;
 		try{
-			reader = new BufferedReader(new FileReader(file));
-			stormCall();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			stormCall(args);
 		}finally{
 			if(reader != null){
 				try{
@@ -50,7 +64,8 @@ private static Scanner user_input;
 		}
 	}
 	
-	public static void stormCall() throws Exception
+	
+	public static void stormCall(String[] args) throws Exception
 	{
 		
 		user_input = new Scanner( System.in );
@@ -64,6 +79,7 @@ private static Scanner user_input;
 		
 		Config config = new Config();
 		config.setDebug(true);
+		Logger LOG = LoggerFactory.getLogger(RDFSpoutCountBase.class);
 		
 		TopologyBuilder builder = new TopologyBuilder();
 		
@@ -79,11 +95,24 @@ private static Scanner user_input;
 		builder.setBolt("bolt_builder", boltBuilder,3).customGrouping("spout_getdata",new PredicateGrouping());
 		builder.setBolt("bolt_prober", new BoltProberCountBase(),1).shuffleGrouping("bolt_builder");
 		
-		LocalCluster cluster = new LocalCluster();
-		cluster.submitTopology("RDFContinuous", config, builder.createTopology());
-		Thread.sleep(30000);
+		if (args != null && args.length > 0) {
+			StormSubmitter.submitTopology(args[0], config, builder.createTopology());
+			
+			//StormSubmitter.
+		}
+		else {
+			LocalCluster cluster = new LocalCluster();
+			cluster.submitTopology("RDFContinuous", config, builder.createTopology());
+			Thread.sleep(30000);
+			
+			
+			
+			System.out.println(LOG.toString());
+			
+			cluster.shutdown();
+		}
 		
-		cluster.shutdown();
+		
 		
 	}
 	

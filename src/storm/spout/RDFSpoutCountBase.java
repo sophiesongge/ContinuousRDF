@@ -61,13 +61,49 @@ public class RDFSpoutCountBase extends BaseRichSpout {
 	 */
 	public void nextTuple() {
 		Utils.sleep(100);
-		generateTuple();
+		if(_reader!=null)
+			generateTuple();
+		else
+		{
+			String Subject =null;				
+			String Predicate = null;
+			String Object = null;
+			
+			int p = _rand.nextInt(3);
+			int s = _rand.nextInt(10);
+			int o = _rand.nextInt(2);
+			if(p==0) {
+				Predicate = "Work";
+				Object=(o==0)?"INRIA":"SAP";
+			}
+			else if(p==1) {
+				Predicate = "Diplome";
+				Object=(o==0)?"Ph.D":"Master";
+			}
+			else if(p==2) {
+				Predicate = "Paper";
+				Object=(o==0)?"kNN":"hadoop";
+			}
+			Subject = "Name"+s;
+			
+			
+			_collector.emit(new Values(Subject,Predicate,Object));
+		}
 	}
 
 	public void generateTuple(){
 		try{
 			String tempsString = null;
-			while((tempsString = _reader.readLine())!=null){
+			if(_reader.ready()) {
+				tempsString = _reader.readLine();
+			}
+			else {
+				System.out.println("Job is finished of this spout");
+			}
+			//while(_reader.read()>-1) {
+			if(tempsString!=null){
+				
+				System.out.println(tempsString);
 				String parts[] = tempsString.split(" +");
 				String Subject = parts[0];				
 				String Predicate = parts[1];
@@ -87,10 +123,11 @@ public class RDFSpoutCountBase extends BaseRichSpout {
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println(e);
 			e.printStackTrace();
 		}finally{
-			System.out.println("Job is finished of this spout");
-			Utils.sleep(10000);
+			//System.out.println("Job is finished of this spout");
+			//Utils.sleep(10000);
 		}
 	}
 	
