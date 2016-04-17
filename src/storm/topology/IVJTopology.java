@@ -27,7 +27,7 @@ public static Query query;
 private static Scanner user_input;
 	
 	public static void main(String[] args) throws Exception{
-				
+		
 		String filePath="./data/rdfdata.txt";
 		File file = new File(filePath);
 		reader = null;
