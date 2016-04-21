@@ -89,6 +89,5 @@
 	<classpathentry kind="lib" path="lib-src/jena-arq-3.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib-src/jena-core-3.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib-src/jena-tdb-3.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="/jenaapi/lib/jena-base-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
