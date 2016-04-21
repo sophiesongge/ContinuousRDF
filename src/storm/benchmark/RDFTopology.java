@@ -11,9 +11,4 @@ public class RDFTopology{
 		String filePath="./data/University_combined.daml";
 		System.out.println("Test");
 	}
-	
-	
-	
-	
-
 }
