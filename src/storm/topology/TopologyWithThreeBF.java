@@ -11,15 +11,10 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
-import storm.bolt.BoltBuilder;
 import storm.bolt.BoltBuilderWithThreeBF;
-import storm.bolt.BoltProber;
 import storm.bolt.BoltProberWithThreeBF;
-import storm.bolt.BoltProberWithThreeBF_oldVersion;
-import storm.grouping.PredicateGrouping;
 import storm.rdf.Query;
 import storm.spout.RDFSpoutWithThreeBF;
-import storm.spout.TestSpout;
 
 public class TopologyWithThreeBF{
 	public static Query query;
