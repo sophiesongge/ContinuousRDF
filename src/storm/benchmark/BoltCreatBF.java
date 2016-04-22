@@ -24,10 +24,10 @@ public class BoltCreatBF implements IRichBolt {
 	}
 
 	public void execute(Tuple input) {
-		
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
+		System.out.println("Execute createBF for input (" + Subject + "," + Predicate + "," + Object + ")");
 		
 		if (!bloomFilters.containsKey(Predicate)) {
 			BloomFilter< Object> bf= new BloomFilter<Object>(0.01, 15);

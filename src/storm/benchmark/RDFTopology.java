@@ -14,6 +14,10 @@ import backtype.storm.tuple.Fields;
 public class RDFTopology{
 	
 	/**
+	 * Feedback Sophie: don't take subqueries, makes results uncomparable with others, use Queries 1, 3, 4, 5, 10, 11
+	 * For query 4: add more bolts
+	 * Start with the simple ones (4th later)
+	 * 
 	 * Extra package for benchmark tests, for testing, we use subqueries of testquery 4 in http://swat.cse.lehigh.edu/projects/lubm/lubm.jpg
 	 * The original full query can be found at http://swat.cse.lehigh.edu/projects/lubm/queries-sparql.txt
 	 * 
