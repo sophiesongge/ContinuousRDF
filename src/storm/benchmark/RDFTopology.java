@@ -10,11 +10,6 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
-import storm.bolt.BoltCreatBF;
-import storm.bolt.BoltTest;
-import storm.spout.RDFSpout;
-
-
 
 public class RDFTopology{
 	
@@ -22,16 +17,35 @@ public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
 		System.out.println("Benchmark test");
-		
-		
+		String filePath="./data/rdfdata.txt";
+		File file = new File(filePath);
+		reader = null;
+		reader = null;
+		try{
+			reader = new BufferedReader(new FileReader(file));
+			stormCall();
+				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(reader != null){
+				try{
+					reader.close();
+				}catch(IOException e1){
+					//Do nothing
+				}
+			}
+		}
 	}
 	
 	/**
 	 * The function that calls all the other functions and keeps the overview
 	 * @throws InterruptedException if the thread.sleep(10000) gets interrupted
 	 */
-	public static void stormCall() throws InterruptedException
-	{
+	public static void stormCall() throws InterruptedException{
+
+		System.out.println("Stormcall");
 		Config config = new Config();
 		config.setDebug(true);
 		
