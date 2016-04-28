@@ -18,29 +18,9 @@ public class RDFTopology{
 	 * For query 4: add more bolts
 	 * Start with the simple ones (4th later)
 	 * 
-	 * Extra package for benchmark tests, for testing, we use subqueries of testquery 4 in http://swat.cse.lehigh.edu/projects/lubm/lubm.jpg
-	 * The original full query can be found at http://swat.cse.lehigh.edu/projects/lubm/queries-sparql.txt
+	 * Extra package for benchmark tests, for testing, images of the queries are at http://swat.cse.lehigh.edu/projects/lubm/lubm.jpg
+	 * The original text queries can be found at http://swat.cse.lehigh.edu/projects/lubm/queries-sparql.txt
 	 * 
-	 * We will use the following 3 subqueries: 
-	 * 
-	 * SELECT ?X, ?Y1, ?Y2, ?Y3
-		WHERE
-		{ ?X rdf:type ub:Professor .
-			?X ub:name ?Y1 .
-		  	?X ub:emailAddress ?Y2 .
-		  	?X ub:telephone ?Y3}
-		  
-	 * SELECT ?X, ?Y1, ?Y2
-		WHERE
-		{ ?X rdf:type ub:Professor .
-			?X ub:name ?Y1 .
-		  	?X ub:emailAddress ?Y2}
-		  
-		  
-	 * SELECT ?X, ?Y1
-		WHERE
-		{ ?X rdf:type ub:Professor .
-			?X ub:name ?Y1 }
 	 */
 	
 public static BufferedReader reader;
