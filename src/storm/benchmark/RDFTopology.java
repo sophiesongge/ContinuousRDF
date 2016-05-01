@@ -54,8 +54,21 @@ public static BufferedReader reader;
 	 * @throws InterruptedException if the thread.sleep(10000) gets interrupted
 	 */
 	public static void stormCall() throws InterruptedException{
-
-		String[] query = new String[]{"*","Diplome","Ph.D"};
+		int useQuery = 11;//1, 3, 4, 5, 10, 11, note: 4 is not yet implemented
+		
+		String[] query;	
+		//Todo: apply this to the university data set
+		if(useQuery == 1){
+			query = new String[]{"*","Work","INRIA"};//SELECT all gradeStudents and their courses			
+		}else if(useQuery == 3){
+			query = new String[]{"*","Paper","*"};//SELECT all publications and their authors		
+		}else if(useQuery == 5){
+			query = new String[]{"*","Diplome","Ph.D"};	//SELECT all persons in the university			
+		}else if(useQuery == 10){
+			query = new String[]{"John","*","*"}; //SELECT all students and their courses
+		}else{//assume useQuery == 11
+			query = new String[]{"*","*","master"};	//SELECT all researchgroups and their suborganizations			
+		}
 		Config config = new Config();
 		config.setDebug(true);
 		
