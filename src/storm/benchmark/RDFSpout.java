@@ -67,6 +67,7 @@ public class RDFSpout extends BaseRichSpout {
 			String tempsString = null;
 			while((tempsString = _reader.readLine())!=null){
 				String parts[] = tempsString.split(" +");
+				//here it defines how to distribute triples, change here for benchmark
 				String Subject = parts[0];				
 				String Predicate = parts[1];
 				String Object = parts[2];

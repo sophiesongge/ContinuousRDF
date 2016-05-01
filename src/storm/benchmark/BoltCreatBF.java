@@ -48,6 +48,7 @@ public class BoltCreatBF implements IRichBolt {
 
 	public void cleanup() {
 		for (Map.Entry<String, BloomFilter<Object>> entry : bloomFilters.entrySet()) {
+			//for benchmark, create new bolt, only need to change predicate
 			System.out.println("Bloom Filter with Predicate = "+ entry.getKey() + " has values = " + entry.getValue().count());
 		}
 	}

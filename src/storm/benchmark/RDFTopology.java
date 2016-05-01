@@ -28,6 +28,7 @@ public static BufferedReader reader;
 	public static void main(String[] args) throws Exception{
 		System.out.println("Benchmark test");
 		String filePath="./data/rdfdata.txt";
+		//String filePath="./data/generated_data/University0_0.daml";
 		File file = new File(filePath);
 		reader = null;
 		reader = null;
@@ -69,6 +70,9 @@ public static BufferedReader reader;
 		builder.setSpout("spout_getdata", new RDFSpout(),1);
 		//write own bolt, insert here, 3 is the parallelism factor of the bolts
 		//now creates a bloomfilter for every triple
+		//3 bolts: one for work/paper/diplome
+		//for benchmark: need 2 bolts, one for prob and one for built
+		//The one for prob needs to receive triples from the spout and also bloomfilter from the other bolt (to do this change bolt
 		builder.setBolt("bolt_bloomfilter", new BoltCreatBF(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//BoltCreateTest() handles new data after the Bloomfilters have been created
 		builder.setBolt("bolt_test", new BoltTest(),1).shuffleGrouping("spout_getdata");

@@ -14,7 +14,7 @@ public class BoltTest implements IRichBolt {
 			OutputCollector collector) {
 	}
 
-	public void execute(Tuple input) {		
+	public void execute(Tuple input) {
 		System.out.println("BoltTest execute");
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
