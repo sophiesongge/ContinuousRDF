@@ -31,7 +31,6 @@ public static BufferedReader reader;
 		//String filePath="./data/generated_data/University0_0.daml";
 		File file = new File(filePath);
 		reader = null;
-		reader = null;
 		try{
 			reader = new BufferedReader(new FileReader(file));
 			stormCall();
@@ -56,7 +55,7 @@ public static BufferedReader reader;
 	 */
 	public static void stormCall() throws InterruptedException{
 
-		System.out.println("Stormcall");
+		String[] query = new String[]{"*","Diplome","Ph.D"};
 		Config config = new Config();
 		config.setDebug(true);
 		
@@ -72,8 +71,8 @@ public static BufferedReader reader;
 		//now creates a bloomfilter for every triple
 		//3 bolts: one for work/paper/diplome
 		//for benchmark: need 2 bolts, one for prob and one for built
-		//The one for prob needs to receive triples from the spout and also bloomfilter from the other bolt (to do this change bolt
-		builder.setBolt("bolt_bloomfilter", new BoltCreatBF(),3).fieldsGrouping("spout_getdata", new Fields("Predicate"));
+		//The one for prob needs to receive triples from the spout and also bloomfilter from the other bolt (todo: change this bolt)
+		builder.setBolt("bolt_bloomfilter", new BoltCreatBF(query),1).fieldsGrouping("spout_getdata", new Fields("Predicate"));
 		//BoltCreateTest() handles new data after the Bloomfilters have been created
 		builder.setBolt("bolt_test", new BoltTest(),1).shuffleGrouping("spout_getdata");
 		//use API of Jena to treat data

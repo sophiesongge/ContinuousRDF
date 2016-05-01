@@ -14,7 +14,12 @@ public class BoltCreatBF implements IRichBolt {
 	private OutputCollector collector;
 
 	Map<String, BloomFilter<Object>> bloomFilters;
+	String[] query;
 	
+	public BoltCreatBF(String[] input) {
+		query = input;
+	}
+
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
 		
@@ -27,19 +32,36 @@ public class BoltCreatBF implements IRichBolt {
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
+				
 		System.out.println("Execute createBF for input (" + Subject + "," + Predicate + "," + Object + ")");
 		
-		if (!bloomFilters.containsKey(Predicate)) {
-			BloomFilter< Object> bf= new BloomFilter<Object>(0.01, 15);
-			bf.add(Subject);
-			bloomFilters.put(Predicate, bf);
-		} else {
-			BloomFilter< Object> bf= bloomFilters.get(Predicate);
-			bf.add(Subject);
-			bloomFilters.put(Predicate, bf);
+		if(queryMatch(input)){
+			if (!bloomFilters.containsKey(Predicate)) {
+				BloomFilter< Object> bf= new BloomFilter<Object>(0.01, 15);
+				bf.add(Subject);
+				bloomFilters.put(Predicate, bf);
+			} else {
+				BloomFilter< Object> bf= bloomFilters.get(Predicate);
+				bf.add(Subject);
+				bloomFilters.put(Predicate, bf);
+			}
 		}
 		//output, send to next stage.
 		collector.emit(new Values(bloomFilters));
+	}
+	
+	private boolean queryMatch(Tuple tuple){
+		
+		if(!query[0].equalsIgnoreCase("*") && !query[0].equalsIgnoreCase(tuple.getStringByField("Subject"))){
+			return false;
+		}
+		if(!query[1].equalsIgnoreCase("*") && !query[1].equalsIgnoreCase(tuple.getStringByField("Predicate"))){
+			return false;
+		}
+		if(!query[2].equalsIgnoreCase("*") && !query[2].equalsIgnoreCase(tuple.getStringByField("Object"))){
+			return false;
+		}
+		return true;
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
@@ -49,7 +71,7 @@ public class BoltCreatBF implements IRichBolt {
 	public void cleanup() {
 		for (Map.Entry<String, BloomFilter<Object>> entry : bloomFilters.entrySet()) {
 			//for benchmark, create new bolt, only need to change predicate
-			System.out.println("Bloom Filter with Predicate = "+ entry.getKey() + " has values = " + entry.getValue().count());
+			System.out.println("Bloom Filter with Predicate = ("+ query[0] + ","+ query[1] + ","+ query[2] + ") has values = " + entry.getValue().count());
 		}
 	}
 
