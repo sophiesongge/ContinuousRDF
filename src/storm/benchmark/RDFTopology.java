@@ -6,6 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
@@ -27,6 +33,28 @@ public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
 		System.out.println("Benchmark test");
+
+		
+		//not really working way
+		Model rdfModel = ModelFactory.createDefaultModel().read("./data/generated_data/University0_0.daml");
+		String NS = "http://www.Department0.University0.edu";
+		Resource prof;
+		for(int i = 0; i < 100; i++){
+			System.out.println("prof: " + i);
+			prof = rdfModel.getResource( NS + "FullProfessor" + i);
+			for (StmtIterator iter = prof.listProperties(); iter.hasNext(); ) {
+
+				System.out.println("iteration");
+			    Statement s = iter.next();
+			    System.out.println( "FullProffesor " + i + " has property " + s.getPredicate() + 
+			                        " with value " + s.getObject() );
+			}
+		} 
+	
+		//rdfModel
+
+		//old stuff - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		/*		
 		String filePath="./data/rdfdata.txt";
 		//String filePath="./data/generated_data/University0_0.daml";
 		File file = new File(filePath);
@@ -47,6 +75,7 @@ public static BufferedReader reader;
 				}
 			}
 		}
+		*/
 	}
 	
 	/**

@@ -21,8 +21,7 @@ public class RDFTopology{
 public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
-		
-		
+				
 		//String filePath="./data/rdfdata.txt";
 		String filePath="./data/generated_data/University0_0.daml";
 		File file = new File(filePath);
