@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.util.FileManager;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -32,10 +36,49 @@ public class RDFTopology{
 public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println("Benchmark test");
+		System.out.println("Jenaapi");
+		 // create an empty model
+		 Model model = ModelFactory.createDefaultModel();
 
+		 String inputFileName="./data/generated_data/University0_0.daml";
+		 
+		 
+		 // use the FileManager to find the input file
+		 InputStream in = FileManager.get().open( inputFileName );
+		if (in == null) {
+		    throw new IllegalArgumentException(
+		                                 "File: " + inputFileName + " not found");
+		}
+
+		// read the RDF/XML file
+		model.read(in, null);
+		
+		
+		// list the statements in the Model
+		StmtIterator iter = model.listStatements();
+		
+
+		// print out the predicate, subject and object of each statement
+		while (iter.hasNext()) {
+		    Statement stmt      = iter.nextStatement();  // get next statement
+		    Resource  subject   = stmt.getSubject();     // get the subject
+		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    RDFNode   object    = stmt.getObject();      // get the object
+
+		    System.out.print(subject.toString());
+		    System.out.print(" " + predicate.toString() + " ");
+		    if (object instanceof Resource) {
+		       System.out.print(object.toString());
+		    } else {
+		        // object is a literal
+		        System.out.print("\"" + object.toString() + "\"");
+		    }
+
+		    System.out.println(" .");
+		}
 		
 		//not really working way
+		/*
 		Model rdfModel = ModelFactory.createDefaultModel().read("./data/generated_data/University0_0.daml");
 		String NS = "http://www.Department0.University0.edu";
 		Resource prof;
@@ -50,6 +93,7 @@ public static BufferedReader reader;
 			                        " with value " + s.getObject() );
 			}
 		} 
+		*/
 	
 		//rdfModel
 
