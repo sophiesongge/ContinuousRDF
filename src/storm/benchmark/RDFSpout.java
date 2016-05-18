@@ -50,7 +50,7 @@ public class RDFSpout extends BaseRichSpout {
 		this._collector = collector;
 		this._rand = new Random();
 		//to read the input file
-		this._reader = RDFTopology.reader;
+		//this._reader = RDFTopology.reader;
 	}
 	
 	/*

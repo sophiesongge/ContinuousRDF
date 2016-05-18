@@ -15,8 +15,11 @@ import backtype.storm.tuple.Values;
 
 public class BoltProberGrid implements IRichBolt {
 	private OutputCollector collector;
-	private BloomFilter<String> bf1;
-	private BloomFilter<String> bf2;
+	private BloomFilter[] bf1;
+	private BloomFilter[] bf2;
+	private int bf1_index=0;
+	private int bf2_index=0;
+	
 	private List<String> problist;
 	
 	private List<String> queryResult;
@@ -29,8 +32,16 @@ public class BoltProberGrid implements IRichBolt {
 			OutputCollector collector) {
 		
 		this.collector = collector;
-		this.bf1 = new BloomFilter(0.01, 10);
-		this.bf2 = new BloomFilter(0.01, 10);
+		
+		this.bf1 = new BloomFilter[3];
+		this.bf2 = new BloomFilter[3];
+		for(int i=0;i<3;i++) {
+			this.bf1[i]= new BloomFilter(0.01, 10);
+			this.bf2[i]= new BloomFilter(0.01, 10);
+		}
+		
+		
+		
 		queryResult = new ArrayList<String>();
 
 	}
@@ -38,19 +49,24 @@ public class BoltProberGrid implements IRichBolt {
 	public void execute(Tuple tuple) {
 		
 		String id = tuple.getStringByField("id");
-		if(id.equals("bf1")) 
-			bf1 = (BloomFilter<String>)tuple.getValueByField("bf");
-		else if(id.equals("bf2"))
-			bf2 = (BloomFilter<String>)tuple.getValueByField("bf");
-		else {
+		if(id.equals("bf1")) {
+			bf1[bf1_index%3] = (BloomFilter<String>)tuple.getValueByField("bf");
+			bf1_index++;
+		}
+		else if(id.equals("bf2")) {
+			bf2[bf2_index%3] = (BloomFilter<String>)tuple.getValueByField("bf");
+			bf2_index++;
+		}
 			
+		else {
+			//add to list, 20 max size, 
 			String jointype="onevariable";
 			if (jointype.equalsIgnoreCase("onevariable")) {
 				oneVariableJoin(tuple);
 			} else if (jointype.equalsIgnoreCase("twovariable")){
-				twoVariableJoin(tuple);
+				//twoVariableJoin(tuple);
 			} else if (jointype.equalsIgnoreCase("multivariable")){
-				multiVariableJoin(tuple);
+				//multiVariableJoin(tuple);
 			}
 			else {
 				System.out.println("Error, con't identify join type");
@@ -65,14 +81,24 @@ public class BoltProberGrid implements IRichBolt {
 		String Predicate = tuple.getStringByField("Predicate");
 		String Object = tuple.getStringByField("Object");
 		
-		boolean contains1 = bf1.contains(Subject);
-		boolean contains2 = bf2.contains(Subject);
+		boolean contains1=false;
+		boolean contains2 = false;
+		
+		for(int i=0;i<3 && !contains1;i++) {
+			contains1 = bf1[i].contains(Subject);
+		}
+		for(int i=0;i<3 && !contains2;i++) {
+			contains2 = bf2[i].contains(Subject);
+		} 
+		
 		if(contains1 && contains2){
 			collector.emit(new Values(Subject));
 			queryResult.add(Subject);
 		}
+		
+		//write in file and delete this
 	}
-	
+	/*
 	private void twoVariableJoin(Tuple tuple) {
 		//the same for all 3 for now, keep seperate functions in case we might have to change this.
 		variableJoin(tuple);
@@ -95,7 +121,7 @@ public class BoltProberGrid implements IRichBolt {
 			}
 		}			
 	}
-	
+	*/
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
 	}

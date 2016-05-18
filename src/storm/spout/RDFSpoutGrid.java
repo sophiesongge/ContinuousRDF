@@ -82,7 +82,7 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		//Utils.sleep(10);
+		Utils.sleep(10);
 		{
 			String Subject =null;				
 			String Object = null;

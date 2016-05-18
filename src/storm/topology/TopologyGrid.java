@@ -44,7 +44,7 @@ private static Scanner user_input;
 	public static void stormCall(String[] args) throws Exception
 
 	{
-		System.out.println("hello3");
+		System.out.println("hello");
 		Config config = new Config();
 		config.setDebug(true);
 		//Logger LOG = LoggerFactory.getLogger(RDFSpoutCountBase.class);
@@ -56,11 +56,11 @@ private static Scanner user_input;
 		builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
 		builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
 		builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
-		/*
+		
 		builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
 		builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
 		builder.setBolt("bolt_prober", new  BoltProberGrid("Diplome"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
-		*/
+		
 		//-----------------------
 		
 		if (args != null && args.length > 0) {
@@ -71,10 +71,10 @@ private static Scanner user_input;
 			//StormSubmitter.
 		}
 		else {
-			config.setNumWorkers(2);
+			//config.setNumWorkers(3);
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology("RDFContinuous", config, builder.createTopology());
-			Thread.sleep(3000);
+			Thread.sleep(9000);
 			
 			
 			cluster.shutdown();
