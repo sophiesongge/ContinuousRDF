@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Scanner;
 
-import org.apache.jena.base.Sys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.apache.jena.base.Sys;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -40,8 +40,17 @@ private static Scanner user_input;
 	
 	public static void main(String[] args) throws Exception{
 		
-			
+		
 		String filePath="./data/rdfdata.txt";
+		System.out.println("Please give the dat file path as argument");
+		if (args == null || args.length <= 0) {
+			
+			System.out.println("Please give the dat file path as argument");
+			return;
+			
+			//StormSubmitter.
+		}
+		
 		InputStream is = ClassLoader.getSystemResourceAsStream("rdfdata.txt");
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -77,7 +86,7 @@ private static Scanner user_input;
 	{
 		
 		user_input = new Scanner( System.in );
-		System.out.println("First value? (put in ANY for any possible value)");
+		System.out.println("hello--First value? (put in ANY for any possible value)");
 		String v1 = user_input.next();
 		System.out.println("Second value? (put in ANY for any possible value)");
 		String v2 = user_input.next();
@@ -87,7 +96,7 @@ private static Scanner user_input;
 		
 		Config config = new Config();
 		config.setDebug(true);
-		Logger LOG = LoggerFactory.getLogger(RDFSpoutCountBase.class);
+		//Logger LOG = LoggerFactory.getLogger(RDFSpoutCountBase.class);
 		
 		TopologyBuilder builder = new TopologyBuilder();
 		
@@ -103,6 +112,17 @@ private static Scanner user_input;
 		builder.setBolt("bolt_builder", boltBuilder,3).customGrouping("spout_getdata",new PredicateGrouping());
 		builder.setBolt("bolt_prober", new BoltProberCountBase(),1).shuffleGrouping("bolt_builder");
 		
+		//-----------------------
+		builder.setSpout("spout_1", new RDFSpoutCountBase(),1);
+		builder.setSpout("spout_2", new RDFSpoutCountBase(),1);
+		builder.setSpout("spout_3", new RDFSpoutCountBase(),1);
+		
+		builder.setBolt("bolt_builder1", boltBuilder,1).shuffleGrouping("spout_1");
+		builder.setBolt("bolt_builder2", boltBuilder,1).shuffleGrouping("spout_2");
+		builder.setBolt("bolt_prober", boltBuilder,1).shuffleGrouping("spout_3").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
+		
+		//-----------------------
+		
 		if (args != null && args.length > 0) {
 			StormSubmitter.submitTopology(args[0], config, builder.createTopology());
 			
@@ -113,9 +133,6 @@ private static Scanner user_input;
 			cluster.submitTopology("RDFContinuous", config, builder.createTopology());
 			Thread.sleep(30000);
 			
-			
-			
-			System.out.println(LOG.toString());
 			
 			cluster.shutdown();
 		}

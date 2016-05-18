@@ -21,8 +21,9 @@ public class RDFTopology{
 public static BufferedReader reader;
 	
 	public static void main(String[] args) throws Exception{
-
-		String filePath="./data/University_combined.daml";
+		
+		
+		String filePath="./data/rdfdata.txt";
 		File file = new File(filePath);
 		reader = null;
 		try{
@@ -40,15 +41,9 @@ public static BufferedReader reader;
 					//Do nothing
 				}
 			}
-		}	
-	}
-	
-	/**
-	 * Sets a new reader, if no reader is set, the one of the main() is used
-	 * @param newReader the reader used for the input
-	 */
-	public void setReader(BufferedReader newReader){
-		this.reader = newReader;
+		}
+		
+		
 	}
 	
 	/**
