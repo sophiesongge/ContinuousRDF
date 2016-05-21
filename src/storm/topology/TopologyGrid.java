@@ -52,16 +52,27 @@ private static Scanner user_input;
 		TopologyBuilder builder = new TopologyBuilder();
 		
 
+		
+		
 		//-----------------------
+		/*
 		builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
 		builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
 		builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
 		
 		builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
 		builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
-		builder.setBolt("bolt_prober", new  BoltProberGrid("Diplome"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
-		
+		builder.setBolt("bolt_prober", new  BoltProberGrid("2V","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
+		*/
 		//-----------------------
+		
+		builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
+		builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
+		builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
+		
+		builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
+		builder.setBolt("bolt_prober1", new  BoltProberGrid("MV","WORK","ANY"),1).shuffleGrouping("spout_work").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober2");
+		builder.setBolt("bolt_prober2", new  BoltProberGrid("MV","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober1");
 		
 		if (args != null && args.length > 0) {
 			
