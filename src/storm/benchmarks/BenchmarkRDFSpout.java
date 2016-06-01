@@ -15,16 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package storm.spout;
+package storm.benchmarks;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.management.ManagementFactory;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Random;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.util.FileManager;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -34,20 +42,21 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import storm.rdf.RDFTriple;
-import storm.topology.TopologyCountBase;
 
-public class RDFSpoutGrid extends BaseRichSpout {
+public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
-	Random _rand;
-	String Predicate = null; 
-	
-	public RDFSpoutGrid(String p) {
+
+	InputStream in;
+	public static Model model;
+	public static StmtIterator iter;
+
+	String gPredicate;
+
+	public BenchmarkRDFSpout(String predicate) {
 		// TODO Auto-generated constructor stub
-		Predicate=p;
-		
-		
+		gPredicate = predicate;
 		
 	}
 
@@ -59,53 +68,23 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	 */
 	public void open(Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
-		//to initialize the collector
+
 		this._collector = collector;
-		this._rand = new Random();
-		/*
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(Predicate+"_predicate.txt", "UTF-8");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		writer.println(Predicate);
-        long threadId = Thread.currentThread().getId();
-		writer.println(threadId);
-		writer.close();
-		*/
+
 	}
-	
+
 	/*
 	 * The main method for spout
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		Utils.sleep(10);
-		{
-			String Subject =null;				
-			String Object = null;
-			
-			int s = _rand.nextInt(10);
-			int o = _rand.nextInt(2);
-			
-			if(Predicate.equals("Work")) {
-				Object=(o==0)?"INRIA":"ECP";
-			}
-			else if(Predicate.equals("Diplome")) {
-				Object=(o==0)?"Ph.D":"Master";
-			}
-			else if(Predicate.equals("Paper")) {
-				Object=(o==0)?"kNN":"hadoop";
-			}
-			
-			Subject = "Name"+s;
-			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
-		}
+		Utils.sleep(100);
+		generateTuple();
+	}
+
+	public void generateTuple(){
+		
+		// Here add your code to generate tuples in random order
 	}
 
 	@Override
@@ -117,9 +96,8 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
 		declarer.declare(new Fields("Subject","Predicate","Object","id"));
-		//declarer.declare(new Fields("tuple"));
+
 	}
 
 }

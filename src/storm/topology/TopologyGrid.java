@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Scanner;
 
 //import org.apache.jena.base.Sys;
@@ -40,51 +41,69 @@ private static Scanner user_input;
 
 	}
 	
-	
 	public static void stormCall(String[] args) throws Exception
 
 	{
-		System.out.println("hello");
-		Config config = new Config();
-		config.setDebug(true);
-		//Logger LOG = LoggerFactory.getLogger(RDFSpoutCountBase.class);
-		
-		TopologyBuilder builder = new TopologyBuilder();
+		String jointype = "1V";
+		int numberofworkers = 1;
+		String topologyname = "RDFContinuous";
+		if (args != null && args.length == 3) {
+			jointype = args[0];
+			numberofworkers =  Integer.parseInt(args[1]);
+			topologyname = args[2];
+		}
 		
 
+		Config config = new Config();
+		TopologyBuilder builder = new TopologyBuilder();
 		
-		
-		//-----------------------
-		/*
-		builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
-		builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
-		builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
-		
-		builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
-		builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
-		builder.setBolt("bolt_prober", new  BoltProberGrid("2V","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
-		*/
-		//-----------------------
-		
-		builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
-		builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
-		builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
-		
-		builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
-		builder.setBolt("bolt_prober1", new  BoltProberGrid("MV","WORK","ANY"),1).shuffleGrouping("spout_work").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober2");
-		builder.setBolt("bolt_prober2", new  BoltProberGrid("MV","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober1");
-		
-		if (args != null && args.length > 0) {
+		//Check the join type
+		if(jointype.equalsIgnoreCase("MV")) {
 			
-			config.setNumWorkers(3);
-			StormSubmitter.submitTopology(args[0], config, builder.createTopology());
+			builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
+			builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
+			builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
 			
-			//StormSubmitter.
+			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_prober1", new  BoltProberGrid("MV","WORK","ANY"),1).shuffleGrouping("spout_work").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober2");
+			builder.setBolt("bolt_prober2", new  BoltProberGrid("MV","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober1");
+			
+		}
+		else if(jointype.equalsIgnoreCase("2V")) {
+			
+			builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
+			builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
+			builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
+			
+			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
+			builder.setBolt("bolt_prober", new  BoltProberGrid("2V","Diplome","ANY"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
+			
+		}
+		else {
+			
+			builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
+			builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
+			builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
+			
+			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
+			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
+			
+		}
+		
+		
+		if (args != null && args.length == 3) {
+			
+			config.setNumWorkers(numberofworkers);
+			StormSubmitter.submitTopology(topologyname, config, builder.createTopology());
+			
 		}
 		else {
 			//config.setNumWorkers(3);
+			config.setDebug(true);
 			LocalCluster cluster = new LocalCluster();
-			cluster.submitTopology("RDFContinuous", config, builder.createTopology());
+			cluster.submitTopology(topologyname, config, builder.createTopology());
 			Thread.sleep(9000);
 			
 			
