@@ -1,6 +1,6 @@
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_0.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_0.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -50,9 +50,9 @@ worksFor 41 41
 TOTAL: 6896
 TOTAL SO FAR: 6896
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_1.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_1.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -102,9 +102,9 @@ worksFor 34 75
 TOTAL: 5364
 TOTAL SO FAR: 12260
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_2.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_2.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -154,9 +154,9 @@ worksFor 34 109
 TOTAL: 5085
 TOTAL SO FAR: 17345
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_3.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_3.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -206,9 +206,9 @@ worksFor 37 146
 TOTAL: 5152
 TOTAL SO FAR: 22497
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_4.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_4.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -258,9 +258,9 @@ worksFor 34 180
 TOTAL: 5542
 TOTAL SO FAR: 28039
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_5.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_5.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -310,9 +310,9 @@ worksFor 35 215
 TOTAL: 5717
 TOTAL SO FAR: 33756
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_6.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_6.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -362,9 +362,9 @@ worksFor 34 249
 TOTAL: 4593
 TOTAL SO FAR: 38349
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_7.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_7.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -414,9 +414,9 @@ worksFor 37 286
 TOTAL: 6010
 TOTAL SO FAR: 44359
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_8.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_8.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -466,9 +466,9 @@ worksFor 37 323
 TOTAL: 6038
 TOTAL SO FAR: 50397
 
----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_9.daml
----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_9.daml
+-------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -518,9 +518,9 @@ worksFor 35 358
 TOTAL: 4743
 TOTAL SO FAR: 55140
 
-----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_10.daml
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_10.daml
+--------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -570,9 +570,9 @@ worksFor 36 394
 TOTAL: 5719
 TOTAL SO FAR: 60859
 
-----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_11.daml
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_11.daml
+--------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -622,9 +622,9 @@ worksFor 39 433
 TOTAL: 5748
 TOTAL SO FAR: 66607
 
-----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_12.daml
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_12.daml
+--------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -674,9 +674,9 @@ worksFor 36 469
 TOTAL: 5138
 TOTAL SO FAR: 71745
 
-----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_13.daml
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_13.daml
+--------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
@@ -726,9 +726,9 @@ worksFor 38 507
 TOTAL: 6349
 TOTAL SO FAR: 78094
 
-----------------------------------------------------------------------------------------------------------------------
-E:\Dropbox\Sander\College\Processing RDF Graphs in a parallel and continuous way\git\ContinuousRDF\University0_14.daml
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------
+E:\Dropbox\Sander\College\RDFProject\git\ContinuousRDF\University0_14.daml
+--------------------------------------------------------------------------
 External Seed=0 Interal Seed=0
 
 CLASS INSTANCE# TOTAL-SO-FAR
