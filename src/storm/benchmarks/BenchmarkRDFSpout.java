@@ -66,7 +66,7 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 				
 		//open the file and start the model
 		Model model = ModelFactory.createDefaultModel();
-		String inputFileName="Benchmarks_data.daml";
+		String inputFileName="./data/University_combined.daml";
 		
 		// use the FileManager to find the input file
 		InputStream in = FileManager.get().open( inputFileName );
