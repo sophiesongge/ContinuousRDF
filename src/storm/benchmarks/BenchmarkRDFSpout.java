@@ -18,10 +18,13 @@
 package storm.benchmarks;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Map;
 import java.util.Random;
 
@@ -51,13 +54,32 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	InputStream in;
 	public static Model model;
 	public static StmtIterator iter;
+	private File sourceFile = null;
+	private FileReader fr;
+    private BufferedReader br;
 
 	String gPredicate;
 
 	public BenchmarkRDFSpout(String predicate) {
 		// TODO Auto-generated constructor stub
 		gPredicate = predicate;
+				
+		//open the file and start the model
+		Model model = ModelFactory.createDefaultModel();
+		String inputFileName="Benchmarks_data.daml";
 		
+		// use the FileManager to find the input file
+		InputStream in = FileManager.get().open( inputFileName );
+		 
+		if (in == null) {
+		    throw new IllegalArgumentException("File: " + inputFileName + " not found");
+		}
+		
+		// read the RDF/XML file
+		model.read(in, null);
+
+		// list the statements in the Model
+		StmtIterator iter = model.listStatements();
 	}
 
 	/*
@@ -83,7 +105,16 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	}
 
 	public void generateTuple(){
-		
+		if(iter.hasNext()){
+		    Statement stmt      = iter.nextStatement();  // get next statement
+		    Resource  Subject   = stmt.getSubject();     // get the subject
+		    Property  Predicate = stmt.getPredicate();   // get the predicate
+		    RDFNode   Object    = stmt.getObject();      // get the object
+		    			
+			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
+		}else{
+			throw new NullPointerException("No more elements");
+		}
 		// Here add your code to generate tuples in random order
 	}
 
