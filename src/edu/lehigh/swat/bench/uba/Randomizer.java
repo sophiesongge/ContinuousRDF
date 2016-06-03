@@ -6,16 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
 public class Randomizer {
 
+	/**
+	 * Run this class to randomize all .daml files in a folder
+	 * The first and last elements will stay at the same place, but all others will be changed in order
+	 * Note: one element is splitted by a whiteline, so each new element starts after an empty line
+	 */
 	public void randomize(){
 		String folder = "E:\\Dropbox\\Sander\\College\\RDFProject\\git\\ContinuousRDF\\data";
 		System.out.println("Files to randomize are in folder " + folder);
