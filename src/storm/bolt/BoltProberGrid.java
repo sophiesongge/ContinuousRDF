@@ -7,16 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.storm.shade.org.eclipse.jetty.util.log.Log;
+
 import storm.bloomfilter.BloomFilter;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BoltProberGrid implements IRichBolt,Serializable {
+import backtype.storm.metric.api.CountMetric;
+
+public class BoltProberGrid implements IRichBolt,Serializable  {
 	private OutputCollector collector;
 	private BloomFilter[] bf1;
 	private BloomFilter[] bf2;
@@ -38,6 +43,7 @@ public class BoltProberGrid implements IRichBolt,Serializable {
 	private int slidingWindowNumber=0;
 	
 	FileWriter filerwriter=null;
+	CountMetric _countMetric;
 	
 	public BoltProberGrid(String jointype, String predicate, String value) {
 		// TODO Auto-generated constructor stub
@@ -72,6 +78,8 @@ public class BoltProberGrid implements IRichBolt,Serializable {
 			e.printStackTrace();
 		}
 		*/
+		_countMetric = new CountMetric();
+		context.registerMetric("result_count", _countMetric, 5);
 	}
 
 	public void execute(Tuple tuple) {
@@ -190,9 +198,11 @@ public class BoltProberGrid implements IRichBolt,Serializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}*/
+				_countMetric.incr();
 			}
 			
 		}
+		Log.info("Size is: "+queryResult.size()+" Query Result is: "+ queryResult);
 		System.out.println("Size is: "+queryResult.size()+" Query Result is: "+ queryResult);
 		queryResult.clear();
 		

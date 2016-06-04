@@ -18,6 +18,7 @@ import java.util.Scanner;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
+import backtype.storm.metric.LoggingMetricsConsumer;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import backtype.storm.utils.Utils;
@@ -82,14 +83,19 @@ private static Scanner user_input;
 		}
 		else {
 			
+			config.registerMetricsConsumer(LoggingMetricsConsumer.class);
 			builder.setSpout("spout_work", new RDFSpoutGrid("Work"),1);
 			builder.setSpout("spout_diplome", new RDFSpoutGrid("Diplome"),1);
 			builder.setSpout("spout_paper", new RDFSpoutGrid("Paper"),1);
+			/*
+			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),2).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),2).shuffleGrouping("spout_work");
 			
-			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),1).shuffleGrouping("spout_paper");
-			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),1).shuffleGrouping("spout_work");
-			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),1).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
-			
+			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),3).shuffleGrouping("spout_diplome").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_builder2");
+			*/
+			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),2).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),2).shuffleGrouping("spout_work");
+			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),2).allGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
 		}
 		
 		
@@ -105,7 +111,6 @@ private static Scanner user_input;
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology(topologyname, config, builder.createTopology());
 			Thread.sleep(9000);
-			
 			
 			cluster.shutdown();
 		}
