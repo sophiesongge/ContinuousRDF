@@ -95,7 +95,7 @@ private static Scanner user_input;
 			*/
 			builder.setBolt("bolt_builder1", new  BoltBuilderGrid("Paper", "kNN"),2).shuffleGrouping("spout_paper");
 			builder.setBolt("bolt_builder2", new  BoltBuilderGrid("Work", "INRIA"),2).shuffleGrouping("spout_work");
-			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),2).allGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
+			builder.setBolt("bolt_prober", new  BoltProberGrid("1V","Diplome","Master"),2).shuffleGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
 		}
 		
 		
