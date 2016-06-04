@@ -90,17 +90,22 @@ public class RDFSpoutGrid extends BaseRichSpout {
 			String Subject =null;				
 			String Object = null;
 			
-			int s = _rand.nextInt(10);
-			int o = _rand.nextInt(2);
+			int s = _rand.nextInt(100);
+			int w = _rand.nextInt(20);
+			int d = _rand.nextInt(3);
+			int p = _rand.nextInt(30);
 			
 			if(Predicate.equals("Work")) {
-				Object=(o==0)?"INRIA":"ECP";
+				Object = "Place"+ w ;
+				//Object=(o==0)?"INRIA":"ECP";
 			}
 			else if(Predicate.equals("Diplome")) {
-				Object=(o==0)?"Ph.D":"Master";
+				Object = "Diplome" + d;
+				//Object=(o==0)?"Ph.D":"Master";
 			}
 			else if(Predicate.equals("Paper")) {
-				Object=(o==0)?"kNN":"hadoop";
+				Object = "Paper" + p;
+				//Object=(o==0)?"kNN":"hadoop";
 			}
 			
 			Subject = "Name"+s;
