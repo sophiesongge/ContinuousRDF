@@ -33,17 +33,22 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
+import storm.config.TopologyConfiguration;
 import storm.rdf.RDFTriple;
 import storm.topology.TopologyCountBase;
+import storm.topology.TopologyGridTimebase;
 
-public class RDFSpoutGrid extends BaseRichSpout {
+public class RDFSpoutGridTimebase extends BaseRichSpout {
 
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
-	String Predicate = null; 
+	String Predicate = null;
 	
-	public RDFSpoutGrid(String p) {
+	int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
+	int currentGenerationSize=0;
+	
+	public RDFSpoutGridTimebase(String p) {
 		// TODO Auto-generated constructor stub
 		Predicate=p;
 		
@@ -62,22 +67,6 @@ public class RDFSpoutGrid extends BaseRichSpout {
 		//to initialize the collector
 		this._collector = collector;
 		this._rand = new Random();
-		/*
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(Predicate+"_predicate.txt", "UTF-8");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		writer.println(Predicate);
-        long threadId = Thread.currentThread().getId();
-		writer.println(threadId);
-		writer.close();
-		*/
 	}
 	
 	/*
@@ -85,15 +74,15 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		Utils.sleep(1);
+		//Utils.sleep(1);
 		{
 			String Subject =null;				
 			String Object = null;
 			
 			int s = _rand.nextInt(100);
-			int w = _rand.nextInt(20);
+			int w = _rand.nextInt(10);
 			int d = _rand.nextInt(3);
-			int p = _rand.nextInt(10);
+			int p = _rand.nextInt(20);
 			
 			if(Predicate.equals("Work")) {
 				Object = "Place"+ w ;
@@ -107,9 +96,14 @@ public class RDFSpoutGrid extends BaseRichSpout {
 				Object = "Paper" + p;
 				//Object=(o==0)?"kNN":"hadoop";
 			}
-			
 			Subject = "Name"+s;
+			
 			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
+			currentGenerationSize++;
+			if(currentGenerationSize==GenerationSize) {
+				currentGenerationSize=0;
+				_collector.emit(new Values(Subject,Predicate,Object,"process"));
+			}
 		}
 	}
 
@@ -122,9 +116,8 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
+		
 		declarer.declare(new Fields("Subject","Predicate","Object","id"));
-		//declarer.declare(new Fields("tuple"));
 	}
 
 }

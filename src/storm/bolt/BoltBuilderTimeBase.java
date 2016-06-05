@@ -80,8 +80,8 @@ public class BoltBuilderTimeBase implements IRichBolt {
 		
 		timer = new Timer();
         timer.schedule(new RemindTask(),
-                       10000,        //initial delay
-                       1*10000);  //subsequent rate
+                       1000,        //initial delay
+                       1*1000);  //subsequent rate
 		
 	}
 
