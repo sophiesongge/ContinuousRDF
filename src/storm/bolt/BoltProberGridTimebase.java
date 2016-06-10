@@ -4,8 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,6 +24,7 @@ import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.MessageId;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
@@ -53,6 +57,9 @@ public class BoltProberGridTimebase implements IRichBolt  {
 	private int NUM_BF2 = TopologyConfiguration.NUMBER_BF2;
 	private int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
 	private int NumberOfGenerations = TopologyConfiguration.NUMBER_OF_GENERATIONS;
+	
+	Set<String> hs[];
+	int slidingWindowPading = 0;
 
 	public BoltProberGridTimebase(String jointype, String predicate, String value) {
 		// TODO Auto-generated constructor stub
@@ -89,6 +96,12 @@ public class BoltProberGridTimebase implements IRichBolt  {
 		for(int i=0;i<NumberOfGenerations;i++) {
 			problist[i] = new ArrayList<Tuple>();
 		}
+		
+		hs = new HashSet[NumberOfGenerations];
+		for(int i=0;i<NumberOfGenerations;i++) {
+			hs[i] = new HashSet<>();
+		}
+		
 		//problist = new ArrayList<ArrayList<Tuple>>();
 		//problist = new ArrayList<Tuple>();
 		queryResult = new ArrayList<String>();
@@ -290,8 +303,12 @@ public class BoltProberGridTimebase implements IRichBolt  {
 				e.printStackTrace();
 			}
 		}
-		
 		problist_index = (problist_index+1) % NumberOfGenerations;
+		problist[problist_index].clear();
+		
+		slidingWindowPading = (slidingWindowPading+1) % NumberOfGenerations;
+		hs[slidingWindowPading].clear();
+		
 	}
 
 	private void Join(List<Tuple> tuplelist) throws IOException {
@@ -304,7 +321,7 @@ public class BoltProberGridTimebase implements IRichBolt  {
 
 			boolean contains1=false;
 			boolean contains2 = false;
-
+			
 			for(int i=0;i<NUM_BF1 && i< bf1.size() && !contains1;i++) {
 				for(int j=0;j<NumberOfGenerations && !contains1;j++) {
 					contains1 =  bf1.get(i)[j].contains(Subject);
@@ -320,7 +337,22 @@ public class BoltProberGridTimebase implements IRichBolt  {
 			if(contains1 && contains2){
 				queryResult.add(Subject);
 				
-				this.collector.ack(tuple);
+				//String tripleid = tuple.getMessageId()
+				String msgID = tuple.getMessageId().toString();
+				System.out.println(msgID);
+				
+				boolean isFreshTriple = true;
+				
+				for(int i=0; i< NumberOfGenerations ; i++) {
+					if( hs[i].contains(msgID) ) {
+						isFreshTriple = false;
+						break;
+					}
+				}
+				
+				if (isFreshTriple && hs[slidingWindowPading].add(msgID) ) {
+					this.collector.ack(tuple);
+				}
 			}
 
 		}

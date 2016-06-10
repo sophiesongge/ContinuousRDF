@@ -66,7 +66,8 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 				
 		//open the file and start the model
 		Model model = ModelFactory.createDefaultModel();
-		String inputFileName="./data/University_combined.daml";
+		//String inputFileName="./data/University_combined.daml";
+		String inputFileName="University0_0.daml";
 		
 		// use the FileManager to find the input file
 		InputStream in = FileManager.get().open( inputFileName );
@@ -79,7 +80,7 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 		model.read(in, null);
 
 		// list the statements in the Model
-		StmtIterator iter = model.listStatements();
+		iter = model.listStatements();
 	}
 
 	/*

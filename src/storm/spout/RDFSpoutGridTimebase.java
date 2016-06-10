@@ -52,8 +52,6 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 		// TODO Auto-generated constructor stub
 		Predicate=p;
 		
-		
-		
 	}
 
 	/*
@@ -81,7 +79,7 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 			
 			int s = _rand.nextInt(100);
 			int w = _rand.nextInt(10);
-			int d = _rand.nextInt(3);
+			int d = _rand.nextInt(30);
 			int p = _rand.nextInt(20);
 			
 			if(Predicate.equals("Work")) {
@@ -97,23 +95,16 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 				//Object=(o==0)?"kNN":"hadoop";
 			}
 			Subject = "Name"+s;
-			
-			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
+			String msgID = String.valueOf(System.currentTimeMillis());
+			_collector.emit(new Values(Subject,Predicate,Object,"triple"),msgID);
 			currentGenerationSize++;
 			if(currentGenerationSize==GenerationSize) {
 				currentGenerationSize=0;
-				_collector.emit(new Values(Subject,Predicate,Object,"process"));
+				_collector.emit(new Values(Subject,Predicate,Object,"process"),msgID);
 			}
 		}
 	}
 
-	@Override
-	public void ack(Object id) {
-	}
-
-	@Override
-	public void fail(Object id) {
-	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
