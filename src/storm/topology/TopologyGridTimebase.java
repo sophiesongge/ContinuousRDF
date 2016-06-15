@@ -18,9 +18,9 @@ public class TopologyGridTimebase {
 		
 		
 		String TopologyName = "RDFContinuous";
-		String JoinType = "MV";
+		String JoinType = "1V";
 		int NumberofWorkers = 1;
-		int SlidingWindowSize = 900;
+		int SlidingWindowSize = 90;
 		int NumberofGenerations = 3;
 		boolean isLocal = true;
 		
@@ -59,7 +59,7 @@ public class TopologyGridTimebase {
 			builder.setSpout("spout_diplome", new RDFSpoutGridTimebase("Diplome"),1);
 			builder.setSpout("spout_paper", new RDFSpoutGridTimebase("Paper"),1);
 			
-			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "Paper0"),2).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "kNN"),2).shuffleGrouping("spout_paper");
 			builder.setBolt("bolt_prober1", new  BoltProberGridTimebase("MV","WORK","ANY"),3).shuffleGrouping("spout_work").shuffleGrouping("bolt_builder1").shuffleGrouping("bolt_prober2");
 			builder.setBolt("bolt_prober2", new  BoltProberGridTimebase("MV","Diplome","ANY"),3).shuffleGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_prober1");
 			
@@ -73,8 +73,8 @@ public class TopologyGridTimebase {
 			builder.setSpout("spout_diplome", new RDFSpoutGridTimebase("Diplome"),1);
 			builder.setSpout("spout_paper", new RDFSpoutGridTimebase("Paper"),1);
 			
-			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "Paper0"),2).shuffleGrouping("spout_paper");
-			builder.setBolt("bolt_builder2", new  BoltBuilderGridTimebase("Work", "Place0"),2).shuffleGrouping("spout_work");
+			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "kNN"),2).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGridTimebase("Work", "INRIA"),2).shuffleGrouping("spout_work");
 			builder.setBolt("bolt_prober", new  BoltProberGridTimebase("2V","Diplome","ANY"),3).shuffleGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
 			
 			TopologyConfiguration.NUMBER_BF1 = 2;
@@ -85,9 +85,9 @@ public class TopologyGridTimebase {
 			builder.setSpout("spout_work", new RDFSpoutGridTimebase("Work"),1);
 			builder.setSpout("spout_diplome", new RDFSpoutGridTimebase("Diplome"),1);
 			builder.setSpout("spout_paper", new RDFSpoutGridTimebase("Paper"),1);
-			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "Paper0"),2).shuffleGrouping("spout_paper");
-			builder.setBolt("bolt_builder2", new  BoltBuilderGridTimebase("Work", "Place0"),2).shuffleGrouping("spout_work");
-			builder.setBolt("bolt_prober", new  BoltProberGridTimebase("1V","Diplome","Diplome0"),3).shuffleGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
+			builder.setBolt("bolt_builder1", new  BoltBuilderGridTimebase("Paper", "kNN"),2).shuffleGrouping("spout_paper");
+			builder.setBolt("bolt_builder2", new  BoltBuilderGridTimebase("Work", "INRIA"),2).shuffleGrouping("spout_work");
+			builder.setBolt("bolt_prober", new  BoltProberGridTimebase("1V","Diplome","PhD"),3).shuffleGrouping("spout_diplome").allGrouping("bolt_builder1").allGrouping("bolt_builder2");
 			
 			TopologyConfiguration.NUMBER_BF1 = 2;
 			TopologyConfiguration.NUMBER_BF2 = 2;
@@ -104,7 +104,7 @@ public class TopologyGridTimebase {
 			config.setDebug(true);
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology(TopologyName, config, builder.createTopology());
-			Thread.sleep(9000);
+			Thread.sleep(12000);
 			cluster.shutdown();
 		}
 		

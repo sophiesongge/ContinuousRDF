@@ -74,12 +74,12 @@ public class BoltBuilderGridTimebase implements IRichBolt {
 			String Object = input.getStringByField("Object");
 			
 			if(Predicate.equals(gPredicate) && Predicate.equals("Paper")){
-				if(Object.equals(gObject)){
+				if(Object.equalsIgnoreCase(gObject)){
 					bf1.add(Subject);
 				}
 			}
 			else if(Predicate.equals(gPredicate) && Predicate.equals("Work")){
-				if(Object.equals(gObject)){
+				if(Object.equalsIgnoreCase(gObject)){
 					bf2.add(Subject);
 				}
 			}

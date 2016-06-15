@@ -47,7 +47,7 @@ public class BoltProberGridTimebase implements IRichBolt  {
 	private ArrayList<Tuple> problist[];
 	private int problist_index=0;
 
-	private List<String> queryResult;
+	private Set<String> queryResult;
 
 	String JoinType="1V";
 	String Predicate="";
@@ -61,6 +61,10 @@ public class BoltProberGridTimebase implements IRichBolt  {
 	Set<String> hs[];
 	int slidingWindowPading = 0;
 
+	//FileWriter filerwriter=null;
+	
+	int slidingWindowNumber=0;
+	
 	public BoltProberGridTimebase(String jointype, String predicate, String value) {
 		// TODO Auto-generated constructor stub
 		JoinType=jointype;
@@ -104,7 +108,16 @@ public class BoltProberGridTimebase implements IRichBolt  {
 		
 		//problist = new ArrayList<ArrayList<Tuple>>();
 		//problist = new ArrayList<Tuple>();
-		queryResult = new ArrayList<String>();
+		queryResult = new HashSet<String>();
+		
+		/*
+		try {
+			filerwriter = new FileWriter("SlidingWindowResults" + Predicate + ".txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 
 	}
 
@@ -112,7 +125,12 @@ public class BoltProberGridTimebase implements IRichBolt  {
 
 		String tripleID = tuple.getStringByField("id");
 		if(tripleID.equals("process")) {
-			ProcessGeneration();
+			try {
+				ProcessGeneration();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else {
 			try {
@@ -200,7 +218,7 @@ public class BoltProberGridTimebase implements IRichBolt  {
 
 		else if (id.equals("triple")){ 
 			if (JoinType.equalsIgnoreCase("1V")) {
-				if(tuple.getValueByField("Object").equals(PredicateValue))
+				if(tuple.getValueByField("Object").toString().equalsIgnoreCase(PredicateValue))
 					problist[problist_index].add(tuple);
 			}
 			else
@@ -286,8 +304,26 @@ public class BoltProberGridTimebase implements IRichBolt  {
 
 	}
 
-	void ProcessGeneration() {
+	void ProcessGeneration() throws Exception{
 
+		
+		//filerwriter.write("\n\n------------------------------------------------------------------\n\n");
+		//filerwriter.write("Results for Sliding Window: "+slidingWindowNumber++);
+		
+		for(int i=0;i<NumberOfGenerations;i++) {
+			System.out.println("ProberList Size is: "+problist[i].size());
+		}
+		for(int i=0;i<bf1.size();i++) {
+			for(int j=0;j<NumberOfGenerations;j++) {
+				System.out.println("Bf1 Size is: "+bf1.get(i)[j].count());
+			}
+		}
+		for(int i=0;i<bf2.size();i++) {
+			for(int j=0;j<NumberOfGenerations;j++) {
+				System.out.println("Bf2 Size is: "+bf2.get(i)[j].count());
+			}
+		}
+		
 		if(this.JoinType.equals("MV")) {
 			BloomFilter<String> bf3ToSend=new BloomFilter(bf3);
 			collector.emit(new Values("bf2"+this.id,bf3ToSend));
@@ -308,6 +344,12 @@ public class BoltProberGridTimebase implements IRichBolt  {
 		
 		slidingWindowPading = (slidingWindowPading+1) % NumberOfGenerations;
 		hs[slidingWindowPading].clear();
+		
+		
+		System.out.println(this.id + " Results for Sliding Window: "+slidingWindowNumber++);
+		System.out.println("Size is: "+queryResult.size()+" Query Result is: "+ queryResult);
+		System.out.println("\n\n------------------------------------------------------------------\n\n");
+		queryResult.clear();
 		
 	}
 
@@ -335,11 +377,11 @@ public class BoltProberGridTimebase implements IRichBolt  {
 			//write resultant tuples/triples from current sliding window in file 
 
 			if(contains1 && contains2){
-				queryResult.add(Subject);
+				queryResult.add(Subject+","+Object);
 				
 				//String tripleid = tuple.getMessageId()
 				String msgID = tuple.getMessageId().toString();
-				System.out.println(msgID);
+				
 				
 				boolean isFreshTriple = true;
 				
@@ -352,13 +394,25 @@ public class BoltProberGridTimebase implements IRichBolt  {
 				
 				if (isFreshTriple && hs[slidingWindowPading].add(msgID) ) {
 					this.collector.ack(tuple);
+					
+					long start_time = Long.valueOf(tuple.getStringByField("timestamp"));
+					long end_time = System.currentTimeMillis();
+					System.out.println("Time for "+  Subject + " is: "+start_time + " "+ end_time);
+					System.out.println("Time for "+  Subject + " is: "+ (end_time-start_time));
 				}
+				/*
+				try {
+					filerwriter.write(Subject+","+Predicate+","+Object);
+					filerwriter.write("\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
 			}
 
 		}
 
-		System.out.println("Size is: "+queryResult.size()+" Query Result is: "+ queryResult);
-		queryResult.clear();
+		
 
 	}
 

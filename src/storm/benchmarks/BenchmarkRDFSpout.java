@@ -44,6 +44,7 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
+import storm.config.TopologyConfiguration;
 import storm.rdf.RDFTriple;
 
 public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
@@ -52,35 +53,40 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	SpoutOutputCollector _collector;
 
 	InputStream in;
-	public static Model model;
-	public static StmtIterator iter;
-	private File sourceFile = null;
-	private FileReader fr;
-    private BufferedReader br;
-
+	public Model model;
+	public static StmtIterator iter_type;
+	public static StmtIterator iter_takescourse;
+	public static StmtIterator iter_publicationAuthor;
+	
 	String gPredicate;
+
+	int GenerationSize = 20;
+	int currentGenerationSize=0;
 
 	public BenchmarkRDFSpout(String predicate) {
 		// TODO Auto-generated constructor stub
 		gPredicate = predicate;
-				
+
 		//open the file and start the model
 		Model model = ModelFactory.createDefaultModel();
 		//String inputFileName="./data/University_combined.daml";
 		String inputFileName="University0_0.daml";
-		
+
 		// use the FileManager to find the input file
 		InputStream in = FileManager.get().open( inputFileName );
-		 
+
 		if (in == null) {
-		    throw new IllegalArgumentException("File: " + inputFileName + " not found");
+			throw new IllegalArgumentException("File: " + inputFileName + " not found");
 		}
-		
+
 		// read the RDF/XML file
 		model.read(in, null);
 
 		// list the statements in the Model
-		iter = model.listStatements();
+		//iter = model.listStatements();
+		iter_type = model.listStatements();
+		iter_takescourse = model.listStatements();
+		iter_publicationAuthor = model.listStatements();
 	}
 
 	/*
@@ -101,22 +107,80 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		Utils.sleep(100);
+		Utils.sleep(10);
 		generateTuple();
 	}
 
 	public void generateTuple(){
-		if(iter.hasNext()){
-		    Statement stmt      = iter.nextStatement();  // get next statement
-		    Resource  Subject   = stmt.getSubject();     // get the subject
-		    Property  Predicate = stmt.getPredicate();   // get the predicate
-		    RDFNode   Object    = stmt.getObject();      // get the object
-		    			
-			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
-		}else{
-			throw new NullPointerException("No more elements");
+		if(gPredicate.equals("type")) {
+			if(iter_type.hasNext()){
+				Statement stmt      = iter_type.nextStatement();  // get next statement
+				Resource  Subject   = stmt.getSubject();     // get the subject
+				Property  Predicate = stmt.getPredicate();   // get the predicate
+				RDFNode   Object    = stmt.getObject();      // get the object
+
+				if(Predicate.toString().contains(gPredicate)) {
+					String msgID = String.valueOf(System.currentTimeMillis());
+					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple"),msgID);
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize/4) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process"),msgID);
+					}
+				}
+
+
+			}else{
+				throw new NullPointerException("No more elements");
+			}
 		}
-		// Here add your code to generate tuples in random order
+		else if(gPredicate.equals("takesCourse")) {
+			if(iter_takescourse.hasNext()){
+				Statement stmt      = iter_takescourse.nextStatement();  // get next statement
+				Resource  Subject   = stmt.getSubject();     // get the subject
+				Property  Predicate = stmt.getPredicate();   // get the predicate
+				RDFNode   Object    = stmt.getObject();      // get the object
+
+				if(Predicate.toString().contains(gPredicate)) {
+
+					String msgID = String.valueOf(System.currentTimeMillis());
+					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple"),msgID);
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process"),msgID);
+					}
+				}
+
+
+			}else{
+				throw new NullPointerException("No more elements");
+			}
+		}
+
+		else if(gPredicate.equals("publicationAuthor")) {
+			if(iter_takescourse.hasNext()){
+				Statement stmt      = iter_takescourse.nextStatement();  // get next statement
+				Resource  Subject   = stmt.getSubject();     // get the subject
+				Property  Predicate = stmt.getPredicate();   // get the predicate
+				RDFNode   Object    = stmt.getObject();      // get the object
+
+				if(Predicate.toString().contains(gPredicate)) {
+
+					String msgID = String.valueOf(System.currentTimeMillis());
+					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple"),msgID);
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process"),msgID);
+					}
+				}
+
+
+			}else{
+				throw new NullPointerException("No more elements");
+			}
+		}
 	}
 
 	@Override

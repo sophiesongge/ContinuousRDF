@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.security.auth.login.Configuration;
+
 import storm.bloomfilter.BloomFilter;
+import storm.config.TopologyConfiguration;
 import storm.rdf.Query;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -25,11 +28,10 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 
 	private int id;	
 
-	private int maxGenerationSize=30;
-	private int currentGenerationSize=0;
-
 	String gPredicate;
 	String gObject;
+	
+	private int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
 
 	public BenchmarkBoltBuilder(String p, String o) {
 		gPredicate=p;
@@ -43,8 +45,8 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 			OutputCollector collector) {	
 		//initialize the emitter
 		this.collector = collector;
-		//initialize an empty Bloom Filter with fp=0.001 and maximum_element=20 
-		this.bf = new BloomFilter(0.01, 10);
+		//initialize an empty Bloom Filter with fp=0.001 and maximum_element= Generation Size
+		this.bf = new BloomFilter(0.01, GenerationSize);
 
 		this.id = context.getThisTaskId();
 	}
@@ -54,33 +56,36 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 	 * It will add the subject to the triple received into the Bloom Filter 
 	 */
 	public void execute(Tuple input) {
-		String Subject = input.getStringByField("Subject");
-		String Predicate = input.getStringByField("Predicate");
-		String Object = input.getStringByField("Object");
-
-		if(Predicate.equals(gPredicate)){
-			
-			if(gObject.equals("ANY")){
-				bf.add(Subject);
-			}
-			else if(Object.equals(gObject)){
-				bf.add(Subject);
-			}
+		
+		String tripleID = input.getStringByField("id");
+		if(tripleID.equals("process")) {
+			ProcessGeneration();
 		}
+		else {
+			String Subject = input.getStringByField("Subject");
+			String Predicate = input.getStringByField("Predicate");
+			String Object = input.getStringByField("Object");
 
-		currentGenerationSize++;
-		if(currentGenerationSize==maxGenerationSize)
-		{
-
-			BloomFilter<String> bfToSend=new BloomFilter(bf);
-			collector.emit(new Values("bf_"+gPredicate,bfToSend));
-			bf.clear();
-
-			currentGenerationSize=0;
+			bf.add(Subject);
+			if(Predicate.contains(gPredicate)){
+				
+				if(gObject.equals("ANY")){
+					bf.add(Subject);
+				}
+				else if(Object.contains(gObject)){
+					bf.add(Subject);
+				}
+			}
 		}
 
 	}
 
+	void ProcessGeneration() {
+
+		BloomFilter<String> bfToSend=new BloomFilter(bf);
+		collector.emit(new Values("bf",bfToSend));
+		bf.clear();
+	}
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("id","bf"));
 	}

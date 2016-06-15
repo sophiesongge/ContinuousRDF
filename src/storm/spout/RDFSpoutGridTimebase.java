@@ -48,6 +48,11 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 	int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
 	int currentGenerationSize=0;
 	
+	int NumberOfGenerations = TopologyConfiguration.NUMBER_OF_GENERATIONS;
+	int currentGenerationNumber=0;
+	
+	boolean alreadyGenerate = false;
+	
 	public RDFSpoutGridTimebase(String p) {
 		// TODO Auto-generated constructor stub
 		Predicate=p;
@@ -72,7 +77,7 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		//Utils.sleep(1);
+		Utils.sleep(1);
 		{
 			String Subject =null;				
 			String Object = null;
@@ -82,33 +87,91 @@ public class RDFSpoutGridTimebase extends BaseRichSpout {
 			int d = _rand.nextInt(30);
 			int p = _rand.nextInt(20);
 			
+			Subject = "Name"+s;
+			
 			if(Predicate.equals("Work")) {
 				Object = "Place"+ w ;
 				//Object=(o==0)?"INRIA":"ECP";
+				/*
+				if(GenerationSize-currentGenerationSize<10) {
+					Subject = "RName"+(GenerationSize-currentGenerationSize);
+					Object = "INRIA" ;
+				}*/
+				
+				
 			}
 			else if(Predicate.equals("Diplome")) {
 				Object = "Diplome" + d;
 				//Object=(o==0)?"Ph.D":"Master";
+				/*
+				if(GenerationSize-currentGenerationSize<10) {
+					Subject = "RName"+(GenerationSize-currentGenerationSize);
+					Object = "PhD";
+				}*/
 			}
 			else if(Predicate.equals("Paper")) {
 				Object = "Paper" + p;
 				//Object=(o==0)?"kNN":"hadoop";
+				/*
+				if(GenerationSize-currentGenerationSize<10) {
+					Subject = "RName"+(GenerationSize-currentGenerationSize);
+					Object = "kNN" ;
+				}*/
 			}
-			Subject = "Name"+s;
+			
 			String msgID = String.valueOf(System.currentTimeMillis());
-			_collector.emit(new Values(Subject,Predicate,Object,"triple"),msgID);
-			currentGenerationSize++;
-			if(currentGenerationSize==GenerationSize) {
-				currentGenerationSize=0;
-				_collector.emit(new Values(Subject,Predicate,Object,"process"),msgID);
+			if(!alreadyGenerate &&currentGenerationNumber==NumberOfGenerations-1 && GenerationSize-currentGenerationSize < 21 && GenerationSize-currentGenerationSize > 10) {
+			//if( (GenerationSize-currentGenerationSize) < 21 && (GenerationSize-currentGenerationSize) > 10) {
+				
+				Subject = "RName"+(GenerationSize-currentGenerationSize);
+				if(Predicate.equals("Work"))
+					Object = "INRIA";
+				else if(Predicate.equals("Diplome"))
+					Object = "PhD";
+				else if(Predicate.equals("Paper"))
+					Object = "kNN";
+				
+				_collector.emit(new Values(Subject,Predicate,Object,"triple",msgID),msgID);
+				
 			}
+			else if(currentGenerationSize==GenerationSize) {
+				currentGenerationSize=0;
+				currentGenerationNumber++;
+				
+				if(Predicate.equals("Work")) {
+					_collector.emit(new Values(Subject,Predicate,Object,"process",msgID),msgID);
+					Utils.sleep(1);
+				}
+				else if(Predicate.equals("Diplome")) {
+					Utils.sleep(1);
+					_collector.emit(new Values(Subject,Predicate,Object,"process",msgID),msgID);
+				}
+				else if(Predicate.equals("Paper")) {
+					_collector.emit(new Values(Subject,Predicate,Object,"process",msgID),msgID);
+					Utils.sleep(1);
+				}
+					
+				
+				//_collector.emit(new Values(Subject,Predicate,Object,"process",msgID),msgID);
+				
+				if(currentGenerationNumber >= NumberOfGenerations) {
+					currentGenerationNumber=0;
+					//alreadyGenerate=true;
+					//Utils.sleep(1000);
+				}
+			}
+			else {
+				_collector.emit(new Values(Subject,Predicate,Object,"triple",msgID),msgID);
+			}
+			
+			currentGenerationSize++;
 		}
 	}
 
-
+	
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		
-		declarer.declare(new Fields("Subject","Predicate","Object","id"));
+		declarer.declare(new Fields("Subject","Predicate","Object","id","timestamp"));
 	}
 
 }
