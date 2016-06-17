@@ -32,7 +32,8 @@
         	<groupId>org.apache.storm</groupId>
   			<artifactId>storm-core</artifactId>
   			<version>0.10.0</version>
-		</dependency>
+  			<scope>test</scope>
+        </dependency>
         <!-- 
         <dependency>
             <groupId>storm</groupId>

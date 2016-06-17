@@ -13,6 +13,7 @@ import javax.security.auth.login.Configuration;
 import storm.bloomfilter.BloomFilter;
 import storm.config.TopologyConfiguration;
 import storm.rdf.Query;
+import backtype.storm.Constants;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
@@ -30,7 +31,7 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 
 	String gPredicate;
 	String gObject;
-	
+
 	private int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
 
 	public BenchmarkBoltBuilder(String p, String o) {
@@ -51,14 +52,21 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 		this.id = context.getThisTaskId();
 	}
 
+	private static boolean isTickTuple(Tuple tuple) {
+		return tuple.getSourceComponent().equals(Constants.SYSTEM_COMPONENT_ID)
+				&& tuple.getSourceStreamId().equals(Constants.SYSTEM_TICK_STREAM_ID);
+	}
+
 	/**
 	 * The main method of Bolt, it will be called when the bolt receives a new tuple
 	 * It will add the subject to the triple received into the Bloom Filter 
 	 */
 	public void execute(Tuple input) {
+
 		
-		String tripleID = input.getStringByField("id");
-		if(tripleID.equals("process")) {
+		//String tripleID = input.getStringByField("id");
+		//if(tripleID.equals("process")) {
+		if(isTickTuple(input)) {
 			ProcessGeneration();
 		}
 		else {
@@ -68,7 +76,7 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 
 			bf.add(Subject);
 			if(Predicate.contains(gPredicate)){
-				
+
 				if(gObject.equals("ANY")){
 					bf.add(Subject);
 				}

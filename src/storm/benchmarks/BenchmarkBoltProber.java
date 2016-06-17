@@ -12,6 +12,7 @@ import org.apache.jena.base.Sys;
 
 import storm.bloomfilter.BloomFilter;
 import storm.config.TopologyConfiguration;
+import backtype.storm.Constants;
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
@@ -80,18 +81,27 @@ public class BenchmarkBoltProber implements IRichBolt {
 
 	}
 
+	private static boolean isTickTuple(Tuple tuple) {
+		return tuple.getSourceComponent().equals(Constants.SYSTEM_COMPONENT_ID)
+				&& tuple.getSourceStreamId().equals(Constants.SYSTEM_TICK_STREAM_ID);
+	}
+	
 	public void execute(Tuple tuple) {
 
-		String tripleID = tuple.getStringByField("id");
-		if(tripleID.equals("process")) {
+		//String tripleID = tuple.getStringByField("id");
+		//if(tripleID.equals("process")) {
+		if(isTickTuple(tuple)) {
 			ProcessGeneration();
 		}
-		try {
-			UpdateGeneration(tuple);
+		else {
+			try {
+				UpdateGeneration(tuple);
 
-		} catch (IOException e) {
+			} catch (IOException e) {
 
+			}
 		}
+		
 
 	}
 
@@ -99,7 +109,7 @@ public class BenchmarkBoltProber implements IRichBolt {
 
 		String id = tuple.getStringByField("id");
 
-		if(id.contains("bf1")) {
+		if(id.contains("bf")) {
 
 			if(bf1_ids.size()==0) {
 				BloomFilter[] bf = new BloomFilter[NumberOfGenerations];
@@ -143,6 +153,8 @@ public class BenchmarkBoltProber implements IRichBolt {
 		for(int i=0;i<NumberOfGenerations;i++) {
 			System.out.println("ProberList Size is: "+problist[i].size());
 		}
+		
+		System.out.println("Bf1 Size is: "+bf1.size());
 		for(int i=0;i<bf1.size();i++) {
 			for(int j=0;j<NumberOfGenerations;j++) {
 				System.out.println("Bf1 Size is: "+bf1.get(i)[j].count());

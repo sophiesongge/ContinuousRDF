@@ -32,7 +32,7 @@ public class BenchmarkQuery1 {
 	public static void main(String[] args) throws Exception{
 
 		String TopologyName = "RDFBenchmark";
-		String QueryNumber = "1";
+		String QueryNumber = "11";
 		int NumberofWorkers = 1;
 		int SlidingWindowSize = 90;
 		int NumberofGenerations = 3;
@@ -68,19 +68,23 @@ public class BenchmarkQuery1 {
 		Config config = new Config();
 		TopologyBuilder builder = new TopologyBuilder();
 
+		int tickFrequencyInSeconds = 10;
+		config.put(Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS, tickFrequencyInSeconds);
+
+
 		//Check the Query Number
 		if(QueryNumber.equalsIgnoreCase("1")) {
 
 			builder.setSpout("spout_takecourse", new BenchmarkRDFSpout("takesCourse"),1);
 			builder.setSpout("spout_type", new BenchmarkRDFSpout("type"),1);
 
-			builder.setBolt("bolt_builder1", new  BenchmarkBoltBuilder("type", "GraduateStudent"),3).shuffleGrouping("spout_type");
+			builder.setBolt("bolt_builder1", new  BenchmarkBoltBuilder("type", "GraduateStudent"),1).shuffleGrouping("spout_type");
 
 			String Value = "http://www.Department0.University0.edu/GraduateCourse0";
-			builder.setBolt("bolt_prober", new  BenchmarkBoltProber("takesCourse",Value),3).shuffleGrouping("spout_takecourse").allGrouping("bolt_builder1");
+			builder.setBolt("bolt_prober", new  BenchmarkBoltProber("takesCourse",Value),1).shuffleGrouping("spout_takecourse").allGrouping("bolt_builder1");
 
-			TopologyConfiguration.NUMBER_BF1 = 3; //set this value equal to number of builder bolts
-			
+			TopologyConfiguration.NUMBER_BF1 = 1; //set this value equal to number of builder bolts
+
 		}
 		else if(QueryNumber.equalsIgnoreCase("3")) {
 
@@ -103,7 +107,7 @@ public class BenchmarkQuery1 {
 
 			String Value = "http://www.University0.edu";
 			builder.setBolt("bolt_prober", new  BenchmarkBoltProber("subOrganizationOf",Value),3).shuffleGrouping("spout_subOrganizationOf").allGrouping("bolt_builder1");		
-			
+
 			TopologyConfiguration.NUMBER_BF1 = 3; //set this value equal to number of builder bolts
 		}
 
@@ -116,7 +120,7 @@ public class BenchmarkQuery1 {
 		}
 		else {
 			config.setDebug(true);
-						
+
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology(TopologyName, config, builder.createTopology());
 			Thread.sleep(12000);
