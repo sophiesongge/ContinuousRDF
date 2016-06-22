@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Processing RDF Graphs in a parallel and continuous way</title>
+
+		<meta name="description" content="A short explenation of an autocomplete module">
+		<meta name="author" content="Sander Breukink">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+        <script src="js/acm.js"></script>
+        <style type="text/css">
+            .reveal section img{
+                border: none;
+            }
+
+            .reveal h1 {
+                font-size: 3.57em;
+            }
+
+            .reveal .slide-number{
+                font-size: 25px;
+            }
+
+            .reveal section img{
+                box-shadow: none;
+            }
+        </style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+                    <section>
+                        <h2>Processing RDF Graphs in a parallel and continuous way</h2>
+                        <p>
+                            <small>By Usman Younas and Sander Breukink</small>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Contents</h2>
+                        <ul>
+                            <li>Motivation</li>
+                            <li>Basic definitions</li>
+                            <li>Used technologies</li>
+                            <li>Our work</li>
+                            <li>Benchmarks</li>
+                            <li>Conclusion</li>
+                        </ul>
+                    </section>
+				</section>
+                <section id="Motivation">
+                    <section>
+                        <h2>Motivation</h2>
+                        More and more RDF data, need to analyze it increases, Todo.
+                    </section>
+                </section>
+                <section id="Basic definitinos">
+                    <section>
+                        <h1>Basic definitions</h1>
+                    </section>
+                    <section>
+                        <h2>Streams</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>RDF triples</h2>
+                        RDF: Resource Description Framework
+                        <img src="images/rdf.png" alt="">
+                    </section>
+                    <section>
+                        <h2>Bloom filters</h2>
+                        Todo
+                    </section>
+                </section>
+                <section id="Used technologies">
+                    <section>
+                        <h1>Used technologies</h1>
+                    </section>
+                    <section>
+                        <h2>Apache storm</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>Jena api</h2>
+                        Todo
+                    </section>
+                </section>
+                <section id="Our work">
+                    <section>
+                        <h1>Our work</h1>
+                    </section>
+                    <section>
+                        <h2>Spout</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>Bolt builder</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>Bolt prober</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>Synthetic Data</h2>
+                        3 Predicates
+                        Work
+                        Diplome
+                        Paper
+                    </section>
+                    <section>
+                        <h2>Query decomposition</h2>
+                        1V Join
+                        2V Join
+                        MV Join
+                    </section>
+                </section>
+                <section id="Benchmarks">
+                    <section>
+                        <h1>Benchmarks</h1>
+                    </section>
+                    <section>
+                        <h2>Network</h2>
+                        Grid 5000
+                    </section>
+                    <section>
+                        <h2>Used queries</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h2>Results</h2>
+                        Todo
+                    </section>
+                </section>
+                <section id="Conclusion">
+                    <section>
+                        <h1>Conclusion</h1>
+                    </section>
+                    <section>
+                        <h2>Results</h2>
+                        Todo
+                    </section>
+                    <section>
+                        <h1>Questions?</h1>
+                    </section>
+                </section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: false,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+            Reveal.configure({ slideNumber: true });
+            Reveal.configure({ slideNumber: 'c/t' });
+
+
+		</script>
+
+	</body>
+</html>
