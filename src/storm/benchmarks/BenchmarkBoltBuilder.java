@@ -91,7 +91,7 @@ public class BenchmarkBoltBuilder implements IRichBolt {
 	void ProcessGeneration() {
 
 		BloomFilter<String> bfToSend=new BloomFilter(bf);
-		collector.emit(new Values("bf",bfToSend));
+		collector.emit(new Values("bf1"+id,bfToSend));
 		bf.clear();
 	}
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

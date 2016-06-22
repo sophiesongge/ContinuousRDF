@@ -21,16 +21,20 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class BenchmarkBoltProber implements IRichBolt {
+public class BenchmarkBoltBuilderProber implements IRichBolt {
 	private OutputCollector collector;
 	private int id;
 
 	private ArrayList<BloomFilter[]> bf1;
-
+	private ArrayList<BloomFilter[]> bf2;
+	private BloomFilter bf3;
+	
 	private ArrayList<String> bf1_ids;
+	private ArrayList<String> bf2_ids;
 
 	private int[] bf1_index;
-
+	private int[] bf2_index;
+	
 	private ArrayList<Tuple> problist[];
 	private int problist_index=0;
 
@@ -50,7 +54,7 @@ public class BenchmarkBoltProber implements IRichBolt {
 	//FileWriter filerwriter=null;
 
 	int slidingWindowNumber=0;
-	public BenchmarkBoltProber(String predicate, String value) {
+	public BenchmarkBoltBuilderProber(String predicate, String value) {
 		// TODO Auto-generated constructor stub
 
 		Predicate=predicate;
@@ -68,6 +72,12 @@ public class BenchmarkBoltProber implements IRichBolt {
 		this.bf1_ids = new ArrayList<String>();
 		this.bf1_index = new int[NUM_BF1];
 
+		this.bf2 = new ArrayList<BloomFilter[]>();
+		this.bf2_ids = new ArrayList<String>();
+		this.bf2_index = new int[NUM_BF2];
+
+		bf3 = new BloomFilter(0.01, GenerationSize);
+		
 		problist = new ArrayList[NumberOfGenerations];
 		for(int i=0;i<NumberOfGenerations;i++) {
 			problist[i] = new ArrayList<Tuple>();
@@ -141,9 +151,41 @@ public class BenchmarkBoltProber implements IRichBolt {
 
 		}
 
+		if(id.contains("bf2")) {
+			if(bf2_ids.size()==0) {
+
+				BloomFilter[] bf = new BloomFilter[NumberOfGenerations];
+				for(int i=0;i<NumberOfGenerations;i++) {
+					bf[i]= new BloomFilter(0.01, GenerationSize);
+				}
+				bf[0] = (BloomFilter<String>)tuple.getValueByField("bf");
+				bf2.add(bf);
+				bf2_ids.add(id);
+				bf2_index[0]=1;
+			}
+
+			else if(bf2_ids.contains(id)) {
+				int bfnumber = bf2_ids.indexOf(id);
+				bf2.get(bfnumber)[bf2_index[bfnumber]%NumberOfGenerations] = (BloomFilter<String>)tuple.getValueByField("bf");
+				bf2_index[bfnumber] = (bf2_index[bfnumber] +1)%NumberOfGenerations;
+			}
+			else if(! bf2_ids.contains(id)){
+				bf2_ids.add(id);
+				BloomFilter[] bf = new BloomFilter[NumberOfGenerations];
+				for(int i=0;i<NumberOfGenerations;i++) {
+					bf[i]= new BloomFilter(0.01, GenerationSize);
+				}
+				bf[0] = (BloomFilter<String>)tuple.getValueByField("bf");
+				bf2.add(bf);
+				bf2_index[0]=1;
+			}
+
+		}
+
+		
 		else if (id.equals("triple")){ 
-			if(tuple.getValueByField("Object").toString().contains(PredicateValue))
-				problist[problist_index].add(tuple);			
+			problist[problist_index].add(tuple);
+			bf3.add(tuple.getValueByField("Subject"));
 		}
 
 	}
@@ -154,15 +196,22 @@ public class BenchmarkBoltProber implements IRichBolt {
 			System.out.println("ProberList Size is: "+problist[i].size());
 		}
 		
-		System.out.println("Bf1 Size is: "+bf1.size());
 		for(int i=0;i<bf1.size();i++) {
 			for(int j=0;j<NumberOfGenerations;j++) {
 				System.out.println("Bf1 Size is: "+bf1.get(i)[j].count());
 			}
 		}
 
+		for(int i=0;i<bf2.size();i++) {
+			for(int j=0;j<NumberOfGenerations;j++) {
+				System.out.println("Bf2 Size is: "+bf2.get(i)[j].count());
+			}
+		}
 
-
+		BloomFilter<String> bf3ToSend=new BloomFilter(bf3);
+		collector.emit(new Values("bf2"+this.id,bf3ToSend));
+		bf3.clear();
+		
 		for(int i=0;i<NumberOfGenerations;i++) {
 			List<Tuple> tuplelist=problist[i];
 			try {
@@ -194,6 +243,7 @@ public class BenchmarkBoltProber implements IRichBolt {
 			String Object = tuple.getStringByField("Object");
 
 			boolean contains1=false;
+			boolean contains2 = false;
 
 			for(int i=0;i<NUM_BF1 && i< bf1.size() && !contains1;i++) {
 				for(int j=0;j<NumberOfGenerations && !contains1;j++) {
@@ -201,7 +251,13 @@ public class BenchmarkBoltProber implements IRichBolt {
 				}
 			} 
 
-			if(contains1){
+			for(int i=0;i<NUM_BF2 && i< bf2.size() && !contains2;i++) {
+				for(int j=0;j<NumberOfGenerations && !contains2;j++) {
+					contains2 =  bf2.get(i)[j].contains(Subject);
+				}
+			}
+			
+			if(contains1 && contains2){
 				queryResult.add(Subject+","+Object);
 
 				//String tripleid = tuple.getMessageId()

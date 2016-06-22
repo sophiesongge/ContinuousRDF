@@ -27,15 +27,16 @@ import storm.config.TopologyConfiguration;
 import storm.spout.RDFSpoutGrid;
 import storm.spout.RDFSpoutGridTimebase;
 
-public class BenchmarkQuery1 {
+public class BenchmarkQuery {
 
 	public static void main(String[] args) throws Exception{
 
 		String TopologyName = "RDFBenchmark";
-		String QueryNumber = "11";
+		String QueryNumber = "1";
 		int NumberofWorkers = 1;
-		int SlidingWindowSize = 90;
-		int NumberofGenerations = 3;
+		int SlidingWindowTime = 10;
+		int SlidingWindowSize = 400;
+		int NumberofGenerations = 4;
 		boolean isLocal = true;
 
 		if (args != null && args.length == 5) {
@@ -43,7 +44,8 @@ public class BenchmarkQuery1 {
 			TopologyName = args[0];
 			QueryNumber = args[1];
 			NumberofWorkers =  Integer.parseInt(args[2]);
-			SlidingWindowSize = Integer.parseInt(args[3]);
+			SlidingWindowTime = Integer.parseInt(args[3]);
+			SlidingWindowSize = SlidingWindowTime*500;
 			NumberofGenerations = Integer.parseInt(args[4]);
 			isLocal = false;
 		}
@@ -56,19 +58,20 @@ public class BenchmarkQuery1 {
 		System.out.println("SlidingWindowSize: "+ SlidingWindowSize);
 		System.out.println("GENERATION_SIZE: "+ TopologyConfiguration.GENERATION_SIZE);
 
-		stormCall(TopologyName, NumberofWorkers, QueryNumber, isLocal);
+		int WindowTime = SlidingWindowTime/NumberofGenerations;
+		stormCall(TopologyName, NumberofWorkers, QueryNumber, WindowTime, isLocal);
 
 
 	}
 
 
-	public static void stormCall(String TopologyName, int NumberofWorkers, String QueryNumber, boolean isLocal) throws Exception
+	public static void stormCall(String TopologyName, int NumberofWorkers, String QueryNumber,int WindowTime, boolean isLocal) throws Exception
 
 	{
 		Config config = new Config();
 		TopologyBuilder builder = new TopologyBuilder();
 
-		int tickFrequencyInSeconds = 10;
+		int tickFrequencyInSeconds = WindowTime;
 		config.put(Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS, tickFrequencyInSeconds);
 
 
@@ -78,13 +81,27 @@ public class BenchmarkQuery1 {
 			builder.setSpout("spout_takecourse", new BenchmarkRDFSpout("takesCourse"),1);
 			builder.setSpout("spout_type", new BenchmarkRDFSpout("type"),1);
 
-			builder.setBolt("bolt_builder1", new  BenchmarkBoltBuilder("type", "GraduateStudent"),1).shuffleGrouping("spout_type");
+			builder.setBolt("bolt_builder1", new  BenchmarkBoltBuilder("type", "GraduateStudent"),3).shuffleGrouping("spout_type");
 
 			String Value = "http://www.Department0.University0.edu/GraduateCourse0";
-			builder.setBolt("bolt_prober", new  BenchmarkBoltProber("takesCourse",Value),1).shuffleGrouping("spout_takecourse").allGrouping("bolt_builder1");
+			builder.setBolt("bolt_prober", new  BenchmarkBoltProber("takesCourse",Value),3).shuffleGrouping("spout_takecourse").allGrouping("bolt_builder1");
 
-			TopologyConfiguration.NUMBER_BF1 = 1; //set this value equal to number of builder bolts
+			TopologyConfiguration.NUMBER_BF1 = 3; //set this value equal to number of builder bolts
 
+		}
+		else if(QueryNumber.equalsIgnoreCase("4")) {
+
+			builder.setSpout("spout_emailAddress", new BenchmarkRDFSpout("emailAddress"),1);
+			builder.setSpout("spout_name", new BenchmarkRDFSpout("name"),1);
+			builder.setSpout("spout_type", new BenchmarkRDFSpout("type"),1);
+
+			builder.setBolt("bolt_builder1", new  BenchmarkBoltBuilder("type", "Professor"),3).shuffleGrouping("spout_type");
+
+			builder.setBolt("bolt_prober1", new  BenchmarkBoltBuilderProber("emailAddress","ANY"),3).shuffleGrouping("spout_emailAddress").allGrouping("bolt_builder1").allGrouping("bolt_prober2");
+			builder.setBolt("bolt_prober2", new  BenchmarkBoltBuilderProber("name","ANY"),3).shuffleGrouping("spout_name").allGrouping("bolt_builder1").allGrouping("bolt_prober1");
+
+			TopologyConfiguration.NUMBER_BF1 = 3; //set this value equal to number of builder bolts
+			TopologyConfiguration.NUMBER_BF2 = 3;
 		}
 		else if(QueryNumber.equalsIgnoreCase("3")) {
 

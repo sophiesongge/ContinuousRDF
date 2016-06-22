@@ -48,7 +48,7 @@ import backtype.storm.utils.Utils;
 import storm.config.TopologyConfiguration;
 import storm.rdf.RDFTriple;
 
-public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
+public class BenchmarkRDFSpout2 extends BaseRichSpout implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
@@ -76,10 +76,10 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	
 	String gPredicate;
 
-	int GenerationSize = TopologyConfiguration.GENERATION_SIZE;
+	int GenerationSize = 20;
 	int currentGenerationSize=0;
 
-	public BenchmarkRDFSpout(String predicate) {
+	public BenchmarkRDFSpout2(String predicate) {
 		// TODO Auto-generated constructor stub
 		gPredicate = predicate;
 
@@ -99,8 +99,8 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 		//open the file and start the model
 		Model model = ModelFactory.createDefaultModel();
 		//String inputFileName="./data/University_combined.daml";
-		//String inputFileName="/Users/uybhatti/DataScience/project/ContinuousRDF/University0_0.daml";
-		String inputFileName="/tmp/University0_0.daml";
+		String inputFileName="/Users/uybhatti/DataScience/project/ContinuousRDF/University0_0.daml";
+		//String inputFileName="University0_0.daml";
 		// use the FileManager to find the input file
 		InputStream in = FileManager.get().open( inputFileName );
 
@@ -129,7 +129,7 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
-		//Utils.sleep(1);
+		Utils.sleep(5);
 		generateTuple();
 
 	}
@@ -143,9 +143,15 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 				Property  Predicate = stmt.getPredicate();   // get the predicate
 				RDFNode   Object    = stmt.getObject();      // get the object
 
+				String msgID = String.valueOf(System.currentTimeMillis());
 				if(Predicate.toString().contains(gPredicate)) {
-					String msgID = String.valueOf(System.currentTimeMillis());
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
+
+				}
+				currentGenerationSize++;
+				if(currentGenerationSize==GenerationSize) {
+					currentGenerationSize=0;
+					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
 				}
 				index_type++;
 
@@ -169,7 +175,11 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
 
 				}
-				
+				currentGenerationSize++;
+				if(currentGenerationSize==GenerationSize) {
+					currentGenerationSize=0;
+					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
+				}
 				index_takecourse++;
 
 			}else{
@@ -192,7 +202,11 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 
 					String msgID = String.valueOf(System.currentTimeMillis());
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
-					
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
+					}
 				}
 
 				index_publicationAuthor++;
@@ -216,7 +230,11 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 
 					String msgID = String.valueOf(System.currentTimeMillis());
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
-					
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
+					}
 				}
 				index_subOrganizationOf++;
 
@@ -238,7 +256,11 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 
 					String msgID = String.valueOf(System.currentTimeMillis());
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
-					
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
+					}
 				}
 				index_emailAddress++;
 
@@ -260,7 +282,11 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 
 					String msgID = String.valueOf(System.currentTimeMillis());
 					_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"triple",msgID),msgID);
-					
+					currentGenerationSize++;
+					if(currentGenerationSize==GenerationSize) {
+						currentGenerationSize=0;
+						_collector.emit(new Values(Subject.toString(),Predicate.toString(),Object.toString(),"process",msgID),msgID);
+					}
 				}
 				index_name++;
 
@@ -269,14 +295,8 @@ public class BenchmarkRDFSpout extends BaseRichSpout implements Serializable {
 				//throw new NullPointerException("No more elements");
 			}
 		}
-		/*
-		currentGenerationSize++;
-		if(currentGenerationSize==GenerationSize) {
-			currentGenerationSize=0;
-			String msgID = String.valueOf(System.currentTimeMillis());
-			_collector.emit(new Values("Subject","Predicate","Object","process",msgID),msgID);
-		}
-		*/
+		
+		
 	}
 
 	@Override
