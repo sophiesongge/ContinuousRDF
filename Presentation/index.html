@@ -48,6 +48,15 @@
 
             .reveal section img{
                 box-shadow: none;
+                background: none;
+            }
+
+            .animation-slide{
+                position:absolute;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
             }
         </style>
 	</head>
@@ -98,7 +107,20 @@
                     </section>
                     <section>
                         <h2>Bloom filters</h2>
-                        Todo
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_1.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_2.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_3.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_4.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_5.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_6.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_7.png" alt=""></p>
+                        <p class="fragment current-visible animation-slide"><img src="images/bloomfilter_8.png" alt=""></p>
+                        <aside class="notes">
+                            <p>3 insertions with 3 hash functions over a 20 bit array</p>
+                            <p>Reason for usage: very fast and minimal memory usage</p>
+                            <p>False positives: not 100% prevention, but minimize risk</p>
+                            <p>Exact details: see reference articles in report</p>
+                        </aside>
                     </section>
                 </section>
                 <section id="Used technologies">
@@ -144,7 +166,7 @@
                     <section>
                         <h2>Bolt Builder</h2>
                         create bloom filters
-                        <img src="images/bloomfilter.png" alt="">
+                        <img src="images/bloomfilter_wiki.png" alt="">
                     </section>
                     <section>
                         <h2>Bolt Prober</h2>
