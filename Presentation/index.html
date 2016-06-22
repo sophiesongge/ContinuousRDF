@@ -37,6 +37,10 @@
             .reveal section img{
                 border: none;
             }
+
+            .reveal h1 {
+                font-size: 3.57em;
+            }
         </style>
 	</head>
 
@@ -151,14 +155,14 @@
                 </section>
                 <section id="Conclusion">
                     <section>
-                        <h3>Conclusion</h3>
+                        <h1>Conclusion</h1>
                     </section>
                     <section>
                         <h2>Results</h2>
                         Todo
                     </section>
                     <section>
-                        <h3>Questions?</h3>
+                        <h1>Questions?</h1>
                     </section>
                 </section>
 			</div>
@@ -190,6 +194,10 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
+            Reveal.configure(
+                    { slideNumber: true },
+                    { slideNumber: 'c/t' });
 
 		</script>
 
