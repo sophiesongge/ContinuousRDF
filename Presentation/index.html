@@ -424,16 +424,17 @@
                     <section>
                         <h2>Storm Cluster</h2>
                         <img src="images/storm-cluster-1.png" alt="">
+                        
+                        <aside class="notes">
+                            nimbus as master
+                            supervisor as worker
+                        </aside>
                     </section>
                     
                     <section>
                         <h2>Storm Cluster on Grid5000</h2>
                         <img src="images/deployment.png" alt="">
                         
-                        <aside class="notes">
-                            nimbus as master
-                            supervisor as 
-                        </aside>
                     </section>
                     <section>
                         <h2>Storm Cluster on Grid5000</h2>
@@ -445,7 +446,7 @@
                         <img src="images/IIVJoin_number.png" style="width: 350px" alt="">
                         <img src="images/MVJoin_number.png" style="width: 350px" alt="">
                         <aside class="notes">
-                            Run with settings SW=600 and G=3
+                            we are feeding same amount of data for 1V,2V and MV
                         </aside>
                     </section>
                     <section>
@@ -454,7 +455,7 @@
                         <img src="images/IIVJoin_latency.png" style="width: 350px" alt="">
                         <img src="images/MVJoin_latency.png" style="width: 350px" alt="">
                         <aside class="notes">
-                            Run with settings SW=600 and G=3
+                            Process latency of 1-V is less than as compared to 2-V and MV. becuase in 1V is based on more selectivity as compared to 2V and MV. But Process latency of 2V and MV is same (why becuase we are using in MV we have 2 probers)
                         </aside>
                     </section>
                     <section>
@@ -463,7 +464,7 @@
                         <img src="images/IIVJoin_transfer.png" style="width: 350px" alt="">
                         <img src="images/MVJoin_transfer.png" style="width: 350px" alt="">
                         <aside class="notes">
-                            Run with settings SW=600 and G=3
+                            
                         </aside>
                     </section>
                     
@@ -481,7 +482,6 @@
                         </ul>
                         
                     </section>
-                    
                     
                     <section>
                         <h2>Analysis and Results</h2>
