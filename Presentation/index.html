@@ -334,8 +334,25 @@
                     </section>
                     
                     <section>
-                        <h2>Parallelism for Topologies</h2>
-                        How many Spouts, Builders and Probers we need and why?
+                        <h2>Topology Parallelism</h2>
+                        <img src="images/par-1.png" style="width: 600px" alt="">
+                        <aside class="notes">
+                            How many Spouts, Builders and Probers do we need, they are run on different servers and hence we need to balance them properly
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Topology Parallelism</h2>
+                        <img src="images/par-2.png" style="width: 750px" alt="">
+                        <aside class="notes">
+                            In this example the 2 builders are fine (green) but the prober is very busy (red), hence the topology is off-balance
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Topology Parallelism</h2>
+                        <img src="images/par-3.png" style="width: 600px" alt="">
+                        <aside class="notes">
+                            After several testing we found that 2 of each builders and 3 probers where the best amounts for us
+                        </aside>
                     </section>
                     
                     <section>
