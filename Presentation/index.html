@@ -292,39 +292,39 @@
                     </section>
                     
                     <section>
-                        <h2>IV Join Topology</h2>
-                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <h2>1-Variable Join Topology</h2>
+                        <img src="images/topology-IV-IIV.png" style="width: 600px" alt="">
                         <div class="code">
-                            SELECT author WHERE<br>
-                            Paper = kNN AND<br>
-                            work = INRIA AND<br>
+                            SELECT author WHERE
+                            Paper = kNN AND
+                            work = ECP AND
                             diplome = Ph.D
                         </div>
                         <aside class="notes">
-                            to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome.
+                            find the authors for paper kNN who works in ECP and who has a Ph.D diplome.
                         </aside>
                     </section>
                     <section>
-                        <h2>IIV Join Topology</h2>
-                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <h2>2-Variable Join Topology</h2>
+                        <img src="images/topology-IV-IIV.png" style="width: 600px" alt="">
                         <div class="code">
-                            SELECT author,diplome WHERE<br>
-                            Paper = kNN AND<br>
-                            work = INRIA
+                            SELECT author,diplome WHERE
+                            Paper = kNN AND
+                            work = ECP
                         </div>
                         <aside class="notes">
-                            to find the authors for paper kNN and their diplome who works in INRIA
+                            find the authors for paper kNN  and their diplome who works in ECP
                         </aside>
                     </section>
                     <section>
-                        <h2>MV Join Topology</h2>
-                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <h2>Multi-Variable Join Topology</h2>
+                        <img src="images/topology-MV.png" style="width: 600px" alt="">
                         <div class="code">
-                            SELECT authors,work,diplome WHERE<br>
-                            Paper = kNN<br>
+                            SELECT authors,work,diplome WHERE
+                            Paper = kNN
                         </div>
                         <aside class="notes">
-                            to find the authors for paper kNN, and the place they work, and their diplome
+                            find the authors for paper kNN, and the place they work, and their diplome
                         </aside>
                     </section>
                     
