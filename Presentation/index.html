@@ -89,6 +89,7 @@
                             <li>Basic definitions</li>
                             <li>Used technologies</li>
                             <li>Our work</li>
+                            <li>Deployment</li>
                             <li>Benchmarks</li>
                             <li>Questions</li>
                         </ul>
@@ -202,7 +203,7 @@
                             <p></p>
                             <img src="images/grid5000.jpg" alt="" style="width: 400px;">
                             <aside class="notes">
-                                Very large network, we used up to 10 servers at a time
+                                Very large network, we used up to 12 servers in parallel
                                 --> Usman start
                             </aside>
                     </section>
@@ -384,16 +385,47 @@
                             After several testing we found that 2 of each builders and 3 probers where the best amounts for us
                         </aside>
                     </section>
-                    
+                </section>
+                <section id="Deployment">
                     <section>
-                        <h2>Deployment</h2>
+                        <h1>Deployment</h1>
                     </section>
                     
                     <section>
                         <h2>Storm Cluster</h2>
-                        <img src="images/stormcluster.png" alt="">
+                        <img src="images/deployment.png" alt="">
                     </section>
-                    
+                    <section>
+                        <h2>Storm Cluster</h2>
+                        <img src="images/deployment-2.png" alt="">
+                    </section>
+                    <section>
+                        <h2>Data processed</h2>
+                        <img src="images/IVJoin_number.png" style="width: 350px" alt="">
+                        <img src="images/IIVJoin_number.png" style="width: 350px" alt="">
+                        <img src="images/MVJoin_number.png" style="width: 350px" alt="">
+                        <aside class="notes">
+                            Run with settings SW=600 and G=3
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Process latency</h2>
+                        <img src="images/IVJoin_latency.png" style="width: 350px" alt="">
+                        <img src="images/IIVJoin_latency.png" style="width: 350px" alt="">
+                        <img src="images/MVJoin_latency.png" style="width: 350px" alt="">
+                        <aside class="notes">
+                            Run with settings SW=600 and G=3
+                        </aside>
+                    </section>
+                    <section>
+                        <h2>Data transferred</h2>
+                        <img src="images/IVJoin_transfer.png" style="width: 350px" alt="">
+                        <img src="images/IIVJoin_transfer.png" style="width: 350px" alt="">
+                        <img src="images/MVJoin_transfer.png" style="width: 350px" alt="">
+                        <aside class="notes">
+                            Run with settings SW=600 and G=3
+                        </aside>
+                    </section>
                     
                     <section>
                         <h2>Processing with Sliding Window</h2>
@@ -402,18 +434,20 @@
                     
                     <section>
                         <h2>Analysis and Results</h2>
-                        <ul> Fix the sliding window size and change the number of generation
-                            <li>Increase the number of generations - Data transfer amount decrease</li>
-                            <li>increase the number of generations - Processing time decrease</li>
+
+                        <ul>Fix the sliding window size and change the number of generation
+                            <li style="margin-left: 50px;">Increase the number of generations - Data transfer amount decrease</li>
+                            <li style="margin-left: 50px;">increase the number of generations - Processing time decrease</li>
                         </ul>
                         
                     </section>
                     
                     <section>
                         <h2>Analysis and Results</h2>
-                        <ul> Fix the number of generation and change the sliding window size
-                            <li>Large window size - Data transfer amount increase</li>
-                            <li>Large window size - Processing time</li>
+
+                        <ul>Fix the number of generation and change the sliding window size
+                            <li style="margin-left: 50px;">Large window size - Data transfer amount increase</li>
+                            <li style="margin-left: 50px;">Large window size - Processing time</li>
                         </ul>
                     </section>
                     
