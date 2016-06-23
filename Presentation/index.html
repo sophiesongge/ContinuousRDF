@@ -387,7 +387,7 @@
                         <img src="images/sliding-window-2.png" alt="">
                         <p>Sliding window size = #generations x generation size</p>
                         <aside class="notes">
-                            Without increasing bloom filter size we can acieve this by adding sliding window at the prober. SO in this way, the amount of data transfer will be same and no delay.
+                            Without increasing bloom filter size we can acieve this by adding sliding window at the prober. So in this way, the amount of data transfer will be same and no delay.
                         </aside>
                     </section>
                     
@@ -406,14 +406,14 @@
                         <h2>Topology Parallelism</h2>
                         <img src="images/par-2.png" style="width: 750px" alt="">
                         <aside class="notes">
-                            In this example the 2 builders are fine (green) but the prober is very busy (red), hence the topology is off-balance
+                            We run our topology on a single machine and check the load and capicity of spouts, builder and probers.
                         </aside>
                     </section>
                     <section>
                         <h2>Topology Parallelism</h2>
                         <img src="images/par-3.png" style="width: 600px" alt="">
                         <aside class="notes">
-                            After several testing we found that 2 of each builders and 3 probers where the best amounts for us
+                            After several testing we found that we need 2 executor for builders and 3 probers.
                         </aside>
                     </section>
                 </section>
@@ -429,6 +429,11 @@
                     <section>
                         <h2>Storm Cluster on Grid5000</h2>
                         <img src="images/deployment.png" alt="">
+                        
+                        <aside class="notes">
+                            nimbus as master
+                            supervisor as 
+                        </aside>
                     </section>
                     <section>
                         <h2>Storm Cluster on Grid5000</h2>
@@ -477,10 +482,6 @@
                         
                     </section>
                     
-                    <section>
-                        <h2>Data Transfered</h2>
-                        <img src="images/DataTransfer.png" style="width: 750px" alt="">
-                            </section>
                     
                     <section>
                         <h2>Analysis and Results</h2>
@@ -491,6 +492,10 @@
                         </ul>
                     </section>
                     
+                    <section>
+                        <h2>Data Transfered</h2>
+                        <img src="images/DataTransfer.png" style="width: 750px" alt="">
+                    </section>
                     
                     <section>
                         <h2>Process Latency</h2>
