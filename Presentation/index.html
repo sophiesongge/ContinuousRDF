@@ -67,7 +67,7 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
+				<section id="contents and motivation">
                     <section>
                         <h2>Processing RDF Graphs in a parallel and continuous way</h2>
                         <p>
@@ -85,8 +85,6 @@
                             <li>Conclusion</li>
                         </ul>
                     </section>
-				</section>
-                <section id="Motivation">
                     <section>
                         <h2>Motivation</h2>
                         <ul>
@@ -100,8 +98,8 @@
                             <p>Comparrison of querying this data in (quasi-)realtime</p>
                         </aside>
                     </section>
-                </section>
-                <section id="Basic definitinos">
+				</section>
+                <section id="Basic definitions">
                     <section>
                         <h1>Basic definitions</h1>
                     </section>
@@ -150,12 +148,23 @@
                         Topology
                     </section>
                     <section>
-                        <h2>Jena api</h2>
-                        Todo
+                        <h2>Apache Jena api</h2>
+                        <img src="images/jena.png" style="width: 250px;" alt="" align="right">
+                        <ul>
+                            <li>API for handling RDF graphs</li>
+                            <li>Create and read RDF graphs</li>
+                            <li>Can use multiple input files</li>
+                        </ul>
+                        <aside class="notes">
+                            We use the Jena API to read inputs from multiple files and simplify all of those inputs as the same RDF triples
+                        </aside>
+
                     </section>
                     <section>
-                        <h2>Maven</h2>
-                        Todo
+                        <h2>Apache Maven</h2>
+                        <img src="images/maven.png" alt="" align="right">
+                        Todo<br>
+                        Note: do we really want this slide? I think we can also skip Maven.
                     </section>
                 </section>
                 <section id="Our work">
