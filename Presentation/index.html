@@ -245,7 +245,9 @@
                             <li>Useful for quick and easy testing</li>
                         </ul>
                         <aside class="notes">
-                            Used a testing data set while working on the code, this was usefull for some quick feedback to see if everything was working. On the right you see a representative subset of the data that we used.
+                            To analysis processing of RDF streams using bloom filter and Storm, we generate data based on three predicate work, paper and diplome.
+                            Three predicate are enough to analyze this.
+                            What type of queries, we can run on this data?
                         </aside>
                     </section>
                     <section>
@@ -256,12 +258,15 @@
                             <li>2-Variable Join</li>
                             <li>Multi-Variable Join</li>
                         </ul>
+                        <aside class="notes">
+                            We splited queries into 3, graph based categories.
+                        </aside>
                     </section>
                     <section>
                         <h2>1-Variable Join</h2>
                         <img src="images/join-IV-1.png" alt="">
                         <aside class="notes">
-                            A one variable join: 3 objects and predicates should be the same, select subjects
+                            find the subject for which p1 is equal to o1, p2 is equal to o2 and p3 is equal to o3.
                         </aside>
                     </section>
                     <section>
@@ -282,7 +287,7 @@
                         <h2>2-Variable Join</h2>
                         <img src="images/join-IIV-1.png" alt="">
                         <aside class="notes">
-
+                            find the subject and p3 for which p1 is equal to o1, p2 is equal to o2
                         </aside>
                     </section>
                     <section>
@@ -302,7 +307,7 @@
 
                         <img src="images/join-MV-1.png" alt="">
                         <aside class="notes">
-
+                            find the subject,p2,p3 for which p1 is equal to o1.
                         </aside>
 
                     </section>
@@ -319,6 +324,14 @@
                     </section>
                     
                     <section>
+                        <h2>Graph to Topology</h2>
+                        <aside class="notes">
+                            
+                        </aside>
+                    </section>
+                    
+                    
+                    <section>
                         <h2>1-Variable Join Topology</h2>
                         <img src="images/topology-IV-IIV.png" style="width: 600px" alt="">
                         <div class="code">
@@ -329,6 +342,7 @@
                         </div>
                         <aside class="notes">
                             find the authors for paper kNN who works in ECP and who has a Ph.D diplome.
+                            we can choose any predicate for builder and prober bolts.
                         </aside>
                     </section>
                     <section>
@@ -341,6 +355,7 @@
                         </div>
                         <aside class="notes">
                             find the authors for paper kNN  and their diplome who works in ECP
+                            we can't' choose any predicate for builder and prober bolts. We have to select predicate diplome as our prober.
                         </aside>
                     </section>
                     <section>
@@ -352,16 +367,18 @@
                         </div>
                         <aside class="notes">
                             find the authors for paper kNN, and the place they work, and their diplome
+                            we can't' choose any predicate for builder and prober bolts. We have to select predicate diplome and work as our prober and paper as builder.
                         </aside>
                     </section>
                     
                     <section>
-                        <h2>Sliding window Integration</h2>
+                        <h2>Sliding Window Integration</h2>
                         <img src="images/sliding-window-1.png" alt="">
                         <aside class="notes">
-                            Bolt builder sends one bloom filter at a time to the bolt prober
+                            Bolt builder sends one bloom filter at a time to the bolt prober, prober search data from that bloom filter. we want to add more flexibility in searching interms of time and rdf triplse . If we increase the bloom filter size it means we will increase the amount of data transfer and also time delay.
                         </aside>
                     </section>
+                    
                     <section>
                         <h2>Sliding window Integration</h2>
                         <img src="images/sliding-window-2.png" alt="">
