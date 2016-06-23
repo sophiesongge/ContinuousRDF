@@ -373,6 +373,9 @@
                     
                     <section>
                         <h2>Sliding Window Integration</h2>
+                    </section>
+                    <section>
+                        <h2>Without Sliding Window</h2>
                         <img src="images/sliding-window-1.png" alt="">
                         <aside class="notes">
                             Bolt builder sends one bloom filter at a time to the bolt prober, prober search data from that bloom filter. we want to add more flexibility in searching interms of time and rdf triplse. We can achive this by increasing the bloom filter size, but if we increase the bloom filter size it means we will increase the amount of data transfer and also time delay.
@@ -385,6 +388,10 @@
                         <aside class="notes">
                             Without increasing bloom filter size we can acieve this by adding sliding window at the prober. SO in this way, the amount of data transfer will be same and no delay.
                         </aside>
+                    </section>
+                    
+                    <section>
+                        <h2>Topology Parallelism</h2>
                     </section>
                     
                     <section>
