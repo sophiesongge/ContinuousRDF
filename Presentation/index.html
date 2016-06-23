@@ -58,6 +58,12 @@
                 left: 0;
                 right: 0;
             }
+
+            .code{
+                font-family: "courier new" !important;
+                text-align: left;
+
+            }
         </style>
 	</head>
 
@@ -105,7 +111,14 @@
                     </section>
                     <section>
                         <h2>Streams</h2>
-                        Todo
+                        <ul>
+                            <li>Triples come one by one</li>
+                            <li>Analyze during the stream</li>
+                        </ul>
+                        <aside class="notes">
+                            Triples come available one by one, we don't have the full set from the start, but we do want to analyze the data that has passed by
+                        </aside>
+
                     </section>
                     <section>
                         <h2>RDF triples</h2>
@@ -190,7 +203,7 @@
                         create bloom filter for other bolts to probe and search from other’s bloom filter
                     </section>
                     <section>
-                        <h2>Data Generation</h2>
+                        <h2>Testing data</h2>
                         <img src="images/sample-test-data.png" alt="" align="right">
 
                         <ul>
@@ -211,28 +224,78 @@
                     </section>
                     <section>
                         <h2>IV Join</h2>
-                        to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome.
+                        <img src="images/sample-test-data.png" alt="" align="right">
+
+                        <div class="code">
+                            SELECT author WHERE<br>
+                            Paper = kNN AND <br>
+                            Work = INRIA AND <br>
+                            diplome = Ph.D
+                        </div>
+                        <aside class="notes">
+                            Find the authors for paper kNN who works in INRIA and who has a Ph.D diplome
+                        </aside>
                     </section>
                     <section>
                         <h2>IIV Join</h2>
-                        to find the authors for paper kNN and their diplome who works in INRIA
+                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <div class="code">
+                            SELECT author, diplome WHERE<br>
+                            Paper = kNN AND <br>
+                            Work = INRIA AND <br>
+                            diplome = Ph.D
+                        </div>
+                        <aside class="notes">
+                            to find the authors for paper kNN and their diplome who works in INRIA
+                        </aside>
                     </section>
                     <section>
                         <h2>MV Join</h2>
-                        to find the authors for paper kNN, and the place they work, and their diplome
+                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <div class="code">
+                            SELECT author, work, diplome WHERE<br>
+                            Paper = kNN
+                        </div>
+                        <aside class="notes">
+                            to find the authors for paper kNN, and the place they work, and their diplome
+                        </aside>
                     </section>
                     
                     <section>
                         <h2>IV Join Topology</h2>
-                        to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome.
+                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <div class="code">
+                            SELECT author WHERE<br>
+                            Paper = kNN AND<br>
+                            work = INRIA AND<br>
+                            diplome = Ph.D
+                        </div>
+                        <aside class="notes">
+                            to find the authors for paper kNN who works in INRIA and who has a Ph.D diplome.
+                        </aside>
                     </section>
                     <section>
                         <h2>IIV Join Topology</h2>
-                        to find the authors for paper kNN and their diplome who works in INRIA
+                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <div class="code">
+                            SELECT author,diplome WHERE<br>
+                            Paper = kNN AND<br>
+                            work = INRIA
+                        </div>
+                        <aside class="notes">
+                            to find the authors for paper kNN and their diplome who works in INRIA
+                        </aside>
                     </section>
                     <section>
                         <h2>MV Join Topology</h2>
-                        to find the authors for paper kNN, and the place they work, and their diplome
+                        <img src="images/sample-test-data.png" alt="" align="right">
+                        <div class="code">
+                            SELECT authors,work,diplome WHERE<br>
+                            Paper = kNN<br>
+                        </div>
+                        <aside class="notes">
+                            to find the authors for paper kNN, and the place they work, and their diplome
+                        </aside>
                     </section>
                     
                     <section>
