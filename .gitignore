@@ -97,3 +97,4 @@ ignore/
 hs_err_pid*
 
 # End of https://www.gitignore.io/api/macos,eclipse,java
+/target/
