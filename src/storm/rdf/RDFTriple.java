@@ -3,12 +3,12 @@
  */
 package storm.rdf;
 
-public class RDFTriple{
+public class RDFTriple {
 	private String Subject;
 	private String Predicate;
 	private String Object;
-	
-	public RDFTriple(String subject, String predicate, String object){
+
+	public RDFTriple(String subject, String predicate, String object) {
 		this.setSubject(subject);
 		this.setPredicate(predicate);
 		this.setObject(object);
@@ -37,10 +37,9 @@ public class RDFTriple{
 	public void setObject(String object) {
 		Object = object;
 	}
-	
-	public String toString(){
-		return "<"+Subject+", "+Predicate+", "+Object+">";
+
+	public String toString() {
+		return "<" + Subject + ", " + Predicate + ", " + Object + ">";
 	}
-	
-	
+
 }

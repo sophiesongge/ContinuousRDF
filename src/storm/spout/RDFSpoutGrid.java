@@ -41,75 +41,70 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
-	String Predicate = null; 
-	
+	String Predicate = null;
+
 	public RDFSpoutGrid(String p) {
 		// TODO Auto-generated constructor stub
-		Predicate=p;
-		
-		
-		
+		Predicate = p;
+
 	}
 
 	/*
 	 * @param stormConf: the configuration in the topology
+	 * 
 	 * @param context: the context in the topology
+	 * 
 	 * @param collector: emit the tuples from spout to bolt
-	 * @see backtype.storm.spout.ISpout#open(java.util.Map, backtype.storm.task.TopologyContext, backtype.storm.spout.SpoutOutputCollector)
+	 * 
+	 * @see backtype.storm.spout.ISpout#open(java.util.Map,
+	 * backtype.storm.task.TopologyContext,
+	 * backtype.storm.spout.SpoutOutputCollector)
 	 */
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
-		//to initialize the collector
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+		// to initialize the collector
 		this._collector = collector;
 		this._rand = new Random();
 		/*
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(Predicate+"_predicate.txt", "UTF-8");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		writer.println(Predicate);
-        long threadId = Thread.currentThread().getId();
-		writer.println(threadId);
-		writer.close();
-		*/
+		 * PrintWriter writer = null; try { writer = new
+		 * PrintWriter(Predicate+"_predicate.txt", "UTF-8"); } catch
+		 * (FileNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } catch (UnsupportedEncodingException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); }
+		 * writer.println(Predicate); long threadId =
+		 * Thread.currentThread().getId(); writer.println(threadId);
+		 * writer.close();
+		 */
 	}
-	
+
 	/*
 	 * The main method for spout
+	 * 
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
 		Utils.sleep(1);
 		{
-			String Subject =null;				
+			String Subject = null;
 			String Object = null;
-			
+
 			int s = _rand.nextInt(100);
 			int w = _rand.nextInt(20);
 			int d = _rand.nextInt(3);
 			int p = _rand.nextInt(10);
-			
-			if(Predicate.equals("Work")) {
-				Object = "Place"+ w ;
-				//Object=(o==0)?"INRIA":"ECP";
-			}
-			else if(Predicate.equals("Diplome")) {
+
+			if (Predicate.equals("Work")) {
+				Object = "Place" + w;
+				// Object=(o==0)?"INRIA":"ECP";
+			} else if (Predicate.equals("Diplome")) {
 				Object = "Diplome" + d;
-				//Object=(o==0)?"Ph.D":"Master";
-			}
-			else if(Predicate.equals("Paper")) {
+				// Object=(o==0)?"Ph.D":"Master";
+			} else if (Predicate.equals("Paper")) {
 				Object = "Paper" + p;
-				//Object=(o==0)?"kNN":"hadoop";
+				// Object=(o==0)?"kNN":"hadoop";
 			}
-			
-			Subject = "Name"+s;
-			_collector.emit(new Values(Subject,Predicate,Object,"triple"));
+
+			Subject = "Name" + s;
+			_collector.emit(new Values(Subject, Predicate, Object, "triple"));
 		}
 	}
 
@@ -122,9 +117,9 @@ public class RDFSpoutGrid extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
-		declarer.declare(new Fields("Subject","Predicate","Object","id"));
-		//declarer.declare(new Fields("tuple"));
+		// declarer.declare(new Fields("RDFtuple"));
+		declarer.declare(new Fields("Subject", "Predicate", "Object", "id"));
+		// declarer.declare(new Fields("tuple"));
 	}
 
 }

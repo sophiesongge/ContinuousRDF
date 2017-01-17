@@ -15,41 +15,41 @@ public class BoltCreatBF implements IRichBolt {
 	private OutputCollector collector;
 
 	Map<String, BloomFilter<Object>> bloomFilters;
-	
-	public void prepare(Map stormConf, TopologyContext context,
-			OutputCollector collector) {
-		
+
+	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+
 		this.collector = collector;
-		//this.bloomfilters = new HashMap<String, BloomFilter>();
+		// this.bloomfilters = new HashMap<String, BloomFilter>();
 		this.bloomFilters = new HashMap<String, BloomFilter<Object>>();
 	}
 
 	public void execute(Tuple input) {
-		
+
 		String Subject = input.getStringByField("Subject");
 		String Predicate = input.getStringByField("Predicate");
 		String Object = input.getStringByField("Object");
-		
+
 		if (!bloomFilters.containsKey(Predicate)) {
-			BloomFilter< Object> bf= new BloomFilter<Object>(0.01, 15);
+			BloomFilter<Object> bf = new BloomFilter<Object>(0.01, 15);
 			bf.add(Subject);
 			bloomFilters.put(Predicate, bf);
 		} else {
-			BloomFilter< Object> bf= bloomFilters.get(Predicate);
+			BloomFilter<Object> bf = bloomFilters.get(Predicate);
 			bf.add(Subject);
 			bloomFilters.put(Predicate, bf);
 		}
-		//output, send to next stage.
+		// output, send to next stage.
 		collector.emit(new Values(bloomFilters));
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		
+
 	}
 
 	public void cleanup() {
 		for (Map.Entry<String, BloomFilter<Object>> entry : bloomFilters.entrySet()) {
-			System.out.println("Bloom Filter with Predicate = "+ entry.getKey() + " has values = " + entry.getValue().count());
+			System.out.println(
+					"Bloom Filter with Predicate = " + entry.getKey() + " has values = " + entry.getValue().count());
 		}
 	}
 

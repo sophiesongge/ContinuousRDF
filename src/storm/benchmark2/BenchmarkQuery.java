@@ -1,4 +1,4 @@
-package storm.benchmarks;
+package storm.benchmark2;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

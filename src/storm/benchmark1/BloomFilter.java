@@ -1,7 +1,7 @@
 /**
  * @author gsong
  */
-package storm.bloomfilter;
+package storm.benchmark1;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -131,19 +131,6 @@ public class BloomFilter<E> implements Serializable {
 
 	public BloomFilter() {
 		// TODO Auto-generated constructor stub
-	}
-
-	public BloomFilter(BloomFilter<E> obj) {
-		// TODO Auto-generated constructor stub
-
-		this.maxElementNumber = obj.maxElementNumber;
-		this.bitsPerElement = obj.bitsPerElement;
-		this.k = obj.k;
-		this.bitSetSize = obj.bitSetSize;
-		elementNumber = obj.elementNumber;
-		this.bitset = new BitSet(bitSetSize);
-		this.bitset = (BitSet) obj.getBitSet().clone();
-
 	}
 
 	/**

@@ -38,85 +38,85 @@ public class RDFSpoutCountBase extends BaseRichSpout {
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
-	BufferedReader _reader; 
-	
+	BufferedReader _reader;
+
 	/*
 	 * @param stormConf: the configuration in the topology
+	 * 
 	 * @param context: the context in the topology
+	 * 
 	 * @param collector: emit the tuples from spout to bolt
-	 * @see backtype.storm.spout.ISpout#open(java.util.Map, backtype.storm.task.TopologyContext, backtype.storm.spout.SpoutOutputCollector)
+	 * 
+	 * @see backtype.storm.spout.ISpout#open(java.util.Map,
+	 * backtype.storm.task.TopologyContext,
+	 * backtype.storm.spout.SpoutOutputCollector)
 	 */
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
-		//to initialize the collector
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+		// to initialize the collector
 		this._collector = collector;
 		this._rand = new Random();
-		//to read the input file
+		// to read the input file
 		this._reader = TopologyCountBase.reader;
 	}
-	
+
 	/*
 	 * The main method for spout
+	 * 
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
 		Utils.sleep(100);
-		if(_reader!=null)
+		if (_reader != null)
 			generateTuple();
-		else
-		{
-			String Subject =null;				
+		else {
+			String Subject = null;
 			String Predicate = null;
 			String Object = null;
-			
+
 			int p = _rand.nextInt(3);
 			int s = _rand.nextInt(10);
 			int o = _rand.nextInt(2);
-			if(p==0) {
+			if (p == 0) {
 				Predicate = "Work";
-				Object=(o==0)?"INRIA":"SAP";
-			}
-			else if(p==1) {
+				Object = (o == 0) ? "INRIA" : "SAP";
+			} else if (p == 1) {
 				Predicate = "Diplome";
-				Object=(o==0)?"Ph.D":"Master";
-			}
-			else if(p==2) {
+				Object = (o == 0) ? "Ph.D" : "Master";
+			} else if (p == 2) {
 				Predicate = "Paper";
-				Object=(o==0)?"kNN":"hadoop";
+				Object = (o == 0) ? "kNN" : "hadoop";
 			}
-			Subject = "Name"+s;
-			
-			
-			_collector.emit(new Values(Subject,Predicate,Object));
+			Subject = "Name" + s;
+
+			_collector.emit(new Values(Subject, Predicate, Object));
 		}
 	}
 
-	public void generateTuple(){
-		try{
+	public void generateTuple() {
+		try {
 			String tempsString = null;
-			if(_reader.ready()) {
+			if (_reader.ready()) {
 				tempsString = _reader.readLine();
-			}
-			else {
+			} else {
 				System.out.println("Job is finished of this spout");
 			}
-			//while(_reader.read()>-1) {
-			if(tempsString!=null){
-				
+			// while(_reader.read()>-1) {
+			if (tempsString != null) {
+
 				System.out.println(tempsString);
 				String parts[] = tempsString.split(" +");
-				String Subject = parts[0];				
+				String Subject = parts[0];
 				String Predicate = parts[1];
 				String Object = parts[2];
-				
+
 				RDFTriple rdf = new RDFTriple(Subject, Predicate, Object);
 				rdf.setSubject(Subject);
 				rdf.setPredicate(Predicate);
 				rdf.setObject(Object);
-				
-				//emit every line, Values is an instance of ArrayList
+
+				// emit every line, Values is an instance of ArrayList
 				_collector.emit(new Values(Subject, Predicate, Object));
-				
+
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -125,12 +125,12 @@ public class RDFSpoutCountBase extends BaseRichSpout {
 			// TODO Auto-generated catch block
 			System.out.println(e);
 			e.printStackTrace();
-		}finally{
-			//System.out.println("Job is finished of this spout");
-			//Utils.sleep(10000);
+		} finally {
+			// System.out.println("Job is finished of this spout");
+			// Utils.sleep(10000);
 		}
 	}
-	
+
 	@Override
 	public void ack(Object id) {
 	}
@@ -140,9 +140,9 @@ public class RDFSpoutCountBase extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
-		declarer.declare(new Fields("Subject","Predicate","Object"));
-		//declarer.declare(new Fields("tuple"));
+		// declarer.declare(new Fields("RDFtuple"));
+		declarer.declare(new Fields("Subject", "Predicate", "Object"));
+		// declarer.declare(new Fields("tuple"));
 	}
 
 }

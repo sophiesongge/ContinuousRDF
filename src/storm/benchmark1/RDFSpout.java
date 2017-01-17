@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package storm.benchmark;
+package storm.benchmark1;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -36,25 +36,30 @@ public class RDFSpout extends BaseRichSpout {
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
-	BufferedReader _reader; 
-	
+	BufferedReader _reader;
+
 	/*
 	 * @param stormConf: the configuration in the topology
+	 * 
 	 * @param context: the context in the topology
+	 * 
 	 * @param collector: emit the tuples from spout to bolt
-	 * @see backtype.storm.spout.ISpout#open(java.util.Map, backtype.storm.task.TopologyContext, backtype.storm.spout.SpoutOutputCollector)
+	 * 
+	 * @see backtype.storm.spout.ISpout#open(java.util.Map,
+	 * backtype.storm.task.TopologyContext,
+	 * backtype.storm.spout.SpoutOutputCollector)
 	 */
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
-		//to initialize the collector
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+		// to initialize the collector
 		this._collector = collector;
 		this._rand = new Random();
-		//to read the input file
-		//this._reader = RDFTopology.reader;
+		// to read the input file
+		// this._reader = RDFTopology.reader;
 	}
-	
+
 	/*
 	 * The main method for spout
+	 * 
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
@@ -62,24 +67,25 @@ public class RDFSpout extends BaseRichSpout {
 		generateTuple();
 	}
 
-	public void generateTuple(){
-		try{
+	public void generateTuple() {
+		try {
 			String tempsString = null;
-			while((tempsString = _reader.readLine())!=null){
+			while ((tempsString = _reader.readLine()) != null) {
 				String parts[] = tempsString.split(" +");
-				//here it defines how to distribute triples, change here for benchmark
-				String Subject = parts[0];				
+				// here it defines how to distribute triples, change here for
+				// benchmark
+				String Subject = parts[0];
 				String Predicate = parts[1];
 				String Object = parts[2];
-				
+
 				RDFTriple rdf = new RDFTriple(Subject, Predicate, Object);
 				rdf.setSubject(Subject);
 				rdf.setPredicate(Predicate);
 				rdf.setObject(Object);
-				
-				//emit every line, Values is an instance of ArrayList
+
+				// emit every line, Values is an instance of ArrayList
 				_collector.emit(new Values(Subject, Predicate, Object));
-				
+
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -87,12 +93,12 @@ public class RDFSpout extends BaseRichSpout {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			System.out.println("Job is finished of this spout");
 			Utils.sleep(10000);
 		}
 	}
-	
+
 	@Override
 	public void ack(Object id) {
 	}
@@ -102,9 +108,9 @@ public class RDFSpout extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
-		declarer.declare(new Fields("Subject","Predicate","Object"));
-		//declarer.declare(new Fields("tuple"));
+		// declarer.declare(new Fields("RDFtuple"));
+		declarer.declare(new Fields("Subject", "Predicate", "Object"));
+		// declarer.declare(new Fields("tuple"));
 	}
 
 }

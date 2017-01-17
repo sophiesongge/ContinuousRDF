@@ -40,60 +40,66 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 	private static final long serialVersionUID = 1L;
 	SpoutOutputCollector _collector;
 	Random _rand;
-	BufferedReader _reader; 
+	BufferedReader _reader;
 	boolean apimode = false;
-	
-	public RDFSpoutWithThreeBF(boolean mode){
-		if(mode){
+
+	public RDFSpoutWithThreeBF(boolean mode) {
+		if (mode) {
 			apimode = true;
 		}
 	}
-	
+
 	/*
 	 * @param stormConf: the configuration in the topology
+	 * 
 	 * @param context: the context in the topology
+	 * 
 	 * @param collector: emit the tuples from spout to bolt
-	 * @see backtype.storm.spout.ISpout#open(java.util.Map, backtype.storm.task.TopologyContext, backtype.storm.spout.SpoutOutputCollector)
+	 * 
+	 * @see backtype.storm.spout.ISpout#open(java.util.Map,
+	 * backtype.storm.task.TopologyContext,
+	 * backtype.storm.spout.SpoutOutputCollector)
 	 */
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
-		//to initialize the collector
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+		// to initialize the collector
 		this._collector = collector;
 		this._rand = new Random();
-		//to read the input file
-		if(apimode){
-			this._reader = API.reader;//change this reader for API			
-		}else{
-			this._reader = TopologyWithThreeBF.reader;//change this reader for API			
+		// to read the input file
+		if (apimode) {
+			this._reader = API.reader;// change this reader for API
+		} else {
+			this._reader = TopologyWithThreeBF.reader;// change this reader for
+														// API
 		}
 	}
-	
+
 	/*
 	 * The main method for spout
+	 * 
 	 * @see backtype.storm.spout.ISpout#nextTuple()
 	 */
 	public void nextTuple() {
 		Utils.sleep(100);
-		generateTuple();	
+		generateTuple();
 	}
 
-	public void generateTuple(){
-		try{
+	public void generateTuple() {
+		try {
 			String tempsString = null;
-			while((tempsString = _reader.readLine())!=null){
+			while ((tempsString = _reader.readLine()) != null) {
 				String parts[] = tempsString.split(" +");
-				String Subject = parts[0];				
+				String Subject = parts[0];
 				String Predicate = parts[1];
 				String Object = parts[2];
-				
+
 				RDFTriple rdf = new RDFTriple(Subject, Predicate, Object);
 				rdf.setSubject(Subject);
 				rdf.setPredicate(Predicate);
 				rdf.setObject(Object);
-				
-				//emit every line, Values is an instance of ArrayList
+
+				// emit every line, Values is an instance of ArrayList
 				_collector.emit(new Values(Subject, Predicate, Object));
-				
+
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -104,12 +110,12 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			System.out.println("Job is finished of this spout");
 			Utils.sleep(10000);
 		}
 	}
-	
+
 	@Override
 	public void ack(Object id) {
 	}
@@ -119,9 +125,9 @@ public class RDFSpoutWithThreeBF extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("RDFtuple"));
-		declarer.declare(new Fields("Subject","Predicate","Object"));
-		//declarer.declare(new Fields("tuple"));
+		// declarer.declare(new Fields("RDFtuple"));
+		declarer.declare(new Fields("Subject", "Predicate", "Object"));
+		// declarer.declare(new Fields("tuple"));
 	}
 
 }

@@ -13,34 +13,32 @@ import org.apache.jena.util.FileManager;
 
 public class RDFReader {
 
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 
 		// create an empty model
 		Model model = ModelFactory.createDefaultModel();
 
-		//String inputFileName="datafile.owl";
-		String inputFileName="University0_0.daml";
+		// String inputFileName="datafile.owl";
+		String inputFileName = "University0_0.daml";
 
 		// use the FileManager to find the input file
-		InputStream in = FileManager.get().open( inputFileName );
+		InputStream in = FileManager.get().open(inputFileName);
 		if (in == null) {
-			throw new IllegalArgumentException(
-					"File: " + inputFileName + " not found");
+			throw new IllegalArgumentException("File: " + inputFileName + " not found");
 		}
 
 		// read the RDF/XML file
 		model.read(in, null);
-
 
 		// list the statements in the Model
 		StmtIterator iter = model.listStatements();
 
 		// print out the predicate, subject and object of each statement
 		while (iter.hasNext()) {
-			Statement stmt      = iter.nextStatement();  // get next statement
-			Resource  subject   = stmt.getSubject();     // get the subject
-			Property  predicate = stmt.getPredicate();   // get the predicate
-			RDFNode   object    = stmt.getObject();      // get the object
+			Statement stmt = iter.nextStatement(); // get next statement
+			Resource subject = stmt.getSubject(); // get the subject
+			Property predicate = stmt.getPredicate(); // get the predicate
+			RDFNode object = stmt.getObject(); // get the object
 
 			System.out.print(subject.toString());
 			System.out.print(" " + predicate.toString() + " ");
@@ -55,8 +53,6 @@ public class RDFReader {
 			System.out.println(" .");
 		}
 
-
 	}
-
 
 }

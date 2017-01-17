@@ -3,12 +3,12 @@
  */
 package storm.rdf;
 
-public class Query{
+public class Query {
 	private static String v1;
 	private static String v2;
 	private static String v3;
-	
-	public Query(String input1, String input2, String input3){
+
+	public Query(String input1, String input2, String input3) {
 		this.setV1(input1);
 		this.setV2(input2);
 		this.setP3(input3);
@@ -38,10 +38,8 @@ public class Query{
 		v3 = input3;
 	}
 
-	
-	public String toString(){
-		return "<"+v1+", "+v2+", "+v3+">";
+	public String toString() {
+		return "<" + v1 + ", " + v2 + ", " + v3 + ">";
 	}
-	
-	
+
 }
